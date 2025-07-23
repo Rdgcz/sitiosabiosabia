@@ -509,10 +509,10 @@
 
     <nav aria-label="Navegação principal">
         <ul role="menubar">
-            <li role="none"><a href="cunha.html" role="menuitem">Cunha</a></li>
-            <li role="none"><a href="ositio.html" role="menuitem">O Sítio</a></li>
-            <li role="none"><a href="underConstruction.html" role="menuitem">Galeria</a></li>
-	        <li role="none"><a href="login.html" role="menuitem"><i class="fas fa-lock"></i></a></li>
+            <li role="none"><a href="frontend/cunha.html" role="menuitem">Cunha</a></li>
+            <li role="none"><a href="frontend/ositio.html" role="menuitem">O Sítio</a></li>
+            <li role="none"><a href="**" role="menuitem">Galeria</a></li>
+	        <li role="none"><a href="frontend/login.html" role="menuitem"><i class="fas fa-lock"></i></a></li>
         </ul>
     </nav>
 
@@ -597,7 +597,7 @@
     atualizarRelogio();
     setInterval(atualizarRelogio, 1000);
 
-    // Swiper (substitui o slideshow antigo)
+    // Swiper
     new Swiper('.swiper-container', {
       loop: true,
 	    centeredSlides: true,    
@@ -610,7 +610,7 @@
     });
   });
 
-  // Funções do relógio (mantidas como estavam)
+  // Funções do relógio
   function formatarData(data) {
     const opcoes = { 
       weekday: 'long', 
