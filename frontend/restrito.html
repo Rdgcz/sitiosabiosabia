@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Meta tags básicas -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Área Restrita | Sítio Sábio Sabiá</title>
+
+  <!-- SDKs do Firebase (versão compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+  <!-- ViewerJS para visualização de imagens/PDFs -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
+
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Variáveis CSS e estilos globais -->
+  <style>
+    :root {
+      /* Cores do tema */
+      --laranja-ouro: #EAA731;
+      --marrom-escuro: #362219;
+      --terracota: #A0470D;
+      --taupe: #A67958;
+      --fundo: #F8F1E5;
+      --branco: #FFFFFF;
+      --perigo: #C62828;
+      --raio-borda: 8px;
+      --fonte-principal: 'Merriweather', serif;
+    }
+    
+    /* Estilos gerais */
+    body {
+      font-family: var(--fonte-principal);
+      background-color: var(--fundo);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Cabeçalho */
+    header {
+      background: var(--terracota);
+      color: var(--branco);
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { 
+      height: 50px; 
+    }
+    
+    /* Navegação */
+    nav {
+      background: var(--marrom-escuro);
+      padding: 0.5rem;
+    }
+    nav ul {
+      display: flex; 
+      justify-content: center;
+      list-style: none; 
+      gap: 1rem; 
+      margin: 0; 
+      padding: 0;
+    }
+    nav a {
+      color: var(--fundo);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    
+    /* Conteúdo principal */
+    main {
+      flex: 1; 
+      padding: 2rem; 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      width: 100%;
+    }
+    .card {
+      background: var(--branco);
+      border-radius: var(--raio-borda);
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Botões */
+    .btn {
+      background: var(--laranja-ouro);
+      color: var(--marrom-escuro);
+      border: none; 
+      padding: 0.6rem 1rem;
+      border-radius: 4px;
+      font-weight: bold; 
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      background: var(--terracota); 
+      color: var(--branco);
+    }
+    .btn-perigo { 
+      background: var(--perigo); 
+      color: var(--branco); 
+    }
+    .btn-sm { 
+      padding: 0.3rem 0.6rem; 
+      font-size: 0.8rem; 
+    }
+    
+    /* Gerenciador de arquivos */
+    #file-manager { 
+      display: grid; 
+      grid-template-columns: 250px 1fr; 
+      gap: 1.5rem; 
+    }
+    #subpastas, #arquivos { 
+      background: var(--branco); 
+      padding: 1rem; 
+      border-radius: var(--raio-borda); 
+    }
+    .folder, .file {
+      padding: 0.6rem; 
+      margin: 0.3rem 0; 
+      cursor: pointer;
+      border-radius: 4px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+    }
+    .folder:hover, .file:hover { 
+      background: rgba(234,167,49,0.1); 
+    }
+    .file-actions { 
+      display: flex; 
+      gap: 1rem; 
+      margin-top: 1rem; 
+    }
+    
+    /* Upload e preview */
+    #upload-progress { 
+      width: 100%; 
+      margin-top: 1rem; 
+      display: none; 
+    }
+    #preview-container {
+      margin-top: 1.5rem; 
+      border: 1px solid #ddd; 
+      border-radius: var(--raio-borda);
+      padding: 1rem; 
+      display: none;
+    }
+    #preview-content { 
+      max-height: 500px; 
+      overflow: auto; 
+    }
+    
+    /* Painel de busca */
+    .search-panel {
+      background: var(--branco); 
+      padding: 1rem; 
+      border-radius: var(--raio-borda);
+      margin-bottom: 1rem; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .search-filters {
+      display: grid; 
+      grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+      gap: 1rem; 
+      margin-top: 1rem;
+    }
+    .search-filter { 
+      display: flex; 
+      flex-direction: column; 
+    }
+    .search-filter label { 
+      margin-bottom: 0.3rem; 
+      font-weight: bold; 
+    }
+    
+    /* Rodapé */
+    footer {
+      background: var(--marrom-escuro); 
+      color: var(--fundo);
+      text-align: center; 
+      padding: 1rem; 
+      margin-top: auto;
+    }
+    
+    /* Animações */
+    .loading { 
+      display: inline-block; 
+      animation: spin 1s linear infinite; 
+    }
+    @keyframes spin { 
+      0% { transform: rotate(0deg); } 
+      100% { transform: rotate(360deg); } 
+    }
+    
+    /* Responsividade */
+    @media(max-width:768px) { 
+      #file-manager { 
+        grid-template-columns: 1fr; 
+      } 
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Cabeçalho com logo e botão de logout -->
+  <header>
+    <div>
+      <img src="../assets/images/brand/logo/logo_sss_redu_compressed.png" alt="Logo Sítio Sábio Sabiá" class="logo">
+    </div>
+    <h1>Área Restrita</h1>
+    <button id="logout-btn" class="btn btn-perigo" title="Sair da conta">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
+  </header>
+
+  <!-- Menu de navegação -->
+  <nav>
+    <ul>
+      <li><a href="../index.html">Página Inicial</a></li>
+      <li><a href="../cunha.html">Cunha</a></li>
+      <li><a href="../galeria.html">Galeria</a></li>
+      <li><a href="../contato.html">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- Conteúdo principal -->
+  <main>
+    <div class="card">
+      <!-- Painel de busca -->
+      <div class="search-panel">
+        <div style="display:flex;gap:1rem;">
+          <input type="search" id="search-input" placeholder="Buscar por nome..." style="flex:1; padding:0.5rem;">
+          <button id="advanced-search-toggle" class="btn btn-sm" title="Mostrar/ocultar filtros avançados">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+          <button id="clear-search" class="btn btn-sm btn-perigo" title="Limpar todos os filtros">
+            <i class="fas fa-times"></i> Limpar
+          </button>
+        </div>
+        
+        <!-- Filtros avançados (inicialmente ocultos) -->
+        <div id="advanced-search" style="display:none;margin-top:1rem;">
+          <div class="search-filters">
+            <div class="search-filter">
+              <label for="search-type">Tipo</label>
+              <select id="search-type">
+                <option value="">Todos</option>
+                <option value="image">Imagens</option>
+                <option value="pdf">PDF</option>
+                <option value="document">Documentos</option>
+                <option value="spreadsheet">Planilhas</option>
+                <option value="video">Vídeos</option>
+                <option value="audio">Áudios</option>
+              </select>
+            </div>
+            <div class="search-filter">
+              <label for="search-size">Tamanho</label>
+              <select id="search-size">
+                <option value="">Qualquer</option>
+                <option value="small">Pequeno (0-1MB)</option>
+                <option value="medium">Médio (1-5MB)</option>
+                <option value="large">Grande (5MB+)</option>
+              </select>
+            </div>
+            <div class="search-filter">
+              <label for="search-date">Data</label>
+              <select id="search-date">
+                <option value="">Qualquer</option>
+                <option value="today">Hoje</option>
+                <option value="week">Esta semana</option>
+                <option value="month">Este mês</option>
+                <option value="year">Este ano</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gerenciador de arquivos -->
+      <div id="file-manager">
+        <!-- Painel de pastas -->
+        <div id="subpastas">
+          <h3><i class="fas fa-folder"></i> Pastas</h3>
+          <div id="folders-list">Carregando...</div>
+        </div>
+        
+        <!-- Painel de arquivos -->
+        <div id="arquivos">
+          <h3><i class="fas fa-file"></i> Arquivos</h3>
+          <div id="files-list">Carregando...</div>
+          
+          <!-- Container de pré-visualização -->
+          <div id="preview-container">
+            <h4>Pré-visualização</h4>
+            <div id="preview-content"></div>
+          </div>
+          
+          <!-- Ações com arquivos -->
+          <div class="file-actions">
+            <input type="file" id="fileInput" style="display:none;" multiple>
+            <button class="btn" onclick="document.getElementById('fileInput').click()" title="Enviar arquivos">
+              <i class="fas fa-upload"></i> Enviar
+            </button>
+            <button class="btn" onclick="criarPasta()" title="Criar nova pasta">
+              <i class="fas fa-folder-plus"></i> Nova Pasta
+            </button>
+          </div>
+          
+          <!-- Barra de progresso do upload -->
+          <progress id="upload-progress" value="0" max="100"></progress>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer>© <span id="current-year"></span> - Sítio Sábio Sabiá</footer>
+
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0O5QqfQae3K9-Ku9-tnpGS-ko82h10JI",
+      authDomain: "sitio-sabio-sabia.firebaseapp.com",
+      projectId: "sitio-sabio-sabia",
+      storageBucket: "sitio-sabio-sabia.appspot.com",
+      messagingSenderId: "789144165592",
+      appId: "1:789144165592:web:0311bc2930a047cf160bad"
+    };
+
+    // Inicialização do Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const storage = firebase.storage();
+
+    // Variáveis globais
+    let currentUser = null;      // Armazena o usuário logado
+    let currentPath = '';        // Caminho atual no storage
+    let allFiles = [];           // Lista completa de arquivos
+    let allFolders = [];         // Lista completa de pastas
+    let viewer = null;           // Instância do visualizador de imagens
+
+    /**
+     * Observa mudanças no estado de autenticação
+     * Redireciona para login se não estiver autenticado
+     */
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        location.replace("login.html");
+      } else {
+        currentUser = user;
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        listarArquivos('');
+        setupEvents();
+      }
+    });
+
+    /**
+     * Configura os eventos dos elementos da página
+     */
+    function setupEvents() {
+      const adv = document.getElementById('advanced-search');
+      
+      // Mostrar/ocultar filtros avançados
+      document.getElementById('advanced-search-toggle').onclick = () => {
+        adv.style.display = adv.style.display === 'none' ? 'block' : 'none';
+      };
+      
+      // Limpar todos os filtros
+      document.getElementById('clear-search').onclick = () => {
+        document.getElementById('search-input').value = '';
+        document.getElementById('search-type').value = '';
+        document.getElementById('search-size').value = '';
+        document.getElementById('search-date').value = '';
+        filterFiles();
+      };
+      
+      // Aplicar filtros ao digitar/selecionar
+      ['search-input','search-type','search-size','search-date'].forEach(id => {
+        document.getElementById(id).oninput = filterFiles;
+      });
+      
+      // Logout
+      document.getElementById('logout-btn').onclick = () => {
+        auth.signOut().then(() => location.replace("login.html"));
+      };
+      
+      // Upload de arquivos
+      document.getElementById('fileInput').onchange = handleFileUpload;
+    }
+
+    /**
+     * Lista arquivos e pastas no caminho especificado
+     * @param {string} path - Caminho no storage (ex: 'documentos/')
+     */
+    async function listarArquivos(path) {
+      currentPath = path;
+      document.getElementById('folders-list').innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
+      document.getElementById('files-list').innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
+      hidePreview();
+      
+      try {
+        const storageRef = storage.ref(`documentos/${currentUser.uid}/${path}`);
+        const result = await storageRef.listAll();
+        
+        // Ordena pastas e arquivos alfabeticamente
+        allFolders = result.prefixes.sort((a,b) => a.name.localeCompare(b.name));
+        allFiles = result.items.sort((a,b) => a.name.localeCompare(b.name));
+        
+        // Obtém metadados de todos os arquivos
+        await Promise.all(allFiles.map(async file => {
+          const meta = await file.getMetadata();
+          file._size = meta.size;
+          file._timeCreated = meta.timeCreated;
+          file._contentType = meta.contentType;
+        }));
+        
+        showFolders(allFolders);
+        showFiles(allFiles);
+      } catch (err) {
+        console.error('Erro ao listar arquivos:', err);
+        showError('Erro ao carregar arquivos');
+      }
+    }
+
+    /**
+     * Exibe a lista de pastas
+     * @param {Array} folders - Lista de pastas
+     */
+    function showFolders(folders) {
+      let html = folders.map(f => `
+        <div class="folder" onclick="listarArquivos('${currentPath}${f.name}/')" title="Abrir pasta">
+          <div><i class="fas fa-folder"></i> ${f.name}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('folders-list').innerHTML = html || '<em>Nenhuma pasta encontrada.</em>';
+    }
+
+    /**
+     * Exibe a lista de arquivos
+     * @param {Array} files - Lista de arquivos
+     */
+    function showFiles(files) {
+      let html = files.map(f => {
+        const size = formatFileSize(f._size);
+        const date = formatDate(f._timeCreated);
+        const type = getFileType(f.name);
+        
+        return `
+        <div class="file" data-type="${type}" data-size="${f._size}" data-date="${f._timeCreated}">
+          <div onclick="previewFile('${currentPath}${f.name}','${type}')" title="Visualizar">
+            <i class="fas ${getFileIcon(f.name)}"></i> ${f.name} 
+            <small>(${size}, ${date})</small>
+          </div>
+          <div>
+            <button class="btn btn-sm" onclick="downloadFile('${currentPath}${f.name}')" title="Baixar">
+              <i class="fas fa-download"></i>
+            </button>
+            <button class="btn btn-sm btn-perigo" onclick="deleteFile('${currentPath}${f.name}')" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>`;
+      }).join('');
+      
+      document.getElementById('files-list').innerHTML = html || '<em>Nenhum arquivo encontrado.</em>';
+    }
+
+    /**
+     * Filtra arquivos e pastas com base nos critérios de busca
+     */
+    function filterFiles() {
+      const searchText = document.getElementById('search-input').value.toLowerCase();
+      const filterType = document.getElementById('search-type').value;
+      const filterSize = document.getElementById('search-size').value;
+      const filterDate = document.getElementById('search-date').value;
+      
+      // Filtra pastas
+      showFolders(allFolders.filter(f => 
+        f.name.toLowerCase().includes(searchText)
+      ));
+      
+      // Filtra arquivos
+      showFiles(allFiles.filter(f => {
+        let matches = f.name.toLowerCase().includes(searchText);
+        
+        // Filtro por tipo
+        if (filterType && getFileType(f.name) !== filterType) {
+          matches = false;
+        }
+        
+        // Filtro por tamanho
+        if (filterSize === 'small') matches = matches && f._size < 1e6;
+        if (filterSize === 'medium') matches = matches && f._size >= 1e6 && f._size < 5e6;
+        if (filterSize === 'large') matches = matches && f._size >= 5e6;
+        
+        // Filtro por data
+        if (filterDate) {
+          const fileDate = new Date(f._timeCreated);
+          const now = new Date();
+          
+          if (filterDate === 'today') matches = matches && isSameDay(fileDate, now);
+          if (filterDate === 'week') matches = matches && isSameWeek(fileDate, now);
+          if (filterDate === 'month') matches = matches && isSameMonth(fileDate, now);
+          if (filterDate === 'year') matches = matches && isSameYear(fileDate, now);
+        }
+        
+        return matches;
+      }));
+    }
+
+    /**
+     * Retorna o tipo do arquivo baseado na extensão
+     * @param {string} name - Nome do arquivo
+     * @returns {string} Tipo do arquivo
+     */
+    function getFileType(name) {
+      const ext = name.split('.').pop().toLowerCase();
+      
+      if (['jpg','jpeg','png','gif','webp'].includes(ext)) return 'image';
+      if (ext === 'pdf') return 'pdf';
+      if (['doc','docx','odt','rtf','txt'].includes(ext)) return 'document';
+      if (['xls','xlsx','csv','ods'].includes(ext)) return 'spreadsheet';
+      if (['mp4','webm','avi','mov'].includes(ext)) return 'video';
+      if (['mp3','wav','ogg','m4a'].includes(ext)) return 'audio';
+      return 'other';
+    }
+
+    /**
+     * Retorna o ícone correspondente ao tipo de arquivo
+     * @param {string} name - Nome do arquivo
+     * @returns {string} Classe do ícone Font Awesome
+     */
+    function getFileIcon(name) {
+      const type = getFileType(name);
+      const icons = {
+        image: 'fa-file-image',
+        pdf: 'fa-file-pdf',
+        document: 'fa-file-word',
+        spreadsheet: 'fa-file-excel',
+        video: 'fa-file-video',
+        audio: 'fa-file-audio',
+        other: 'fa-file'
+      };
+      return icons[type] || 'fa-file';
+    }
+
+    /**
+     * Processa o upload de arquivos selecionados
+     * @param {Event} e - Evento de change do input file
+     */
+    async function handleFileUpload(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      
+      const progressBar = document.getElementById('upload-progress');
+      progressBar.style.display = 'block';
+      progressBar.value = 0;
+      
+      let uploadCount = 0;
+      const uploadPromises = [];
+      
+      for (const file of files) {
+        // Validação do nome do arquivo
+        if (!isValidFilename(file.name)) {
+          alert(`Nome de arquivo inválido: "${file.name}".\nUse apenas letras, números, hífens, underscores e espaços.`);
+          continue;
+        }
+        
+        const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
+        const storageRef = storage.ref(filePath);
+        
+        // Configura metadados para o arquivo
+        const metadata = {
+          contentType: file.type,
+          customMetadata: {
+            originalName: file.name,
+            uploadedBy: currentUser.uid,
+            uploadedAt: new Date().toISOString()
+          }
+        };
+        
+        // Adiciona a promise de upload ao array
+        uploadPromises.push(
+          storageRef.put(file, metadata)
+            .then(() => {
+              uploadCount++;
+              progressBar.value = (uploadCount / files.length) * 100;
+            })
+            .catch(error => {
+              console.error(`Erro ao enviar ${file.name}:`, error);
+              alert(`Falha ao enviar "${file.name}": ${error.message}`);
+            })
+        );
+      }
+      
+      // Aguarda todos os uploads terminarem
+      try {
+        await Promise.all(uploadPromises);
+        if (uploadCount > 0) {
+          showSuccess(`${uploadCount} arquivo(s) enviado(s) com sucesso!`);
+          listarArquivos(currentPath); // Atualiza a lista
+        }
+      } catch (error) {
+        console.error('Erro no upload:', error);
+        showError('Ocorreu um erro durante o upload');
+      } finally {
+        progressBar.style.display = 'none';
+        e.target.value = ''; // Limpa o input
+      }
+    }
+
+    /**
+     * Exibe pré-visualização do arquivo
+     * @param {string} path - Caminho completo do arquivo no storage
+     * @param {string} type - Tipo do arquivo
+     */
+    async function previewFile(path, type) {
+      const previewContainer = document.getElementById('preview-container');
+      const previewContent = document.getElementById('preview-content');
+      
+      previewContainer.style.display = 'block';
+      previewContent.innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
+      
+      try {
+        const fileRef = storage.ref(`documentos/${currentUser.uid}/${path}`);
+        const url = await fileRef.getDownloadURL();
+        
+        // Limpa o visualizador anterior se existir
+        if (viewer) {
+          viewer.destroy();
+          viewer = null;
+        }
+        
+        // Exibe o conteúdo conforme o tipo
+        switch (type) {
+          case 'image':
+            previewContent.innerHTML = `<img src="${url}" style="max-width:100%;" alt="Pré-visualização">`;
+            viewer = new Viewer(previewContent.querySelector('img'), {
+              toolbar: {
+                zoomIn: 1,
+                zoomOut: 1,
+                oneToOne: 1,
+                reset: 1,
+                prev: 1,
+                play: 0,
+                next: 1,
+                rotateLeft: 1,
+                rotateRight: 1,
+                flipHorizontal: 1,
+                flipVertical: 1,
+              }
+            });
+            break;
+            
+          case 'pdf':
+            previewContent.innerHTML = `
+              <iframe src="${url}" style="width:100%;height:500px;border:none;"></iframe>
+              <div style="margin-top:10px;">
+                <a href="${url}" target="_blank" class="btn btn-sm">
+                  <i class="fas fa-external-link-alt"></i> Abrir em nova aba
+                </a>
+              </div>
+            `;
+            break;
+            
+          case 'document':
+          case 'spreadsheet':
+            previewContent.innerHTML = `
+              <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true" 
+                style="width:100%;height:500px;border:none;"></iframe>
+              <div style="margin-top:10px;">
+                <a href="${url}" target="_blank" class="btn btn-sm">
+                  <i class="fas fa-download"></i> Baixar arquivo
+                </a>
+              </div>
+            `;
+            break;
+            
+          case 'video':
+            previewContent.innerHTML = `
+              <video controls src="${url}" style="width:100%;max-height:500px;"></video>
+              <div style="margin-top:10px;">
+                <a href="${url}" target="_blank" class="btn btn-sm">
+                  <i class="fas fa-download"></i> Baixar vídeo
+                </a>
+              </div>
+            `;
+            break;
+            
+          case 'audio':
+            previewContent.innerHTML = `
+              <audio controls src="${url}" style="width:100%;"></audio>
+              <div style="margin-top:10px;">
+                <a href="${url}" target="_blank" class="btn btn-sm">
+                  <i class="fas fa-download"></i> Baixar áudio
+                </a>
+              </div>
+            `;
+            break;
+            
+          default:
+            previewContent.innerHTML = `
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Pré-visualização não disponível para este tipo de arquivo.
+              </div>
+              <div style="margin-top:10px;">
+                <a href="${url}" target="_blank" class="btn">
+                  <i class="fas fa-download"></i> Baixar arquivo
+                </a>
+              </div>
+            `;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar pré-visualização:', error);
+        previewContent.innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> Erro ao carregar pré-visualização.
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Oculta o painel de pré-visualização
+     */
+    function hidePreview() {
+      if (viewer) {
+        viewer.destroy();
+        viewer = null;
+      }
+      document.getElementById('preview-container').style.display = 'none';
+    }
+
+    /**
+     * Baixa o arquivo especificado
+     * @param {string} path - Caminho completo do arquivo no storage
+     */
+    function downloadFile(path) {
+      storage.ref(`documentos/${currentUser.uid}/${path}`)
+        .getDownloadURL()
+        .then(url => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = path.split('/').pop();
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        })
+        .catch(error => {
+          console.error('Erro ao baixar arquivo:', error);
+          showError('Erro ao baixar arquivo');
+        });
+    }
+
+    /**
+     * Exclui o arquivo especificado após confirmação
+     * @param {string} path - Caminho completo do arquivo no storage
+     */
+    function deleteFile(path) {
+      if (!confirm(`Tem certeza que deseja excluir "${path.split('/').pop()}"?`)) {
+        return;
+      }
+      
+      storage.ref(`documentos/${currentUser.uid}/${path}`)
+        .delete()
+        .then(() => {
+          showSuccess('Arquivo excluído com sucesso');
+          listarArquivos(currentPath); // Atualiza a lista
+        })
+        .catch(error => {
+          console.error('Erro ao excluir arquivo:', error);
+          showError('Erro ao excluir arquivo');
+        });
+    }
+
+    /**
+ * Cria uma nova pasta no Firebase Storage após validar o nome
+ * 
+ * Fluxo da função:
+ * 1. Solicita o nome da pasta via prompt
+ * 2. Valida o nome fornecido
+ * 3. Cria um arquivo marcador (.keep) com mensagem descritiva
+ * 4. Atualiza a interface após criação
+ */
+function criarPasta() {
+  // 1. Solicita o nome da pasta ao usuário
+  const nome = prompt('Digite o nome da nova pasta:');
+  
+  // 2. Validações do nome
+  if (nome === null) return; // Usuário cancelou a operação
+  
+  const nomeTrimmed = nome.trim();
+  
+  if (!nomeTrimmed) {
+    alert('O nome da pasta não pode estar vazio.');
+    return;
+  }
+  
+  if (!isValidFilename(nomeTrimmed)) {
+    alert('Nome inválido. Use apenas letras, números, hífens, underscores, espaços e pontos.');
+    return;
+  }
+  
+  // 3. Verifica se a pasta já existe
+  const pastaExistente = allFolders.some(pasta => pasta.name === nomeTrimmed);
+  if (pastaExistente) {
+    alert(`Já existe uma pasta com o nome "${nomeTrimmed}".`);
+    return;
+  }
+  
+  // 4. Prepara o conteúdo do arquivo .keep
+  const keepFileContent = `Este arquivo foi gerado automaticamente pelo sistema para manter a estrutura de pastas.\n` +
+                         `Pasta: ${nomeTrimmed}\n` +
+                         `Criada por: ${currentUser.email}\n` +
+                         `Data: ${new Date().toISOString()}\n` +
+                         `\nPODE SER EXCLUÍDO SE A PASTA FOR REMOVIDA MANUALMENTE`;
+  
+  // 5. Prepara o caminho completo no Storage
+  const filePath = `documentos/${currentUser.uid}/${currentPath}${nomeTrimmed}/.keep`;
+  
+  // Feedback visual durante a operação
+  const botao = document.querySelector('[onclick="criarPasta()"]');
+  const textoOriginal = botao.innerHTML;
+  botao.innerHTML = '<i class="fas fa-spinner loading"></i> Criando...';
+  botao.disabled = true;
+  
+  // 6. Executa a criação da pasta com o arquivo .keep
+  storage.ref(filePath)
+    .putString(keepFileContent, 'raw', {
+      contentType: 'text/plain',
+      customMetadata: {
+        purpose: 'folder-marker',
+        createdBy: currentUser.uid
+      }
+    })
+    .then(() => {
+      showSuccess(`Pasta "${nomeTrimmed}" criada com sucesso!`);
+      listarArquivos(currentPath);
+    })
+    .catch(error => {
+      console.error('Erro ao criar pasta:', error);
+      showError(`Erro ao criar pasta: ${error.message}`);
+    })
+    .finally(() => {
+      botao.innerHTML = textoOriginal;
+      botao.disabled = false;
+    });
+}
+
+    // =============================================
+    // FUNÇÕES AUXILIARES
+    // =============================================
+
+    /**
+     * Formata o tamanho do arquivo para exibição
+     * @param {number} bytes - Tamanho em bytes
+     * @returns {string} Tamanho formatado
+     */
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
+      if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(1)} MB`;
+      return `${(bytes / 1073741824).toFixed(1)} GB`;
+    }
+
+    /**
+     * Formata a data para exibição
+     * @param {string} dateString - Data em formato ISO
+     * @returns {string} Data formatada
+     */
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Valida se o nome do arquivo/pasta é válido
+     * @param {string} filename - Nome a ser validado
+     * @returns {boolean} Verdadeiro se for válido
+     */
+    function isValidFilename(filename) {
+      return /^[a-zA-Z0-9\-_ .\u00C0-\u00FF]+$/.test(filename);
+    }
+
+    /**
+     * Exibe mensagem de sucesso
+     * @param {string} message - Mensagem a ser exibida
+     */
+    function showSuccess(message) {
+      alert(message); // Pode ser substituído por um toast/snackbar
+    }
+
+    /**
+     * Exibe mensagem de erro
+     * @param {string} message - Mensagem a ser exibida
+     */
+    function showError(message) {
+      alert(message); // Pode ser substituído por um toast/snackbar
+    }
+
+    /**
+     * Verifica se duas datas são do mesmo dia
+     * @param {Date} date1 - Primeira data
+     * @param {Date} date2 - Segunda data
+     * @returns {boolean} Verdadeiro se forem do mesmo dia
+     */
+    function isSameDay(date1, date2) {
+      return date1.getFullYear() === date2.getFullYear() &&
+             date1.getMonth() === date2.getMonth() &&
+             date1.getDate() === date2.getDate();
+    }
+
+    /**
+     * Verifica se duas datas são da mesma semana
+     * @param {Date} date1 - Primeira data
+     * @param {Date} date2 - Segunda data
+     * @returns {boolean} Verdadeiro se forem da mesma semana
+     */
+    function isSameWeek(date1, date2) {
+      const oneDay = 24 * 60 * 60 * 1000;
+      const diffDays = Math.round(Math.abs((date1 - date2) / oneDay));
+      return diffDays <= 7 && date1.getDay() <= date2.getDay();
+    }
+
+    /**
+     * Verifica se duas datas são do mesmo mês
+     * @param {Date} date1 - Primeira data
+     * @param {Date} date2 - Segunda data
+     * @returns {boolean} Verdadeiro se forem do mesmo mês
+     */
+    function isSameMonth(date1, date2) {
+      return date1.getFullYear() === date2.getFullYear() &&
+             date1.getMonth() === date2.getMonth();
+    }
+
+    /**
+     * Verifica se duas datas são do mesmo ano
+     * @param {Date} date1 - Primeira data
+     * @param {Date} date2 - Segunda data
+     * @returns {boolean} Verdadeiro se forem do mesmo ano
+     */
+    function isSameYear(date1, date2) {
+      return date1.getFullYear() === date2.getFullYear();
+    }
+  </script>
+</body>
+</html>

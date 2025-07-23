@@ -1,0 +1,99 @@
+# ====================================
+# 🔒 ARQUIVOS SENSÍVEIS E CREDENCIAIS
+# ====================================
+# Firebase e Google Cloud
+firebase*.json               # Cobre todos arquivos JSON do Firebase
+*.service-account.json       # Padrão para contas de serviço
+*-credentials.json           # Qualquer arquivo de credencial
+.firebase/                   # Pasta de cache do CLI
+.firebaserc                  # Configuração do Firebase CLI
+firebase-export*.json        # Exportações de dados
+firebase-debug.log           # Logs de debug
+
+# Configurações específicas do projeto
+backend/src/config/*.json    # Todos JSON na pasta config
+!backend/src/config/*.example.json  # Exceto arquivos de exemplo
+
+# Variáveis de ambiente
+.env                         # Arquivo base
+.env.*                       # Todas variações
+!.env.production             # Exceto produção (se necessário)
+!.env.example                # Template seguro
+
+# Certificados e chaves
+*.key                        # Chaves privadas
+*.pem                        # Certificados PEM
+*.crt                        # Certificados CRT
+*.pfx                        # Certificados PFX/PKCS12
+*.p12                        # Certificados P12
+
+# Pastas sensíveis
+**/secrets/                  # Qualquer pasta 'secrets'
+**/private/                  # Qualquer pasta 'private'
+**/credentials/              # Qualquer pasta 'credentials'
+
+# ====================================
+# 📦 DEPENDÊNCIAS E ARQUIVOS DE BUILD
+# ====================================
+# Dependências
+node_modules/
+jspm_packages/
+bower_components/
+vendor/
+.pnp/
+
+# Artefatos de build
+dist/
+build/
+out/
+.cache/
+.next/
+.nuxt/
+
+# Logs e cache
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Minificados e sourcemaps
+*.min.js
+*.min.css
+*.map
+*.tsbuildinfo
+
+# ====================================
+# 💻 ARQUIVOS DE SISTEMA E IDE
+# ====================================
+# Sistemas operacionais
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs e editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-*
+
+# ====================================
+# 🗃️ ARQUIVOS TEMPORÁRIOS E BACKUPS
+# ====================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.bkp
+*.pid
+*.seed
+*.pid.lock
+
+# ====================================
+# 🚀 CONFIGURAÇÕES ESPECÍFICAS
+# ====================================
+# Custom
+startup.js
+test-auth.jsbackend/src/config/firebase-*.json
+backend/src/config/firebase-*.json

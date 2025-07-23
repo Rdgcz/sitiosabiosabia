@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Área de acesso restrito do Sítio Sábio Sabiá">
+    <title>Acesso Restrito | Sítio Sábio Sabiá</title>
+    
+    <!-- Firebase SDK (versão mais recente) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <style>
+        :root {
+            --laranja-ouro: #EAA731;
+            --marrom-escuro: #362219;
+            --branco: #FFFFFF;
+            --fundo: #F8F1E5;
+            --perigo: #C62828;
+            --raio-borda: 8px;
+            --fonte-principal: 'Merriweather', serif;
+        }
+        
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--fundo);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('../assets/images/brand/background-texture.jpg');
+            background-size: cover;
+        }
+        
+        .login-container {
+            background: var(--branco);
+            padding: 2rem;
+            border-radius: var(--raio-borda);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        
+        .logo-container a {
+            display: inline-block; /* Fundamental para links com imagens */
+            line-height: 0; /* Remove espaçamento fantasma abaixo da imagem */
+        }
+
+        .logo-login {
+            width: 150px;
+            height: auto; /* Mantém proporção */
+            border: 0; /* Remove borda padrão em alguns navegadores */
+        }
+        
+        .form-group {
+            margin-bottom: 1.0rem;
+            text-align: left;
+            padding-right: 25px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: var(--fonte-principal);
+        }
+        
+        .btn {
+            background: var(--laranja-ouro);
+            color: var(--marrom-escuro);
+            border: none;
+            padding: 0.8rem;
+            width: 100%;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #d6942a;
+        }
+        
+        .alert {
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .alert-danger {
+            background: #ffebee;
+            color: var(--perigo);
+            border-left: 3px solid var(--perigo);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-container">
+            <a href="index.html" aria-label="Voltar para página inicial">
+                <img src="assets/images/brand/logo/logo_sss_redu_compressed.png" 
+                alt="Sítio Sábio Sabiá" class="logo-login">
+            </a>
+        </div>
+
+        <h1>Acesso Restrito</h1>
+        
+        <div id="error" class="alert alert-danger"></div>
+        
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" class="form-control" placeholder="seu@email.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+        </div>
+        
+        <button class="btn" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i> Entrar
+        </button>
+        
+        <p class="login-footer">©<span id="current-year"></span> - Sítio Sábio Sabiá</p>
+    </div>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0O5QqfQae3K9-Ku9-tnpGS-ko82h10JI",
+            authDomain: "sitio-sabio-sabia.firebaseapp.com",
+            projectId: "sitio-sabio-sabia",
+            storageBucket: "sitio-sabio-sabia.appspot.com",
+            messagingSenderId: "789144165592",
+            appId: "1:789144165592:web:0311bc2930a047cf160bad"
+        };
+
+        // Inicialização do Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // URL do backend (substitua pela sua)
+        const BACKEND_URL = 'http://localhost:8080'; //Backend local
+        //const BACKEND_URL = 'https://service-api.sitiosabiosabia.com.br'; //Backend produção
+
+        // Função de login aprimorada (agora com integração ao backend)
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error');
+            
+            // Validação
+            if (!email || !password) {
+                showError('Por favor, preencha todos os campos');
+                return;
+            }
+
+            try {
+                // Mostrar loading
+                const btn = document.getElementById('loginBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+
+                // 1️⃣ Login com Firebase Auth
+                const userCredential = await firebase.auth()
+                    .signInWithEmailAndPassword(email, password);
+                
+                // 2️⃣ Obter o token JWT do Firebase
+                const firebaseToken = await userCredential.user.getIdToken();
+                
+                // 3️⃣ Enviar token para o backend (/api/auth)
+                const response = await fetch(`${BACKEND_URL}/api/auth`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token: firebaseToken })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Falha na comunicação com o backend');
+                }
+
+                // 4️⃣ Obter resposta do backend
+                const data = await response.json();
+
+                // 5️⃣ Armazenar tokens (Firebase + Backend)
+                sessionStorage.setItem('firebaseToken', firebaseToken);
+                sessionStorage.setItem('backendToken', data.backendToken);
+                sessionStorage.setItem('user', JSON.stringify(data.user));
+                
+                // 6️⃣ Redirecionar para área restrita
+                window.location.href = 'restrito.html';
+                
+            } catch (error) {
+                let errorMessage = 'Erro no login';
+                
+                switch (error.code || error.message) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'E-mail inválido';
+                        break;
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        errorMessage = 'E-mail ou senha incorretos';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'Muitas tentativas. Tente mais tarde';
+                        break;
+                    case 'Failed to fetch':
+                        errorMessage = 'Sem conexão com o servidor';
+                        break;
+                    default:
+                        errorMessage = error.message || 'Erro desconhecido';
+                }
+                
+                showError(errorMessage);
+                
+                // Restaurar botão
+                const btn = document.getElementById('loginBtn');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+            }
+        });
+
+        // Mostrar mensagens de erro
+        function showError(message) {
+            const errorElement = document.getElementById('error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // Esconder após 5 segundos
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Login com Enter
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+
+        // Ano atual
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Verificar se já está logado
+        auth.onAuthStateChanged((user) => {
+            if (user && window.location.pathname.includes('login.html')) {
+                window.location.href = 'restrito.html';
+            }
+        });
+    </script>
+
+    <!-- Font Awesome (para ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>

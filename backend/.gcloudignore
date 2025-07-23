@@ -1,0 +1,65 @@
+# =============================================
+# 1. HERDADO DO .GITIGNORE (COM ADAPTAÇÕES)
+# =============================================
+
+# Firebase Service Account
+firebase-service-account.json
+firebase-service-account*.json
+
+# Arquivos de ambiente
+.env
+.env*
+*.env.local
+.env.prod
+
+# Firebase cache
+.firebase/
+
+# Firebase config
+.firebaserc
+
+# Node modules (será instalado durante o build)
+node_modules/
+
+# Sistema
+.DS_Store
+.thumbsdb
+
+# IDE
+.idea/
+.vscode/
+
+# Build
+dist/
+build/
+coverage/
+startup.js
+test-auth.js
+firebase-admin-credentials.json
+firebase-admin-credentials.jsonfirebase-admin-credentials.json
+
+# =============================================
+# 2. ADICIONAIS ESPECÍFICOS PARA CLOUD DEPLOY
+# =============================================
+
+# Logs de desenvolvimento
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de configuração local
+*.local
+
+# Cache do npm/yarn
+.npm
+.yarn-integrity
+.pnpm-debug.log
+
+# Arquivos de testes
+__tests__/
+test/
+*.spec.js
+*.test.js
+
+# Diretórios de documentação
+docs/
