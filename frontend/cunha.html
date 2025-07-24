@@ -319,6 +319,26 @@
         text-decoration: none;
     }
 
+    #btnTopo {
+            display: none; /* Esconde o botão inicialmente */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #555;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        #btnTopo:hover {
+            background-color: #333;
+        }
+
     /* === RODAPÉ === */
     footer {
         background-color: var(--marrom-escuro);
@@ -726,6 +746,7 @@
             </div>
             
             <hr class="separador">
+            <button onclick="topFunction()" id="btnTopo" title="Voltar ao topo">↑</button>    
         </section>
     </main>
 
@@ -739,71 +760,117 @@
     </footer>
 
     <script>
-        // Função para formatar a data em português
-        function formatarData(data) {
-            const opcoes = { 
-                weekday: 'long', 
-                day: 'numeric', 
-                month: 'long', 
-                year: 'numeric',
-                timeZone: 'America/Sao_Paulo'
-            };
-            
-            return data.toLocaleDateString('pt-BR', opcoes);
-        }
+    // Função para formatar a data em português
+    function formatarData(data) {
+        const opcoes = { 
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric',
+            timeZone: 'America/Sao_Paulo'
+        };
+        
+        return data.toLocaleDateString('pt-BR', opcoes);
+    }
 
-        // Função para atualizar relógio e data
-        function atualizarRelogio() {
-            const agora = new Date();
-            
-            // Formatar hora
-            const horas = agora.getHours().toString().padStart(2, '0');
-            const minutos = agora.getMinutes().toString().padStart(2, '0');
-            const segundos = agora.getSeconds().toString().padStart(2, '0');
-            
-            // Atualizar DOM
-            const relogio = document.getElementById('digital-clock');
-            if(relogio) {
-                relogio.textContent = `${horas}:${minutos}:${segundos}`;
-                relogio.setAttribute('aria-label', `Hora atual: ${horas} horas, ${minutos} minutos e ${segundos} segundos`);
-            }
-            
-            // Formatar e atualizar data
-            const dataElemento = document.getElementById('current-date');
-            if(dataElemento) {
-                dataElemento.textContent = formatarData(agora);
+    // Função para atualizar relógio e data
+    function atualizarRelogio() {
+        const agora = new Date();
+        
+        // Formatar hora
+        const horas = agora.getHours().toString().padStart(2, '0');
+        const minutos = agora.getMinutes().toString().padStart(2, '0');
+        const segundos = agora.getSeconds().toString().padStart(2, '0');
+        
+        // Atualizar DOM
+        const relogio = document.getElementById('digital-clock');
+        if(relogio) {
+            relogio.textContent = `${horas}:${minutos}:${segundos}`;
+            relogio.setAttribute('aria-label', `Hora atual: ${horas} horas, ${minutos} minutos e ${segundos} segundos`);
+        }
+        
+        // Formatar e atualizar data
+        const dataElemento = document.getElementById('current-date');
+        if(dataElemento) {
+            dataElemento.textContent = formatarData(agora);
+        }
+    }
+
+    // Função para mostrar/ocultar o botão de voltar ao topo
+    function verificarScroll() {
+        const btnTopo = document.getElementById('btnTopo');
+        if (btnTopo) {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btnTopo.style.display = 'block';
+            } else {
+                btnTopo.style.display = 'none';
             }
         }
+    }
 
-        // Inicialização quando o DOM estiver pronto
-        document.addEventListener('DOMContentLoaded', function() {
-            // Atualiza o ano no footer
-            const currentYearElement = document.getElementById('current-year');
-            if(currentYearElement) {
-                currentYearElement.textContent = new Date().getFullYear();
-            }
-            
-            // Inicia o relógio
-            atualizarRelogio();
-            setInterval(atualizarRelogio, 1000);
-            
-            // Melhoria de acessibilidade para links externos
-            document.querySelectorAll('a[href^="http"]').forEach(link => {
-                if(link.hostname !== window.location.hostname) {
-                    link.setAttribute('rel', 'noopener noreferrer');
-                }
-            });
-            
-            // Adiciona classe de carregamento para transição suave
-            document.body.classList.add('loaded');
+    // Função para voltar ao topo com animação suave
+    function voltarAoTopo() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
         });
+    }
 
-        // Fallback para imagens quebradas
-        document.addEventListener('error', function(e) {
-            if(e.target.tagName.toLowerCase() === 'img') {
-                e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
+    // Inicialização quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+        // Atualiza o ano no footer
+        const currentYearElement = document.getElementById('current-year');
+        if(currentYearElement) {
+            currentYearElement.textContent = new Date().getFullYear();
+        }
+        
+        // Inicia o relógio
+        atualizarRelogio();
+        setInterval(atualizarRelogio, 1000);
+        
+        // Configura o botão de voltar ao topo
+        window.addEventListener('scroll', verificarScroll);
+        
+        // Cria o botão de voltar ao topo se não existir
+        if (!document.getElementById('btnTopo')) {
+            const btnTopo = document.createElement('button');
+            btnTopo.id = 'btnTopo';
+            btnTopo.title = 'Voltar ao topo';
+            btnTopo.innerHTML = '↑';
+            btnTopo.style.display = 'none';
+            btnTopo.style.position = 'fixed';
+            btnTopo.style.bottom = '20px';
+            btnTopo.style.right = '20px';
+            btnTopo.style.zIndex = '99';
+            btnTopo.style.border = 'none';
+            btnTopo.style.outline = 'none';
+            btnTopo.style.backgroundColor = '#555';
+            btnTopo.style.color = 'white';
+            btnTopo.style.cursor = 'pointer';
+            btnTopo.style.padding = '15px';
+            btnTopo.style.borderRadius = '10px';
+            btnTopo.style.fontSize = '18px';
+            btnTopo.addEventListener('click', voltarAoTopo);
+            document.body.appendChild(btnTopo);
+        }
+        
+        // Melhoria de acessibilidade para links externos
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+            if(link.hostname !== window.location.hostname) {
+                link.setAttribute('rel', 'noopener noreferrer');
             }
-        }, true);
+        });
+        
+        // Adiciona classe de carregamento para transição suave
+        document.body.classList.add('loaded');
+    });
+
+    // Fallback para imagens quebradas
+    document.addEventListener('error', function(e) {
+        if(e.target.tagName.toLowerCase() === 'img') {
+            e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
+        }
+    }, true);
     </script>
 </body>
 </html>
