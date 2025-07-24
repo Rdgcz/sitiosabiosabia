@@ -319,25 +319,33 @@
         text-decoration: none;
     }
 
-    #btnTopo {
-            display: none; /* Esconde o botão inicialmente */
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 99;
-            border: none;
-            outline: none;
-            background-color: #555;
-            color: white;
-            cursor: pointer;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 18px;
-        }
+    /* Container do botão (novo) */
+    .btn-topo-container {
+        text-align: center;
+        margin: 30px 0;
+        width: 100%;
+    }
 
-        #btnTopo:hover {
-            background-color: #333;
-        }
+    /* Estilo do botão (modificado) */
+    #btnTopo {
+        display: block; /* Alterado de 'none' para 'block' */
+        margin: 0 auto; /* Centraliza horizontalmente */
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: #362219; /* Cor mantida do seu JS */
+        color: #F8F1E5; /* Cor mantida do seu JS */
+        cursor: pointer;
+        padding: 10px 20px; /* Ajustado para melhor proporção */
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s; /* Adicionado para suavizar hover */
+        width: auto; /* Largura conforme conteúdo */
+    }
+
+    #btnTopo:hover {
+        background-color: #EAA731; /* Cor mais clara para hover */
+    }
 
     /* === RODAPÉ === */
     footer {
