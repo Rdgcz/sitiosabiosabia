@@ -2,7 +2,7 @@
   "firestore": {
     "database": "(default)",
     "location": "us-central1",
-    "rules": "backend/storage.rules",
+    "rules": "backend/firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
