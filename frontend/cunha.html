@@ -838,22 +838,48 @@
             const btnTopo = document.createElement('button');
             btnTopo.id = 'btnTopo';
             btnTopo.title = 'Voltar ao topo';
-            btnTopo.innerHTML = '↑';
-            btnTopo.style.display = 'none';
-            btnTopo.style.position = 'fixed';
-            btnTopo.style.bottom = '20px';
-            btnTopo.style.right = '20px';
+            btnTopo.innerHTML = '↑ Voltar ao topo';  // Adicionei o texto
+    
+            // Removi as propriedades de posição fixa
+            btnTopo.style.display = 'block';
+            btnTopo.style.margin = '20px auto';  // Centraliza horizontalmente
             btnTopo.style.zIndex = '99';
             btnTopo.style.border = 'none';
             btnTopo.style.outline = 'none';
             btnTopo.style.backgroundColor = '#362219';
             btnTopo.style.color = '#F8F1E5';
             btnTopo.style.cursor = 'pointer';
-            btnTopo.style.padding = '15px';
-            btnTopo.style.borderRadius = '10px';
-            btnTopo.style.fontSize = '18px';
+            btnTopo.style.padding = '10px 20px';  // Ajustei o padding
+            btnTopo.style.borderRadius = '5px';
+            btnTopo.style.fontSize = '16px';
+            btnTopo.style.transition = 'background-color 0.3s';
+    
+            // Efeito hover
+            btnTopo.onmouseover = function() {
+            this.style.backgroundColor = '#4a2d21';
+            }
+            btnTopo.onmouseout = function() {
+            this.style.backgroundColor = '#362219';
+            }
+    
             btnTopo.addEventListener('click', voltarAoTopo);
-            document.body.appendChild(btnTopo);
+    
+            // Cria um container para o botão
+            const btnContainer = document.createElement('div');
+            btnContainer.style.textAlign = 'center';
+            btnContainer.style.margin = '30px 0';
+    
+            // Insere o botão no container
+            btnContainer.appendChild(btnTopo);
+    
+            // Encontra o separador e insere o container após ele
+            const separador = document.querySelector('.separador');
+            if (separador) {
+                separador.parentNode.insertBefore(btnContainer, separador.nextSibling);
+            } else {
+                // Fallback caso não encontre o separador
+                document.body.appendChild(btnContainer);
+            }
         }
         
         // Melhoria de acessibilidade para links externos
