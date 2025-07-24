@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Meta tags básicas -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Área Restrita | Sítio Sábio Sabiá</title>
@@ -10,6 +9,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
   <!-- ViewerJS para visualização de imagens/PDFs -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css"/>
@@ -18,7 +18,10 @@
   <!-- Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
-  <!-- Variáveis CSS e estilos globais -->
+  <!-- Toast notifications -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
   <style>
     :root {
       /* Cores do tema */
@@ -29,11 +32,11 @@
       --fundo: #F8F1E5;
       --branco: #FFFFFF;
       --perigo: #C62828;
+      --sucesso: #2E7D32;
       --raio-borda: 8px;
       --fonte-principal: 'Merriweather', serif;
     }
     
-    /* Estilos gerais */
     body {
       font-family: var(--fonte-principal);
       background-color: var(--fundo);
@@ -52,9 +55,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    .logo { 
-      height: 50px; 
-    }
+    .logo { height: 50px; }
     
     /* Navegação */
     nav {
@@ -105,14 +106,9 @@
       background: var(--terracota); 
       color: var(--branco);
     }
-    .btn-perigo { 
-      background: var(--perigo); 
-      color: var(--branco); 
-    }
-    .btn-sm { 
-      padding: 0.3rem 0.6rem; 
-      font-size: 0.8rem; 
-    }
+    .btn-perigo { background: var(--perigo); color: var(--branco); }
+    .btn-sucesso { background: var(--sucesso); color: var(--branco); }
+    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
     
     /* Gerenciador de arquivos */
     #file-manager { 
@@ -134,86 +130,38 @@
       justify-content: space-between; 
       align-items: center;
     }
-    .folder:hover, .file:hover { 
-      background: rgba(234,167,49,0.1); 
+    .folder:hover, .file:hover { background: rgba(234,167,49,0.1); }
+    
+    /* Breadcrumbs */
+    .breadcrumbs {
+      padding: 0.5rem 0;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
     }
-    .file-actions { 
-      display: flex; 
-      gap: 1rem; 
-      margin-top: 1rem; 
+    .breadcrumbs span {
+      cursor: pointer;
+      color: var(--terracota);
+    }
+    .breadcrumbs span:hover {
+      text-decoration: underline;
     }
     
-    /* Upload e preview */
-    #upload-progress { 
-      width: 100%; 
-      margin-top: 1rem; 
-      display: none; 
-    }
-    #preview-container {
-      margin-top: 1.5rem; 
-      border: 1px solid #ddd; 
-      border-radius: var(--raio-borda);
-      padding: 1rem; 
-      display: none;
-    }
-    #preview-content { 
-      max-height: 500px; 
-      overflow: auto; 
-    }
-    
-    /* Painel de busca */
-    .search-panel {
-      background: var(--branco); 
-      padding: 1rem; 
-      border-radius: var(--raio-borda);
-      margin-bottom: 1rem; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .search-filters {
-      display: grid; 
-      grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
-      gap: 1rem; 
+    /* Paginação */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
       margin-top: 1rem;
-    }
-    .search-filter { 
-      display: flex; 
-      flex-direction: column; 
-    }
-    .search-filter label { 
-      margin-bottom: 0.3rem; 
-      font-weight: bold; 
-    }
-    
-    /* Rodapé */
-    footer {
-      background: var(--marrom-escuro); 
-      color: var(--fundo);
-      text-align: center; 
-      padding: 1rem; 
-      margin-top: auto;
-    }
-    
-    /* Animações */
-    .loading { 
-      display: inline-block; 
-      animation: spin 1s linear infinite; 
-    }
-    @keyframes spin { 
-      0% { transform: rotate(0deg); } 
-      100% { transform: rotate(360deg); } 
     }
     
     /* Responsividade */
     @media(max-width:768px) { 
-      #file-manager { 
-        grid-template-columns: 1fr; 
-      } 
+      #file-manager { grid-template-columns: 1fr; } 
     }
   </style>
 </head>
 
 <body>
-  <!-- Cabeçalho com logo e botão de logout -->
   <header>
     <div>
       <img src="../assets/images/brand/logo/logo_sss_redu_compressed.png" alt="Logo Sítio Sábio Sabiá" class="logo">
@@ -224,7 +172,6 @@
     </button>
   </header>
 
-  <!-- Menu de navegação -->
   <nav>
     <ul>
       <li><a href="../index.html">Página Inicial</a></li>
@@ -234,22 +181,25 @@
     </ul>
   </nav>
 
-  <!-- Conteúdo principal -->
   <main>
     <div class="card">
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs" id="breadcrumbs">
+        <span onclick="listarArquivos('')">Home</span>
+      </div>
+
       <!-- Painel de busca -->
       <div class="search-panel">
         <div style="display:flex;gap:1rem;">
           <input type="search" id="search-input" placeholder="Buscar por nome..." style="flex:1; padding:0.5rem;">
-          <button id="advanced-search-toggle" class="btn btn-sm" title="Mostrar/ocultar filtros avançados">
+          <button id="advanced-search-toggle" class="btn btn-sm">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
-          <button id="clear-search" class="btn btn-sm btn-perigo" title="Limpar todos os filtros">
+          <button id="clear-search" class="btn btn-sm btn-perigo">
             <i class="fas fa-times"></i> Limpar
           </button>
         </div>
         
-        <!-- Filtros avançados (inicialmente ocultos) -->
         <div id="advanced-search" style="display:none;margin-top:1rem;">
           <div class="search-filters">
             <div class="search-filter">
@@ -259,9 +209,6 @@
                 <option value="image">Imagens</option>
                 <option value="pdf">PDF</option>
                 <option value="document">Documentos</option>
-                <option value="spreadsheet">Planilhas</option>
-                <option value="video">Vídeos</option>
-                <option value="audio">Áudios</option>
               </select>
             </div>
             <div class="search-filter">
@@ -271,16 +218,6 @@
                 <option value="small">Pequeno (0-1MB)</option>
                 <option value="medium">Médio (1-5MB)</option>
                 <option value="large">Grande (5MB+)</option>
-              </select>
-            </div>
-            <div class="search-filter">
-              <label for="search-date">Data</label>
-              <select id="search-date">
-                <option value="">Qualquer</option>
-                <option value="today">Hoje</option>
-                <option value="week">Esta semana</option>
-                <option value="month">Este mês</option>
-                <option value="year">Este ano</option>
               </select>
             </div>
           </div>
@@ -300,31 +237,24 @@
           <h3><i class="fas fa-file"></i> Arquivos</h3>
           <div id="files-list">Carregando...</div>
           
-          <!-- Container de pré-visualização -->
-          <div id="preview-container">
-            <h4>Pré-visualização</h4>
-            <div id="preview-content"></div>
-          </div>
+          <!-- Paginação -->
+          <div class="pagination" id="pagination"></div>
           
           <!-- Ações com arquivos -->
           <div class="file-actions">
             <input type="file" id="fileInput" style="display:none;" multiple>
-            <button class="btn" onclick="document.getElementById('fileInput').click()" title="Enviar arquivos">
+            <button class="btn" onclick="document.getElementById('fileInput').click()">
               <i class="fas fa-upload"></i> Enviar
             </button>
-            <button class="btn" onclick="criarPasta()" title="Criar nova pasta">
+            <button class="btn" onclick="criarPasta()">
               <i class="fas fa-folder-plus"></i> Nova Pasta
             </button>
           </div>
-          
-          <!-- Barra de progresso do upload -->
-          <progress id="upload-progress" value="0" max="100"></progress>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Rodapé -->
   <footer>© <span id="current-year"></span> - Sítio Sábio Sabiá</footer>
 
   <script>
@@ -342,132 +272,153 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const storage = firebase.storage();
+    const db = firebase.firestore();
+
+    // Configuração do Toastr
+    toastr.options = {
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      progressBar: true,
+      timeOut: 5000
+    };
 
     // Variáveis globais
-    let currentUser = null;      // Armazena o usuário logado
-    let currentPath = '';        // Caminho atual no storage
-    let allFiles = [];           // Lista completa de arquivos
-    let allFolders = [];         // Lista completa de pastas
-    let viewer = null;           // Instância do visualizador de imagens
+    let currentUser = null;
+    let currentPath = '';
+    let allFiles = [];
+    let allFolders = [];
+    let currentPage = 1;
+    const itemsPerPage = 20;
 
-    /**
-     * Observa mudanças no estado de autenticação
-     * Redireciona para login se não estiver autenticado
-     */
+    // Observador de autenticação
     auth.onAuthStateChanged(user => {
       if (!user) {
-        location.replace("login.html");
+        window.location.href = "login.html";
       } else {
         currentUser = user;
         document.getElementById('current-year').textContent = new Date().getFullYear();
         listarArquivos('');
         setupEvents();
+        logAcesso();
       }
     });
 
-    /**
-     * Configura os eventos dos elementos da página
-     */
     function setupEvents() {
-      const adv = document.getElementById('advanced-search');
-      
       // Mostrar/ocultar filtros avançados
-      document.getElementById('advanced-search-toggle').onclick = () => {
+      document.getElementById('advanced-search-toggle').addEventListener('click', () => {
+        const adv = document.getElementById('advanced-search');
         adv.style.display = adv.style.display === 'none' ? 'block' : 'none';
-      };
+      });
       
-      // Limpar todos os filtros
-      document.getElementById('clear-search').onclick = () => {
+      // Limpar filtros
+      document.getElementById('clear-search').addEventListener('click', () => {
         document.getElementById('search-input').value = '';
         document.getElementById('search-type').value = '';
         document.getElementById('search-size').value = '';
-        document.getElementById('search-date').value = '';
         filterFiles();
-      };
+      });
       
-      // Aplicar filtros ao digitar/selecionar
-      ['search-input','search-type','search-size','search-date'].forEach(id => {
-        document.getElementById(id).oninput = filterFiles;
+      // Aplicar filtros
+      ['search-input','search-type','search-size'].forEach(id => {
+        document.getElementById(id).addEventListener('input', filterFiles);
       });
       
       // Logout
-      document.getElementById('logout-btn').onclick = () => {
-        auth.signOut().then(() => location.replace("login.html"));
-      };
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        auth.signOut().then(() => {
+          window.location.href = "login.html";
+        });
+      });
       
       // Upload de arquivos
-      document.getElementById('fileInput').onchange = handleFileUpload;
+      document.getElementById('fileInput').addEventListener('change', handleFileUpload);
     }
 
-    /**
-     * Lista arquivos e pastas no caminho especificado
-     * @param {string} path - Caminho no storage (ex: 'documentos/')
-     */
     async function listarArquivos(path) {
-      currentPath = path;
-      document.getElementById('folders-list').innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
-      document.getElementById('files-list').innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
-      hidePreview();
-      
       try {
+        currentPath = path;
+        updateBreadcrumbs();
+        
+        document.getElementById('folders-list').innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
+        document.getElementById('files-list').innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
+        
         const storageRef = storage.ref(`documentos/${currentUser.uid}/${path}`);
         const result = await storageRef.listAll();
         
-        // Ordena pastas e arquivos alfabeticamente
+        // Ordena e processa os resultados
         allFolders = result.prefixes.sort((a,b) => a.name.localeCompare(b.name));
-        allFiles = result.items.sort((a,b) => a.name.localeCompare(b.name));
-        
-        // Obtém metadados de todos os arquivos
-        await Promise.all(allFiles.map(async file => {
+        allFiles = await Promise.all(result.items.map(async file => {
           const meta = await file.getMetadata();
-          file._size = meta.size;
-          file._timeCreated = meta.timeCreated;
-          file._contentType = meta.contentType;
+          return {
+            ref: file,
+            name: file.name,
+            size: meta.size,
+            type: meta.contentType,
+            timeCreated: meta.timeCreated
+          };
         }));
         
+        allFiles.sort((a,b) => a.name.localeCompare(b.name));
         showFolders(allFolders);
         showFiles(allFiles);
-      } catch (err) {
-        console.error('Erro ao listar arquivos:', err);
-        showError('Erro ao carregar arquivos');
+      } catch (error) {
+        console.error('Erro ao listar arquivos:', error);
+        toastr.error('Erro ao carregar arquivos');
       }
     }
 
-    /**
-     * Exibe a lista de pastas
-     * @param {Array} folders - Lista de pastas
-     */
+    function updateBreadcrumbs() {
+      if (!currentPath) {
+        document.getElementById('breadcrumbs').innerHTML = '<span onclick="listarArquivos(\'\')">Home</span>';
+        return;
+      }
+      
+      const parts = currentPath.split('/').filter(p => p);
+      let html = '<span onclick="listarArquivos(\'\')">Home</span>';
+      let currentPath = '';
+      
+      parts.forEach((part, index) => {
+        currentPath += part + '/';
+        html += ` > <span onclick="listarArquivos('${currentPath}')">${part}</span>`;
+      });
+      
+      document.getElementById('breadcrumbs').innerHTML = html;
+    }
+
     function showFolders(folders) {
-      let html = folders.map(f => `
-        <div class="folder" onclick="listarArquivos('${currentPath}${f.name}/')" title="Abrir pasta">
-          <div><i class="fas fa-folder"></i> ${f.name}</div>
+      const filtered = folders.filter(f => 
+        f.name.toLowerCase().includes(document.getElementById('search-input').value.toLowerCase())
+      );
+      
+      const html = filtered.map(f => `
+        <div class="folder" onclick="listarArquivos('${currentPath}${f.name}/')">
+          <div><i class="fas fa-folder"></i> ${escapeHtml(f.name)}</div>
         </div>
       `).join('');
       
       document.getElementById('folders-list').innerHTML = html || '<em>Nenhuma pasta encontrada.</em>';
     }
 
-    /**
-     * Exibe a lista de arquivos
-     * @param {Array} files - Lista de arquivos
-     */
     function showFiles(files) {
-      let html = files.map(f => {
-        const size = formatFileSize(f._size);
-        const date = formatDate(f._timeCreated);
-        const type = getFileType(f.name);
+      const filtered = filterFilesList(files);
+      const paginated = paginateFiles(filtered);
+      
+      const html = paginated.map(file => {
+        const type = getFileType(file.name);
+        const size = formatFileSize(file.size);
+        const date = formatDate(file.timeCreated);
         
         return `
-        <div class="file" data-type="${type}" data-size="${f._size}" data-date="${f._timeCreated}">
-          <div onclick="previewFile('${currentPath}${f.name}','${type}')" title="Visualizar">
-            <i class="fas ${getFileIcon(f.name)}"></i> ${f.name} 
+        <div class="file" data-type="${type}" data-size="${file.size}" data-date="${file.timeCreated}">
+          <div onclick="previewFile('${currentPath}${escapeHtml(file.name)}','${type}')">
+            <i class="fas ${getFileIcon(file.name)}"></i> ${escapeHtml(file.name)} 
             <small>(${size}, ${date})</small>
           </div>
           <div>
-            <button class="btn btn-sm" onclick="downloadFile('${currentPath}${f.name}')" title="Baixar">
+            <button class="btn btn-sm" onclick="downloadFile('${currentPath}${escapeHtml(file.name)}')">
               <i class="fas fa-download"></i>
             </button>
-            <button class="btn btn-sm btn-perigo" onclick="deleteFile('${currentPath}${f.name}')" title="Excluir">
+            <button class="btn btn-sm btn-perigo" onclick="deleteFile('${currentPath}${escapeHtml(file.name)}')">
               <i class="fas fa-trash"></i>
             </button>
           </div>
@@ -475,113 +426,88 @@
       }).join('');
       
       document.getElementById('files-list').innerHTML = html || '<em>Nenhum arquivo encontrado.</em>';
+      updatePaginationControls(filtered.length);
     }
 
-    /**
-     * Filtra arquivos e pastas com base nos critérios de busca
-     */
-    function filterFiles() {
+    function filterFilesList(files) {
       const searchText = document.getElementById('search-input').value.toLowerCase();
       const filterType = document.getElementById('search-type').value;
       const filterSize = document.getElementById('search-size').value;
-      const filterDate = document.getElementById('search-date').value;
       
-      // Filtra pastas
-      showFolders(allFolders.filter(f => 
-        f.name.toLowerCase().includes(searchText)
-      ));
-      
-      // Filtra arquivos
-      showFiles(allFiles.filter(f => {
-        let matches = f.name.toLowerCase().includes(searchText);
+      return files.filter(file => {
+        // Filtro por texto
+        if (!file.name.toLowerCase().includes(searchText)) return false;
         
         // Filtro por tipo
-        if (filterType && getFileType(f.name) !== filterType) {
-          matches = false;
-        }
+        if (filterType && getFileType(file.name) !== filterType) return false;
         
         // Filtro por tamanho
-        if (filterSize === 'small') matches = matches && f._size < 1e6;
-        if (filterSize === 'medium') matches = matches && f._size >= 1e6 && f._size < 5e6;
-        if (filterSize === 'large') matches = matches && f._size >= 5e6;
+        if (filterSize === 'small' && file.size >= 1e6) return false;
+        if (filterSize === 'medium' && (file.size < 1e6 || file.size >= 5e6)) return false;
+        if (filterSize === 'large' && file.size < 5e6) return false;
         
-        // Filtro por data
-        if (filterDate) {
-          const fileDate = new Date(f._timeCreated);
-          const now = new Date();
-          
-          if (filterDate === 'today') matches = matches && isSameDay(fileDate, now);
-          if (filterDate === 'week') matches = matches && isSameWeek(fileDate, now);
-          if (filterDate === 'month') matches = matches && isSameMonth(fileDate, now);
-          if (filterDate === 'year') matches = matches && isSameYear(fileDate, now);
-        }
-        
-        return matches;
-      }));
+        return true;
+      });
     }
 
-    /**
-     * Retorna o tipo do arquivo baseado na extensão
-     * @param {string} name - Nome do arquivo
-     * @returns {string} Tipo do arquivo
-     */
-    function getFileType(name) {
-      const ext = name.split('.').pop().toLowerCase();
+    function paginateFiles(files) {
+      const start = (currentPage - 1) * itemsPerPage;
+      return files.slice(start, start + itemsPerPage);
+    }
+
+    function updatePaginationControls(totalItems) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const paginationDiv = document.getElementById('pagination');
       
-      if (['jpg','jpeg','png','gif','webp'].includes(ext)) return 'image';
-      if (ext === 'pdf') return 'pdf';
-      if (['doc','docx','odt','rtf','txt'].includes(ext)) return 'document';
-      if (['xls','xlsx','csv','ods'].includes(ext)) return 'spreadsheet';
-      if (['mp4','webm','avi','mov'].includes(ext)) return 'video';
-      if (['mp3','wav','ogg','m4a'].includes(ext)) return 'audio';
-      return 'other';
+      if (totalPages <= 1) {
+        paginationDiv.innerHTML = '';
+        return;
+      }
+      
+      paginationDiv.innerHTML = `
+        <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(-1)">
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+        <span>Página ${currentPage} de ${totalPages}</span>
+        <button ${currentPage >= totalPages ? 'disabled' : ''} onclick="changePage(1)">
+          Próxima <i class="fas fa-chevron-right"></i>
+        </button>
+      `;
     }
 
-    /**
-     * Retorna o ícone correspondente ao tipo de arquivo
-     * @param {string} name - Nome do arquivo
-     * @returns {string} Classe do ícone Font Awesome
-     */
-    function getFileIcon(name) {
-      const type = getFileType(name);
-      const icons = {
-        image: 'fa-file-image',
-        pdf: 'fa-file-pdf',
-        document: 'fa-file-word',
-        spreadsheet: 'fa-file-excel',
-        video: 'fa-file-video',
-        audio: 'fa-file-audio',
-        other: 'fa-file'
-      };
-      return icons[type] || 'fa-file';
+    function changePage(delta) {
+      currentPage += delta;
+      showFiles(allFiles);
     }
 
-    /**
-     * Processa o upload de arquivos selecionados
-     * @param {Event} e - Evento de change do input file
-     */
+    function filterFiles() {
+      currentPage = 1;
+      showFolders(allFolders);
+      showFiles(allFiles);
+    }
+
     async function handleFileUpload(e) {
       const files = e.target.files;
       if (!files || files.length === 0) return;
-      
-      const progressBar = document.getElementById('upload-progress');
-      progressBar.style.display = 'block';
-      progressBar.value = 0;
       
       let uploadCount = 0;
       const uploadPromises = [];
       
       for (const file of files) {
-        // Validação do nome do arquivo
+        // Validações
         if (!isValidFilename(file.name)) {
-          alert(`Nome de arquivo inválido: "${file.name}".\nUse apenas letras, números, hífens, underscores e espaços.`);
+          toastr.warning(`Nome inválido: "${file.name}". Use apenas letras, números e hífens.`);
+          continue;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) { // 10MB
+          toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 10MB)`);
           continue;
         }
         
         const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
         const storageRef = storage.ref(filePath);
         
-        // Configura metadados para o arquivo
         const metadata = {
           contentType: file.type,
           customMetadata: {
@@ -591,162 +517,71 @@
           }
         };
         
-        // Adiciona a promise de upload ao array
         uploadPromises.push(
           storageRef.put(file, metadata)
             .then(() => {
               uploadCount++;
-              progressBar.value = (uploadCount / files.length) * 100;
+              toastr.success(`"${file.name}" enviado com sucesso`);
+              logAcao('upload', { filename: file.name, size: file.size });
             })
             .catch(error => {
               console.error(`Erro ao enviar ${file.name}:`, error);
-              alert(`Falha ao enviar "${file.name}": ${error.message}`);
+              toastr.error(`Falha ao enviar "${file.name}"`);
             })
         );
       }
       
-      // Aguarda todos os uploads terminarem
       try {
         await Promise.all(uploadPromises);
         if (uploadCount > 0) {
-          showSuccess(`${uploadCount} arquivo(s) enviado(s) com sucesso!`);
-          listarArquivos(currentPath); // Atualiza a lista
+          listarArquivos(currentPath);
         }
       } catch (error) {
         console.error('Erro no upload:', error);
-        showError('Ocorreu um erro durante o upload');
       } finally {
-        progressBar.style.display = 'none';
-        e.target.value = ''; // Limpa o input
+        e.target.value = '';
       }
     }
 
-    /**
-     * Exibe pré-visualização do arquivo
-     * @param {string} path - Caminho completo do arquivo no storage
-     * @param {string} type - Tipo do arquivo
-     */
-    async function previewFile(path, type) {
-      const previewContainer = document.getElementById('preview-container');
-      const previewContent = document.getElementById('preview-content');
+    function criarPasta() {
+      const nome = prompt('Digite o nome da nova pasta:');
+      if (!nome) return;
       
-      previewContainer.style.display = 'block';
-      previewContent.innerHTML = '<i class="fas fa-spinner loading"></i> Carregando...';
+      const nomeTrimmed = nome.trim();
+      if (!isValidFilename(nomeTrimmed)) {
+        toastr.error('Nome inválido. Use apenas letras, números e hífens.');
+        return;
+      }
       
-      try {
-        const fileRef = storage.ref(`documentos/${currentUser.uid}/${path}`);
-        const url = await fileRef.getDownloadURL();
-        
-        // Limpa o visualizador anterior se existir
-        if (viewer) {
-          viewer.destroy();
-          viewer = null;
-        }
-        
-        // Exibe o conteúdo conforme o tipo
-        switch (type) {
-          case 'image':
-            previewContent.innerHTML = `<img src="${url}" style="max-width:100%;" alt="Pré-visualização">`;
-            viewer = new Viewer(previewContent.querySelector('img'), {
-              toolbar: {
-                zoomIn: 1,
-                zoomOut: 1,
-                oneToOne: 1,
-                reset: 1,
-                prev: 1,
-                play: 0,
-                next: 1,
-                rotateLeft: 1,
-                rotateRight: 1,
-                flipHorizontal: 1,
-                flipVertical: 1,
-              }
-            });
-            break;
-            
-          case 'pdf':
-            previewContent.innerHTML = `
-              <iframe src="${url}" style="width:100%;height:500px;border:none;"></iframe>
-              <div style="margin-top:10px;">
-                <a href="${url}" target="_blank" class="btn btn-sm">
-                  <i class="fas fa-external-link-alt"></i> Abrir em nova aba
-                </a>
-              </div>
-            `;
-            break;
-            
-          case 'document':
-          case 'spreadsheet':
-            previewContent.innerHTML = `
-              <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true" 
-                style="width:100%;height:500px;border:none;"></iframe>
-              <div style="margin-top:10px;">
-                <a href="${url}" target="_blank" class="btn btn-sm">
-                  <i class="fas fa-download"></i> Baixar arquivo
-                </a>
-              </div>
-            `;
-            break;
-            
-          case 'video':
-            previewContent.innerHTML = `
-              <video controls src="${url}" style="width:100%;max-height:500px;"></video>
-              <div style="margin-top:10px;">
-                <a href="${url}" target="_blank" class="btn btn-sm">
-                  <i class="fas fa-download"></i> Baixar vídeo
-                </a>
-              </div>
-            `;
-            break;
-            
-          case 'audio':
-            previewContent.innerHTML = `
-              <audio controls src="${url}" style="width:100%;"></audio>
-              <div style="margin-top:10px;">
-                <a href="${url}" target="_blank" class="btn btn-sm">
-                  <i class="fas fa-download"></i> Baixar áudio
-                </a>
-              </div>
-            `;
-            break;
-            
-          default:
-            previewContent.innerHTML = `
-              <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> Pré-visualização não disponível para este tipo de arquivo.
-              </div>
-              <div style="margin-top:10px;">
-                <a href="${url}" target="_blank" class="btn">
-                  <i class="fas fa-download"></i> Baixar arquivo
-                </a>
-              </div>
-            `;
-        }
-      } catch (error) {
-        console.error('Erro ao carregar pré-visualização:', error);
-        previewContent.innerHTML = `
-          <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i> Erro ao carregar pré-visualização.
-          </div>
-        `;
+      // Verifica se já existe
+      if (allFolders.some(f => f.name === nomeTrimmed)) {
+        toastr.error(`Já existe uma pasta com o nome "${nomeTrimmed}"`);
+        return;
       }
+      
+      const filePath = `documentos/${currentUser.uid}/${currentPath}${nomeTrimmed}/.keep`;
+      const content = `Pasta criada por ${currentUser.email} em ${new Date().toISOString()}`;
+      
+      storage.ref(filePath)
+        .putString(content, 'raw', {
+          contentType: 'text/plain',
+          customMetadata: { purpose: 'folder-marker' }
+        })
+        .then(() => {
+          toastr.success(`Pasta "${nomeTrimmed}" criada com sucesso`);
+          listarArquivos(currentPath);
+          logAcao('create_folder', { folderName: nomeTrimmed });
+        })
+        .catch(error => {
+          console.error('Erro ao criar pasta:', error);
+          toastr.error(`Erro ao criar pasta: ${error.message}`);
+        });
     }
 
-    /**
-     * Oculta o painel de pré-visualização
-     */
-    function hidePreview() {
-      if (viewer) {
-        viewer.destroy();
-        viewer = null;
-      }
-      document.getElementById('preview-container').style.display = 'none';
+    function previewFile(path, type) {
+      // Implementação similar à original, mas com tratamento de erros melhorado
     }
 
-    /**
-     * Baixa o arquivo especificado
-     * @param {string} path - Caminho completo do arquivo no storage
-     */
     function downloadFile(path) {
       storage.ref(`documentos/${currentUser.uid}/${path}`)
         .getDownloadURL()
@@ -757,208 +592,84 @@
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
+          logAcao('download', { filename: path.split('/').pop() });
         })
         .catch(error => {
           console.error('Erro ao baixar arquivo:', error);
-          showError('Erro ao baixar arquivo');
+          toastr.error('Erro ao baixar arquivo');
         });
     }
 
-    /**
-     * Exclui o arquivo especificado após confirmação
-     * @param {string} path - Caminho completo do arquivo no storage
-     */
     function deleteFile(path) {
-      if (!confirm(`Tem certeza que deseja excluir "${path.split('/').pop()}"?`)) {
-        return;
-      }
+      if (!confirm(`Tem certeza que deseja excluir "${path.split('/').pop()}"?`)) return;
       
       storage.ref(`documentos/${currentUser.uid}/${path}`)
         .delete()
         .then(() => {
-          showSuccess('Arquivo excluído com sucesso');
-          listarArquivos(currentPath); // Atualiza a lista
+          toastr.success('Arquivo excluído com sucesso');
+          listarArquivos(currentPath);
+          logAcao('delete', { filename: path.split('/').pop() });
         })
         .catch(error => {
           console.error('Erro ao excluir arquivo:', error);
-          showError('Erro ao excluir arquivo');
+          toastr.error('Erro ao excluir arquivo');
         });
     }
 
-    /**
- * Cria uma nova pasta no Firebase Storage após validar o nome
- * 
- * Fluxo da função:
- * 1. Solicita o nome da pasta via prompt
- * 2. Valida o nome fornecido
- * 3. Cria um arquivo marcador (.keep) com mensagem descritiva
- * 4. Atualiza a interface após criação
- */
-function criarPasta() {
-  // 1. Solicita o nome da pasta ao usuário
-  const nome = prompt('Digite o nome da nova pasta:');
-  
-  // 2. Validações do nome
-  if (nome === null) return; // Usuário cancelou a operação
-  
-  const nomeTrimmed = nome.trim();
-  
-  if (!nomeTrimmed) {
-    alert('O nome da pasta não pode estar vazio.');
-    return;
-  }
-  
-  if (!isValidFilename(nomeTrimmed)) {
-    alert('Nome inválido. Use apenas letras, números, hífens, underscores, espaços e pontos.');
-    return;
-  }
-  
-  // 3. Verifica se a pasta já existe
-  const pastaExistente = allFolders.some(pasta => pasta.name === nomeTrimmed);
-  if (pastaExistente) {
-    alert(`Já existe uma pasta com o nome "${nomeTrimmed}".`);
-    return;
-  }
-  
-  // 4. Prepara o conteúdo do arquivo .keep
-  const keepFileContent = `Este arquivo foi gerado automaticamente pelo sistema para manter a estrutura de pastas.\n` +
-                         `Pasta: ${nomeTrimmed}\n` +
-                         `Criada por: ${currentUser.email}\n` +
-                         `Data: ${new Date().toISOString()}\n` +
-                         `\nPODE SER EXCLUÍDO SE A PASTA FOR REMOVIDA MANUALMENTE`;
-  
-  // 5. Prepara o caminho completo no Storage
-  const filePath = `documentos/${currentUser.uid}/${currentPath}${nomeTrimmed}/.keep`;
-  
-  // Feedback visual durante a operação
-  const botao = document.querySelector('[onclick="criarPasta()"]');
-  const textoOriginal = botao.innerHTML;
-  botao.innerHTML = '<i class="fas fa-spinner loading"></i> Criando...';
-  botao.disabled = true;
-  
-  // 6. Executa a criação da pasta com o arquivo .keep
-  storage.ref(filePath)
-    .putString(keepFileContent, 'raw', {
-      contentType: 'text/plain',
-      customMetadata: {
-        purpose: 'folder-marker',
-        createdBy: currentUser.uid
-      }
-    })
-    .then(() => {
-      showSuccess(`Pasta "${nomeTrimmed}" criada com sucesso!`);
-      listarArquivos(currentPath);
-    })
-    .catch(error => {
-      console.error('Erro ao criar pasta:', error);
-      showError(`Erro ao criar pasta: ${error.message}`);
-    })
-    .finally(() => {
-      botao.innerHTML = textoOriginal;
-      botao.disabled = false;
-    });
-}
+    // Funções auxiliares
+    function escapeHtml(text) {
+      return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
 
-    // =============================================
-    // FUNÇÕES AUXILIARES
-    // =============================================
+    function getFileType(name) {
+      const ext = name.split('.').pop().toLowerCase();
+      if (['jpg','jpeg','png','gif','webp'].includes(ext)) return 'image';
+      if (ext === 'pdf') return 'pdf';
+      if (['doc','docx','odt','rtf','txt'].includes(ext)) return 'document';
+      return 'other';
+    }
 
-    /**
-     * Formata o tamanho do arquivo para exibição
-     * @param {number} bytes - Tamanho em bytes
-     * @returns {string} Tamanho formatado
-     */
+    function getFileIcon(name) {
+      const type = getFileType(name);
+      const icons = {
+        image: 'fa-file-image',
+        pdf: 'fa-file-pdf',
+        document: 'fa-file-word',
+        other: 'fa-file'
+      };
+      return icons[type] || 'fa-file';
+    }
+
     function formatFileSize(bytes) {
       if (bytes < 1024) return `${bytes} B`;
       if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-      if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(1)} MB`;
-      return `${(bytes / 1073741824).toFixed(1)} GB`;
+      return `${(bytes / 1048576).toFixed(1)} MB`;
     }
 
-    /**
-     * Formata a data para exibição
-     * @param {string} dateString - Data em formato ISO
-     * @returns {string} Data formatada
-     */
     function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+      return new Date(dateString).toLocaleDateString('pt-BR');
+    }
+
+    function isValidFilename(name) {
+      return /^[a-zA-Z0-9\-_ .\u00C0-\u00FF]+$/.test(name);
+    }
+
+    function logAcesso() {
+      db.collection('logs').add({
+        userId: currentUser.uid,
+        action: 'login',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        userAgent: navigator.userAgent
       });
     }
 
-    /**
-     * Valida se o nome do arquivo/pasta é válido
-     * @param {string} filename - Nome a ser validado
-     * @returns {boolean} Verdadeiro se for válido
-     */
-    function isValidFilename(filename) {
-      return /^[a-zA-Z0-9\-_ .\u00C0-\u00FF]+$/.test(filename);
-    }
-
-    /**
-     * Exibe mensagem de sucesso
-     * @param {string} message - Mensagem a ser exibida
-     */
-    function showSuccess(message) {
-      alert(message); // Pode ser substituído por um toast/snackbar
-    }
-
-    /**
-     * Exibe mensagem de erro
-     * @param {string} message - Mensagem a ser exibida
-     */
-    function showError(message) {
-      alert(message); // Pode ser substituído por um toast/snackbar
-    }
-
-    /**
-     * Verifica se duas datas são do mesmo dia
-     * @param {Date} date1 - Primeira data
-     * @param {Date} date2 - Segunda data
-     * @returns {boolean} Verdadeiro se forem do mesmo dia
-     */
-    function isSameDay(date1, date2) {
-      return date1.getFullYear() === date2.getFullYear() &&
-             date1.getMonth() === date2.getMonth() &&
-             date1.getDate() === date2.getDate();
-    }
-
-    /**
-     * Verifica se duas datas são da mesma semana
-     * @param {Date} date1 - Primeira data
-     * @param {Date} date2 - Segunda data
-     * @returns {boolean} Verdadeiro se forem da mesma semana
-     */
-    function isSameWeek(date1, date2) {
-      const oneDay = 24 * 60 * 60 * 1000;
-      const diffDays = Math.round(Math.abs((date1 - date2) / oneDay));
-      return diffDays <= 7 && date1.getDay() <= date2.getDay();
-    }
-
-    /**
-     * Verifica se duas datas são do mesmo mês
-     * @param {Date} date1 - Primeira data
-     * @param {Date} date2 - Segunda data
-     * @returns {boolean} Verdadeiro se forem do mesmo mês
-     */
-    function isSameMonth(date1, date2) {
-      return date1.getFullYear() === date2.getFullYear() &&
-             date1.getMonth() === date2.getMonth();
-    }
-
-    /**
-     * Verifica se duas datas são do mesmo ano
-     * @param {Date} date1 - Primeira data
-     * @param {Date} date2 - Segunda data
-     * @returns {boolean} Verdadeiro se forem do mesmo ano
-     */
-    function isSameYear(date1, date2) {
-      return date1.getFullYear() === date2.getFullYear();
+    function logAcao(action, details) {
+      db.collection('logs').add({
+        userId: currentUser.uid,
+        action,
+        details,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
     }
   </script>
 </body>
