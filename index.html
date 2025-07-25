@@ -234,9 +234,12 @@
 
         .nav-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: var(--espaco-pequeno) var(--espaco-base);
+            max-width: 1200px; /* Adicionado para limitar a largura */
+            margin: 0 auto; /* Centraliza o container */
+            width: 100%;
         }
 
         .menu-toggle {
@@ -247,6 +250,8 @@
             font-size: 1.5rem;
             cursor: pointer;
             padding: var(--espaco-pequeno);
+            position: absolute;
+            right: var(--espaco-base);
         }
 
         nav ul {
@@ -257,6 +262,7 @@
             flex-wrap: wrap;
             padding: var(--espaco-pequeno) 0;
             margin: 0;
+            width: 100%;
         }
 
         nav a {
@@ -440,11 +446,14 @@
             .nav-container {
                 flex-direction: column;
                 align-items: stretch;
+                padding: 0;
             }
 
             .menu-toggle {
                 display: block;
+                position: static;
                 align-self: flex-end;
+                margin: var(--espaco-pequeno);
             }
 
             nav ul {
