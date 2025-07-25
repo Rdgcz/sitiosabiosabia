@@ -26,7 +26,7 @@ const path = require('path');           // Manipulação de caminhos de arquivos
 
 // Configuração do Multer para upload de arquivos
 const upload = multer({
-  dest: 'uploads/',
+  dest: '/tmp/uploads/',
   limits: { fileSize: 10 * 1024 * 1024 } // Limite de 10MB
 });
 
