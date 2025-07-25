@@ -623,4 +623,258 @@ backend/src/config/firebase-*.json
 
 --- 
 
+## 25/07/2025
+
+Excelente decisão, Rodrigo!
+Aqui está um **`README.md`** **super completo** e **integrado**, cobrindo **todo o fluxo real** do seu projeto **`Sitio Sabio Sabia`**, do **frontend** ao **backend**, com **Firebase**, **Cloud Run**, **Secrets**, **DNS** e **boas práticas**.
+Guarde este arquivo como **documentação oficial** do seu repositório!
+
+---
+
+## ✅ `README.md` COMPLETO — **Sitio Sabio Sabia**
+
+```markdown
+# 🌿 Sitio Sabio Sabia — Documentação Completa
+
+Este repositório reúne **frontend** e **backend** do projeto **Sitio Sabio Sabia**, integrando **Firebase**, **Cloud Run**, **Auth**, **Storage**, **Firestore** e **GitHub Pages**.
+
+---
+
+## 📂 Estrutura de Pastas
+
+```
+
+/
+├── index.html          # Página inicial, contém inicialização do Firebase
+├── frontend/
+│   ├── login.html      # Tela de login com Firebase Auth + chamada backend
+│   ├── restrito.html   # Área restrita, protegida pelo Firebase SDK
+│   ├── config.js (opcional) # Guarda BACKEND\_URL se quiser usar variável global
+├── backend/
+│   ├── Dockerfile      # Container do backend para Cloud Run
+│   ├── src/
+│   │   ├── app.js      # App Express principal
+│   │   ├── config/index.js  # Configuração de envs, Firebase Admin
+│   │   ├── routes/     # Rotas API (/api/auth etc.)
+│   │   └── middlewares/
+
+````
+
+---
+
+## ⚙️ Tecnologias Principais
+
+- **Frontend**: HTML + Firebase Client SDK
+- **Backend**: Node.js + Express + Firebase Admin SDK + Multer + Cloud Run
+- **Hospedagem Frontend**: GitHub Pages
+- **Hospedagem Backend**: Google Cloud Run
+- **Banco**: Firestore
+- **Storage**: Firebase Storage
+
+---
+
+## 🔐 Autenticação
+
+- O **login** usa Firebase Auth (Google, Email/Senha, etc.).
+- No `login.html`, após o login Firebase, um **ID Token** é gerado:
+  ```javascript
+  const firebaseToken = await user.getIdToken();
+````
+
+* Esse token é enviado via **`fetch`** para:
+
+  ```
+  POST https://backend-api-XXXXXX.us-central1.run.app/api/auth
+  ```
+* O backend **verifica o ID Token** usando Firebase Admin SDK → cria sessão, logs, etc.
+
+---
+
+## 🔒 Área Restrita
+
+* O `restrito.html` confia no **Firebase Client SDK** para proteger a página:
+
+  ```javascript
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = 'login.html';
+    }
+  });
+  ```
+* Não faz `fetch` para o backend Node, pois neste projeto só o **admin** (você) acessa.
+
+---
+
+## 🌐 Backend no Cloud Run
+
+* O backend é empacotado num **container Docker**:
+
+  ```dockerfile
+  FROM node:18
+  WORKDIR /app
+  COPY . .
+  RUN npm install
+  CMD ["node", "src/app.js"]
+  ```
+
+* É construído e enviado via:
+
+  ```bash
+  gcloud builds submit --tag gcr.io/SEU_PROJECT_ID/backend-api
+  ```
+
+* Implantado:
+
+  ```bash
+  gcloud run deploy backend-api \
+    --image gcr.io/SEU_PROJECT_ID/backend-api \
+    --platform managed \
+    --region us-central1 \
+    --allow-unauthenticated \
+    --set-env-vars "FIREBASE_PROJECT_ID=...,FIREBASE_CLIENT_EMAIL=...,ALLOWED_ORIGINS=https://www.seusite.com,..." \
+    --set-secrets FIREBASE_PRIVATE_KEY=firebase-private-key:latest
+  ```
+
+---
+
+## ✅ Firebase Admin no Backend
+
+Para inicializar:
+
+```js
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY
+  }),
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  databaseURL: process.env.FIREBASE_DATABASE_URL
+});
+```
+
+---
+
+## 🔑 🔐 Secrets — **FIREBASE\_PRIVATE\_KEY**
+
+* O **`FIREBASE_PRIVATE_KEY`** é o maior ponto de atenção.
+
+* Use **Google Secret Manager** para não se perder com `\n` escapados:
+
+  ```bash
+  echo "-----BEGIN PRIVATE KEY-----
+  ...
+  -----END PRIVATE KEY-----" | gcloud secrets create firebase-private-key --data-file=-
+  ```
+
+* Permita acesso:
+
+  ```bash
+  gcloud secrets add-iam-policy-binding firebase-private-key \
+    --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+    --role="roles/secretmanager.secretAccessor"
+  ```
+
+---
+
+## 🌐 Domínio e DNS
+
+* Frontend: `sitiosabiosabia.com.br` → GitHub Pages.
+* Backend: URL Cloud Run ex: `https://backend-api-XXXXXX.us-central1.run.app`
+* **Recomendado:** criar `api.sitiosabiosabia.com.br` (CNAME) apontando para URL do Cloud Run.
+
+---
+
+## ⚡ CORS no Backend
+
+O backend Express deve aceitar requisições só do domínio do frontend:
+
+```env
+ALLOWED_ORIGINS=https://www.sitiosabiosabia.com.br
+```
+
+---
+
+## 📄 `.env.example` recomendado
+
+```env
+# Firebase
+FIREBASE_PROJECT_ID=sitio-sabio-sabia
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxx@xxx.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY=(via Secrets Manager)
+FIREBASE_STORAGE_BUCKET=sitio-sabio-sabia.appspot.com
+FIREBASE_DATABASE_URL=https://sitio-sabio-sabia.firebaseio.com
+
+# API
+ALLOWED_ORIGINS=https://www.sitiosabiosabia.com.br
+API_BASE_URL=https://backend-api-XXXXXX.us-central1.run.app
+
+# Sessão/JWT
+JWT_SECRET=<sua chave forte>
+SESSION_SECRET=<sua chave forte>
+
+# Limites
+RATE_WINDOW=15
+RATE_LIMIT=100
+MAX_REQUEST_SIZE=50kb
+
+# Node env
+NODE_ENV=production
+```
+
+---
+
+## ✅ Health check
+
+Para testar:
+
+```bash
+curl https://backend-api-XXXXXX.us-central1.run.app/health
+# Deve responder: { "status": "healthy" }
+```
+
+---
+
+## 🧑‍💻 Comandos Git + Deploy
+
+```bash
+git add .
+git commit -m "Fix multer /tmp, config keys, deploy Cloud Run"
+git push origin main
+
+# Build & Push
+gcloud builds submit --tag gcr.io/SEU_PROJECT_ID/backend-api
+
+# Deploy Cloud Run
+gcloud run deploy backend-api \
+  --image gcr.io/SEU_PROJECT_ID/backend-api \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars ...
+  --set-secrets FIREBASE_PRIVATE_KEY=firebase-private-key:latest
+```
+
+---
+
+## ✅ Checklist final
+
+* 🔒 **PRIVATE\_KEY:** sempre Secrets Manager ou `.env` local com quebras REAIS.
+* ⚙️ **Multer:** use `/tmp/uploads` no Cloud Run (não use `/app`).
+* 🔗 **Frontend:** `fetch` para URL do Cloud Run.
+* 🌍 **CNAME:** `api.sitiosabiosabia.com.br` opcional, mas recomendável.
+* 🚦 **CORS:** restrito ao domínio real.
+
+---
+
+## 🚀 Contribuições
+
+Projeto pessoal, **apenas admin** (Rodrigo) faz deploys e push.
+
+---
+
+## 🎉 Feito com ❤️ e persistência
+
+> **Sitio Sabio Sabia** — *Onde caminhos reais encontram deploys reais!*
+
+
 
