@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Meta tags permanecem exatamente as mesmas -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="No Sítio Sábio Sabiá, a Serra do Mar revela seu ritmo ancestral. Observação de pássaros, silêncio que cura e trilhas sob a Mata Atlântica. Um refúgio para desacelerar e se reconectar com a essência da natureza.">
@@ -9,17 +10,17 @@
     <meta name="theme-color" content="#362219">
     <meta name="robots" content="index, follow">		
     
-    <!-- Preload -->
+    <!-- Preload permanece o mesmo -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" as="style">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
     <link rel="preload" href="frontend/assets/images/brand/logo/logo_sss_redu_compressed.png" as="image">
     
-    <!-- Preconnect -->
+    <!-- Preconnect permanece o mesmo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Open Graph -->
+    <!-- Open Graph permanece o mesmo -->
     <meta property="og:title" content="Sítio Sábio Sabiá | Onde a Serra do Mar sussurra histórias de reconexão - Cunha/SP">
     <meta property="og:description" content="Entre sabiás e araucárias, o Sítio Sábio Sabiá é mais que um destino: é um convite a escutar. Observação de pássaros raros, trilhas imersivas na Mata Atlântica e o silêncio que restaura.">
     <meta property="og:image" content="https://sitiosabiosabia.com.br/frontend/assets/images/brand/logo/logo-share.png">
@@ -28,10 +29,10 @@
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="Sítio Sábio Sabiá">
     
-    <!-- Favicon -->
+    <!-- Favicon permanece o mesmo -->
     <link rel="icon" href="frontend/assets/images/brand/favicon/favicon-android-chrome-512x512.png" type="image/png">
     
-    <!-- CSS -->
+    <!-- CSS permanece o mesmo -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Updock&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -41,7 +42,7 @@
     <style>
         /* === VARIÁVEIS CSS === */
         :root {
-            /* Cores */
+            /* Cores permanecem as mesmas */
             --laranja-ouro: #EAA731;
             --marrom-escuro: #362219;
             --terracota: #A0470D;
@@ -53,23 +54,23 @@
             --branco: #FFFFFF;
             --sombra: rgba(0, 0, 0, 0.1);
             
-            /* Tipografia */
+            /* Tipografia permanece a mesma */
             --fonte-principal: 'Merriweather', serif;
             --fonte-secundaria: system-ui, sans-serif;
             --peso-regular: 400;
             --peso-bold: 700;
             
-            /* Espaçamentos */
+            /* Espaçamentos permanecem os mesmos */
             --espaco-base: 1rem;
             --espaco-pequeno: 0.5rem;
             --espaco-medio: 1.5rem;
             --espaco-grande: 2rem;
             
-            /* Bordas */
+            /* Bordas permanecem as mesmas */
             --raio-borda: 8px;
             --raio-borda-pequeno: 4px;
             
-            /* Transições */
+            /* Transições permanecem as mesmas */
             --transicao-rapida: 0.2s ease;
             --transicao-media: 0.3s ease;
         }
@@ -231,6 +232,23 @@
             background-color: var(--marrom-escuro);
         }
 
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--espaco-pequeno) var(--espaco-base);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--bordas);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: var(--espaco-pequeno);
+        }
+
         nav ul {
             display: flex;
             justify-content: center;
@@ -238,6 +256,7 @@
             gap: var(--espaco-grande);
             flex-wrap: wrap;
             padding: var(--espaco-pequeno) 0;
+            margin: 0;
         }
 
         nav a {
@@ -418,11 +437,26 @@
                 margin-top: var(--espaco-base);
             }
 
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .menu-toggle {
+                display: block;
+                align-self: flex-end;
+            }
+
             nav ul {
                 flex-direction: column;
                 align-items: center;
                 gap: var(--espaco-base);
                 padding: var(--espaco-base) 0;
+                display: none;
+            }
+
+            nav ul.active {
+                display: flex;
             }
 
             main {
@@ -489,7 +523,16 @@
 <body itemscope itemtype="https://schema.org/WebPage">
     <header>
         <div class="logo-container">
-            <img src="frontend/assets/images/brand/logo/logo_sss_redu_compressed.png" alt="Sítio Sábio Sabiá" class="logo" itemprop="logo" width="150" height="150" fetchpriority="high" decoding="async">
+            <img src="frontend/assets/images/brand/logo/logo_sss_redu_compressed.png" 
+                 alt="Sítio Sábio Sabiá" 
+                 class="logo" 
+                 itemprop="logo" 
+                 width="150" 
+                 height="150" 
+                 fetchpriority="high" 
+                 decoding="async"
+                 srcset="frontend/assets/images/brand/logo/logo_sss_redu_compressed.png 1x,
+                         frontend/assets/images/brand/logo/logo_sss_redu_compressed@2x.png 2x">
         </div>
         
         <div class="header-text">
@@ -504,12 +547,17 @@
     </header>
 
     <nav aria-label="Navegação principal">
-        <ul role="menubar">
-            <li role="none"><a href="frontend/cunha.html" role="menuitem">Cunha</a></li>
-            <li role="none"><a href="frontend/ositio.html" role="menuitem">O Sítio</a></li>
-            <li role="none"><a href="frontend/underConstruction.html" role="menuitem">Galeria</a></li>
-            <li role="none"><a href="frontend/login.html" role="menuitem"><i class="fas fa-lock"></i></a></li>
-        </ul>
+        <div class="nav-container">
+            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-principal">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul id="menu-principal" role="menubar">
+                <li role="none"><a href="frontend/cunha.html" role="menuitem">Cunha</a></li>
+                <li role="none"><a href="frontend/ositio.html" role="menuitem">O Sítio</a></li>
+                <li role="none"><a href="frontend/underConstruction.html" role="menuitem">Galeria</a></li>
+                <li role="none"><a href="frontend/login.html" role="menuitem"><i class="fas fa-lock"></i></a></li>
+            </ul>
+        </div>
     </nav>
 
     <main class="fade-in" itemprop="mainContentOfPage">
@@ -536,19 +584,54 @@
         <div class="swiper-container" role="region" aria-label="Diversas fotos do Sítio">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <img src="frontend/assets/images/homeSlideshow/inicio.png" alt="Vista do Sítio Sábio Sabiá" loading="lazy" decoding="async">
+                    <img src="frontend/assets/images/homeSlideshow/inicio.png" 
+                         alt="Vista do Sítio Sábio Sabiá" 
+                         loading="lazy" 
+                         decoding="async"
+                         width="1200"
+                         height="300"
+                         srcset="frontend/assets/images/homeSlideshow/inicio.png 1x,
+                                 frontend/assets/images/homeSlideshow/inicio@2x.png 2x">
                 </div>
                 <div class="swiper-slide">
-                    <img src="frontend/assets/images/homeSlideshow/patos.png" alt="Patinhos na beira da lagoa" loading="lazy" decoding="async">
+                    <img src="frontend/assets/images/homeSlideshow/patos.png" 
+                         alt="Patinhos na beira da lagoa" 
+                         loading="lazy" 
+                         decoding="async"
+                         width="1200"
+                         height="300"
+                         srcset="frontend/assets/images/homeSlideshow/patos.png 1x,
+                                 frontend/assets/images/homeSlideshow/patos@2x.png 2x">
                 </div>
                 <div class="swiper-slide">
-                    <img src="frontend/assets/images/homeSlideshow/arco-iris.png" alt="Arco-iris" loading="lazy" decoding="async">
+                    <img src="frontend/assets/images/homeSlideshow/arco-iris.png" 
+                         alt="Arco-iris" 
+                         loading="lazy" 
+                         decoding="async"
+                         width="1200"
+                         height="300"
+                         srcset="frontend/assets/images/homeSlideshow/arco-iris.png 1x,
+                                 frontend/assets/images/homeSlideshow/arco-iris@2x.png 2x">
                 </div>
                 <div class="swiper-slide">
-                    <img src="frontend/assets/images/homeSlideshow/flor-branca.png" alt="Flores brancas" loading="lazy" decoding="async">
+                    <img src="frontend/assets/images/homeSlideshow/flor-branca.png" 
+                         alt="Flores brancas" 
+                         loading="lazy" 
+                         decoding="async"
+                         width="1200"
+                         height="300"
+                         srcset="frontend/assets/images/homeSlideshow/flor-branca.png 1x,
+                                 frontend/assets/images/homeSlideshow/flor-branca@2x.png 2x">
                 </div>
                 <div class="swiper-slide">
-                    <img src="frontend/assets/images/homeSlideshow/crepusculo.png" alt="Silhueta de montanhas no crepúsculo" loading="lazy" decoding="async">
+                    <img src="frontend/assets/images/homeSlideshow/crepusculo.png" 
+                         alt="Silhueta de montanhas no crepúsculo" 
+                         loading="lazy" 
+                         decoding="async"
+                         width="1200"
+                         height="300"
+                         srcset="frontend/assets/images/homeSlideshow/crepusculo.png 1x,
+                                 frontend/assets/images/homeSlideshow/crepusculo@2x.png 2x">
                 </div>	  
             </div>
         </div>
@@ -601,13 +684,33 @@
               fadeEffect: { crossFade: true }
           });
 
+          // Menu mobile
+          const menuToggle = document.querySelector('.menu-toggle');
+          const menu = document.querySelector('#menu-principal');
+          
+          if (menuToggle && menu) {
+              menuToggle.addEventListener('click', function() {
+                  const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                  this.setAttribute('aria-expanded', !isExpanded);
+                  menu.classList.toggle('active');
+                  this.innerHTML = isExpanded ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
+              });
+          }
+
           // Firebase Auth State Observer
           firebase.auth().onAuthStateChanged((user) => {
               if (user) {
-                  console.log('Usuário autenticado:', user.email);
-                  // Adicione aqui qualquer lógica para usuários autenticados
+                  // Lógica para usuários autenticados (sem console.log)
               }
           });
+
+          // Fallback para imagens quebradas
+          document.addEventListener('error', function(e) {
+              if (e.target.tagName.toLowerCase() === 'img') {
+                  e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDEyMDAgMzAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmMWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzNlMjcyMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+SW1hZ2VtIG5cdTAwRTNvIGRpc3Bvblx1MDBFRHZlbDwvdGV4dD48L3N2Zz4=';
+                  e.target.alt = 'Imagem não disponível';
+              }
+          }, true);
       });
 
       function formatarData(data) {
@@ -633,14 +736,6 @@
           if (relogio) relogio.textContent = `${horas}:${minutos}:${segundos}`;
           if (dataElemento) dataElemento.textContent = formatarData(agora);
       }
-
-      // Fallback para imagens quebradas
-      document.addEventListener('error', function(e) {
-          if (e.target.tagName.toLowerCase() === 'img') {
-              e.target.src = 'frontend/assets/images/fallback-image.png';
-              e.target.alt = 'Imagem não disponível';
-          }
-      }, true);
     </script>
 </body>
 </html>
