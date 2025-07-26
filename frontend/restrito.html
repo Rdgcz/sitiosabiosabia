@@ -377,10 +377,10 @@
       
       const parts = currentPath.split('/').filter(p => p);
       let html = '<span onclick="listarArquivos(\'\')">Home</span>';
-      let currentPath = '';
+      let tempPath = '';
       
       parts.forEach((part, index) => {
-        currentPath += part + '/';
+        tempPath += part + '/';
         html += ` > <span onclick="listarArquivos('${currentPath}')">${part}</span>`;
       });
       
