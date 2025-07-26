@@ -9,7 +9,15 @@
     <meta name="author" content="Sítio Sábio Sabiá">
     <meta name="theme-color" content="#362219">
     <meta name="robots" content="index, follow">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval';">		
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' data: blob:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdn.jsdelivr.net https://www.googletagmanager.com;
+        style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com data:;
+        img-src 'self' data: blob: https:;
+        connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.gstatic.com https://backend-api-789144165592.us-central1.run.app;
+        frame-src https://*.firebaseapp.com;">
+        		
     
     <!-- Preload permanece o mesmo -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" as="style">
