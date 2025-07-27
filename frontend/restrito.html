@@ -255,45 +255,11 @@
       overflow-y: auto;
       background: var(--branco);
     }
-
-    /* Estilos para miniaturas */
-    .thumbnail-container {
-      position: relative;
-      width: 100%;
-      height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 0.5rem;
-      overflow: hidden;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-    }
-
-    .thumbnail {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .thumbnail-loading {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--taupe);
-    }
     
     /* Visualização em ícones */
     .files-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1rem;
     }
     .file-item {
@@ -321,9 +287,10 @@
     .file-name {
       font-size: 0.75rem;
       line-height: 1.2;
+      margin-top: 0.3rem;
     }
     .file-actions {
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
       display: flex;
       gap: 0.3rem;
     }
@@ -338,6 +305,46 @@
       font-size: 0.7rem;
       border: none;
       cursor: pointer;
+    }
+    
+    /* Estilos para miniaturas */
+    .thumbnail-container {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+    .thumbnail {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .thumbnail-loaded {
+      opacity: 1;
+    }
+    .thumbnail-loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--taupe);
+    }
+    .file-size {
+      font-size: 0.7rem;
+      color: var(--taupe);
+      margin-top: 0.2rem;
     }
     
     /* Visualização em lista */
@@ -434,7 +441,11 @@
       }
       
       .files-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+      
+      .thumbnail-container {
+        height: 100px;
       }
     }
   </style>
@@ -588,7 +599,7 @@
     </div>
   </main>
 
-  <!-- Modal Upload (do teste.html) -->
+  <!-- Modal Upload -->
   <div class="modal fade" id="modalUpload" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -598,6 +609,15 @@
         </div>
         <div class="modal-body">
           <input type="file" id="fileInput" class="form-control" multiple />
+          <div class="mt-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="generateThumbnails" checked>
+              <label class="form-check-label" for="generateThumbnails">
+                Gerar miniaturas para imagens
+              </label>
+            </div>
+            <small class="text-muted">Miniaturas são versões reduzidas das imagens para carregamento mais rápido</small>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -650,6 +670,7 @@
     const itemsPerPage = 20;
     let currentView = 'grid'; // 'grid' ou 'list'
     let modalUpload = null;
+    const thumbnailCache = {}; // Cache para miniaturas
 
     // Observador de autenticação
     auth.onAuthStateChanged(user => {
@@ -719,20 +740,26 @@
         });
       });
       
-      // Upload de arquivos
-      document.getElementById('fileInput').addEventListener('change', handleFileUpload);
-
-      // Configura o lazy loading
+      // Configura o lazy loading e intersection observer
       setupLazyLoading();
     }
 
     function abrirModalUpload() {
+      document.getElementById('fileInput').value = ''; // Limpa seleção anterior
       modalUpload.show();
     }
 
     async function uploadArquivo() {
       const files = document.getElementById('fileInput').files;
-      if (!files || files.length === 0) return;
+      const generateThumbs = document.getElementById('generateThumbnails').checked;
+      
+      if (!files || files.length === 0) {
+        toastr.warning('Nenhum arquivo selecionado');
+        return;
+      }
+      
+      modalUpload.hide();
+      toastr.info(`Enviando ${files.length} arquivo(s)...`, '', { timeOut: 3000 });
       
       let uploadCount = 0;
       const uploadPromises = [];
@@ -744,56 +771,110 @@
           continue;
         }
         
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-          toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 10MB)`);
+        if (file.size > 50 * 1024 * 1024) { // 50MB
+          toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 50MB)`);
           continue;
         }
         
-        const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
-        const storageRef = storage.ref(filePath);
+        const fileType = getFileType(file.name);
         
-        const metadata = {
-          contentType: file.type,
-          customMetadata: {
-            originalName: file.name,
-            uploadedBy: currentUser.uid,
-            uploadedAt: new Date().toISOString()
-          }
-        };
+        // Upload do arquivo original
+        const originalUpload = uploadFile(file, currentPath + file.name);
+        uploadPromises.push(originalUpload);
         
-        uploadPromises.push(
-          storageRef.put(file, metadata)
-            .then(() => {
-              uploadCount++;
-              toastr.success(`"${file.name}" enviado com sucesso`);
-              logAcao('upload', { filename: file.name, size: file.size });
-            })
-            .catch(error => {
-              console.error(`Erro ao enviar ${file.name}:`, error);
-              toastr.error(`Falha ao enviar "${file.name}"`);
-            })
-        );
+        // Se for imagem e optou por gerar thumbnails
+        if (fileType === 'image' && generateThumbs) {
+          const thumbUpload = createAndUploadThumbnail(file);
+          uploadPromises.push(thumbUpload);
+        }
       }
       
       try {
         await Promise.all(uploadPromises);
-        if (uploadCount > 0) {
-          listarArquivos(currentPath);
-          updateStorageUsage();
-          modalUpload.hide();
-        }
+        toastr.success('Upload concluído com sucesso');
+        listarArquivos(currentPath);
+        updateStorageUsage();
       } catch (error) {
         console.error('Erro no upload:', error);
-      } finally {
-        document.getElementById('fileInput').value = '';
+        toastr.error('Ocorreram erros durante o upload');
       }
+    }
+
+    async function uploadFile(file, path = '') {
+      const filePath = `documentos/${currentUser.uid}/${path || currentPath}${file.name.trim()}`;
+      const storageRef = storage.ref(filePath);
+      
+      const metadata = {
+        contentType: file.type,
+        customMetadata: {
+          originalName: file.name,
+          uploadedBy: currentUser.uid,
+          uploadedAt: new Date().toISOString()
+        }
+      };
+      
+      await storageRef.put(file, metadata);
+      logAcao('upload', { filename: file.name, size: file.size });
+    }
+
+    async function createAndUploadThumbnail(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            // Criar canvas para redimensionar
+            const canvas = document.createElement('canvas');
+            const maxSize = 300; // Tamanho máximo da miniatura
+            let width = img.width;
+            let height = img.height;
+            
+            // Calcular novas dimensões mantendo proporção
+            if (width > height) {
+              if (width > maxSize) {
+                height *= maxSize / width;
+                width = maxSize;
+              }
+            } else {
+              if (height > maxSize) {
+                width *= maxSize / height;
+                height = maxSize;
+              }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Converter para blob e fazer upload
+            canvas.toBlob(async (blob) => {
+              const thumbPath = `documentos/${currentUser.uid}/${currentPath}thumbs/${file.name}`;
+              try {
+                await storage.ref(thumbPath).put(blob, {
+                  contentType: 'image/jpeg',
+                  customMetadata: {
+                    isThumbnail: 'true',
+                    originalFile: file.name
+                  }
+                });
+                resolve();
+              } catch (error) {
+                console.error('Erro ao enviar thumbnail:', error);
+                resolve(); // Não rejeita para não bloquear outros uploads
+              }
+            }, 'image/jpeg', 0.7); // 70% de qualidade
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     async function listarArquivos(path) {
       try {
         currentPath = path;
         updateBreadcrumbs();
-        updateFolderTree();
         
         document.getElementById('files-grid').innerHTML = '<div class="file-item"><i class="fas fa-spinner fa-spin file-icon"></i><div class="file-name">Carregando...</div></div>';
         document.getElementById('files-list-body').innerHTML = '<tr><td colspan="5"><i class="fas fa-spinner fa-spin"></i> Carregando...</td></tr>';
@@ -811,11 +892,16 @@
             size: meta.size,
             type: meta.contentType,
             timeCreated: meta.timeCreated,
-            fullPath: file.fullPath
+            fullPath: file.fullPath,
+            isThumbnail: meta.customMetadata?.isThumbnail === 'true'
           };
         }));
         
+        // Filtra para mostrar apenas arquivos principais (não thumbnails)
+        allFiles = allFiles.filter(file => !file.isThumbnail);
         allFiles.sort((a,b) => a.name.localeCompare(b.name));
+        
+        updateFolderTree();
         showFiles(allFiles);
         updateStatusBar();
       } catch (error) {
@@ -880,23 +966,45 @@
 
     function showFilesAsGrid(files) {
       const html = files.map(file => {
-      const type = getFileType(file.name);
-      const icon = getFileIcon(file.name);
-      const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
-      const size = formatFileSize(file.size);
-    
-      // Se for imagem, vamos mostrar a miniatura
-      if (type === 'image') {
-        return `
-          <div class="file-item" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
-            <div class="thumbnail-container">
-              <img src="" data-src="${escapeHtml(fullPath)}" alt="${escapeHtml(file.name)}" class="thumbnail lazy-load">
-              <div class="thumbnail-loading">
-                <i class="fas fa-spinner fa-spin"></i>
+        const type = getFileType(file.name);
+        const icon = getFileIcon(file.name);
+        const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
+        const thumbPath = `documentos/${currentUser.uid}/${currentPath}thumbs/${file.name}`;
+        const size = formatFileSize(file.size);
+        
+        // Se for imagem, mostrar container de thumbnail
+        if (type === 'image') {
+          return `
+            <div class="file-item">
+              <div class="thumbnail-container" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
+                <img src="" data-src="${escapeHtml(thumbPath)}" data-fallback="${escapeHtml(fullPath)}" 
+                     alt="${escapeHtml(file.name)}" class="thumbnail lazy-load">
+                <div class="thumbnail-loading">
+                  <i class="fas fa-spinner fa-spin"></i>
+                </div>
+              </div>
+              <div class="file-name">${escapeHtml(file.name)}</div>
+              <div class="file-size">${size}</div>
+              <div class="file-actions">
+                <button class="file-action-btn" style="background:var(--sucesso);color:white;" 
+                  onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Baixar">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="file-action-btn" style="background:var(--perigo);color:white;" 
+                  onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Excluir">
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
             </div>
+          `;
+        }
+        
+        // Para outros tipos de arquivo, mostrar o ícone padrão
+        return `
+          <div class="file-item" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
+            <i class="fas ${icon} file-icon"></i>
             <div class="file-name">${escapeHtml(file.name)}</div>
-            <small class="text-muted">${size}</small>
+            <div class="file-size">${size}</div>
             <div class="file-actions">
               <button class="file-action-btn" style="background:var(--sucesso);color:white;" 
                 onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Baixar">
@@ -909,33 +1017,13 @@
             </div>
           </div>
         `;
-      }
-    
-      // Para outros tipos de arquivo, mostrar o ícone padrão
-      return `
-        <div class="file-item" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
-          <i class="fas ${icon} file-icon"></i>
-          <div class="file-name">${escapeHtml(file.name)}</div>
-          <small class="text-muted">${size}</small>
-          <div class="file-actions">
-            <button class="file-action-btn" style="background:var(--sucesso);color:white;" 
-              onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Baixar">
-              <i class="fas fa-download"></i>
-            </button>
-            <button class="file-action-btn" style="background:var(--perigo);color:white;" 
-              onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Excluir">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  
-    document.getElementById('files-grid').innerHTML = html || '<div class="file-item"><i class="fas fa-folder-open file-icon"></i><div class="file-name">Nenhum arquivo</div></div>';
-  
-    // Carrega as miniaturas de forma lazy
-    loadThumbnails();
-  }
+      }).join('');
+      
+      document.getElementById('files-grid').innerHTML = html || '<div class="file-item"><i class="fas fa-folder-open file-icon"></i><div class="file-name">Nenhum arquivo</div></div>';
+      
+      // Dispara o carregamento das miniaturas
+      loadThumbnails();
+    }
 
     function showFilesAsList(files) {
       const html = files.map(file => {
@@ -1004,6 +1092,100 @@
         // Para outros tipos de arquivo, oferecer download
         downloadFile(fullPath);
       }
+    }
+
+    // Função para carregar miniaturas de forma lazy
+    function loadThumbnails() {
+      const lazyImages = document.querySelectorAll('.thumbnail.lazy-load:not([data-loaded])');
+      
+      lazyImages.forEach(img => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              const thumbPath = img.dataset.src;
+              const fallbackPath = img.dataset.fallback;
+              
+              // Verifica se já está no cache
+              if (thumbnailCache[thumbPath]) {
+                img.src = thumbnailCache[thumbPath];
+                img.classList.add('thumbnail-loaded');
+                hideLoading(img);
+                img.dataset.loaded = 'true';
+                observer.unobserve(img);
+                return;
+              }
+              
+              // Tenta carregar a miniatura
+              storage.ref(thumbPath).getDownloadURL()
+                .then(url => {
+                  thumbnailCache[thumbPath] = url; // Armazena no cache
+                  img.src = url;
+                  img.classList.add('thumbnail-loaded');
+                  hideLoading(img);
+                  img.dataset.loaded = 'true';
+                })
+                .catch(error => {
+                  console.log('Thumbnail não encontrada, usando fallback');
+                  // Se não encontrar a miniatura, tenta carregar a imagem original reduzida
+                  if (fallbackPath) {
+                    storage.ref(fallbackPath).getDownloadURL()
+                      .then(url => {
+                        thumbnailCache[thumbPath] = url;
+                        img.src = url;
+                        img.classList.add('thumbnail-loaded');
+                        hideLoading(img);
+                        img.dataset.loaded = 'true';
+                      })
+                      .catch(error => {
+                        console.error('Erro ao carregar fallback:', error);
+                        showIconFallback(img);
+                      });
+                  } else {
+                    showIconFallback(img);
+                  }
+                });
+              
+              observer.unobserve(img);
+            }
+          });
+        }, {
+          rootMargin: '100px', // Carrega quando estiver a 100px de distância
+          threshold: 0.1
+        });
+        
+        observer.observe(img);
+      });
+    }
+
+    function hideLoading(img) {
+      const container = img.closest('.thumbnail-container');
+      if (container) {
+        const loading = container.querySelector('.thumbnail-loading');
+        if (loading) loading.style.display = 'none';
+      }
+    }
+
+    function showIconFallback(img) {
+      const container = img.closest('.thumbnail-container');
+      if (container) {
+        container.innerHTML = `<i class="fas fa-file-image file-icon"></i>`;
+      }
+    }
+
+    // Configura o lazy loading com Intersection Observer
+    function setupLazyLoading() {
+      if ('IntersectionObserver' in window) {
+        // Já estamos usando o IntersectionObserver na função loadThumbnails
+        return;
+      }
+      
+      // Fallback para navegadores sem suporte a IntersectionObserver
+      console.warn('IntersectionObserver não suportado, carregando todas as miniaturas');
+      window.addEventListener('scroll', () => {
+        loadThumbnails();
+      });
+      loadThumbnails(); // Carrega todas de uma vez
     }
 
     function filterFilesList(files) {
@@ -1091,64 +1273,6 @@
       }
     }
 
-    async function handleFileUpload(e) {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
-      
-      let uploadCount = 0;
-      const uploadPromises = [];
-      
-      for (const file of files) {
-        // Validações
-        if (!isValidFilename(file.name)) {
-          toastr.warning(`Nome inválido: "${file.name}". Use apenas letras, números e hífens.`);
-          continue;
-        }
-        
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-          toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 10MB)`);
-          continue;
-        }
-        
-        const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
-        const storageRef = storage.ref(filePath);
-        
-        const metadata = {
-          contentType: file.type,
-          customMetadata: {
-            originalName: file.name,
-            uploadedBy: currentUser.uid,
-            uploadedAt: new Date().toISOString()
-          }
-        };
-        
-        uploadPromises.push(
-          storageRef.put(file, metadata)
-            .then(() => {
-              uploadCount++;
-              toastr.success(`"${file.name}" enviado com sucesso`);
-              logAcao('upload', { filename: file.name, size: file.size });
-            })
-            .catch(error => {
-              console.error(`Erro ao enviar ${file.name}:`, error);
-              toastr.error(`Falha ao enviar "${file.name}"`);
-            })
-        );
-      }
-      
-      try {
-        await Promise.all(uploadPromises);
-        if (uploadCount > 0) {
-          listarArquivos(currentPath);
-          updateStorageUsage();
-        }
-      } catch (error) {
-        console.error('Erro no upload:', error);
-      } finally {
-        e.target.value = '';
-      }
-    }
-
     function criarPasta() {
       const nome = prompt('Digite o nome da nova pasta:');
       if (!nome) return;
@@ -1202,21 +1326,30 @@
         });
     }
 
-    function deleteFile(path) {
-      if (!confirm(`Tem certeza que deseja excluir "${path.split('/').pop()}"?`)) return;
+    async function deleteFile(path) {
+      const fileName = path.split('/').pop();
+      if (!confirm(`Tem certeza que deseja excluir "${fileName}"?`)) return;
       
-      storage.ref(path)
-        .delete()
-        .then(() => {
-          toastr.success('Arquivo excluído com sucesso');
-          listarArquivos(currentPath);
-          updateStorageUsage();
-          logAcao('delete', { filename: path.split('/').pop() });
-        })
-        .catch(error => {
-          console.error('Erro ao excluir arquivo:', error);
-          toastr.error('Erro ao excluir arquivo');
-        });
+      try {
+        // Tenta excluir a miniatura primeiro (se existir)
+        const thumbPath = path.replace('/documentos/', '/documentos/thumbs/');
+        try {
+          await storage.ref(thumbPath).delete();
+        } catch (error) {
+          console.log('Miniatura não encontrada ou já excluída');
+        }
+        
+        // Exclui o arquivo principal
+        await storage.ref(path).delete();
+        
+        toastr.success('Arquivo excluído com sucesso');
+        listarArquivos(currentPath);
+        updateStorageUsage();
+        logAcao('delete', { filename: fileName });
+      } catch (error) {
+        console.error('Erro ao excluir arquivo:', error);
+        toastr.error('Erro ao excluir arquivo');
+      }
     }
 
     // Funções auxiliares
@@ -1226,9 +1359,14 @@
 
     function getFileType(name) {
       const ext = name.split('.').pop().toLowerCase();
-      if (['jpg','jpeg','png','gif','webp'].includes(ext)) return 'image';
+      if (['jpg','jpeg','png','gif','webp','bmp','svg'].includes(ext)) return 'image';
       if (ext === 'pdf') return 'pdf';
       if (['doc','docx','odt','rtf','txt'].includes(ext)) return 'document';
+      if (['xls','xlsx','csv'].includes(ext)) return 'spreadsheet';
+      if (['ppt','pptx'].includes(ext)) return 'presentation';
+      if (['zip','rar','7z','tar','gz'].includes(ext)) return 'archive';
+      if (['mp3','wav','ogg'].includes(ext)) return 'audio';
+      if (['mp4','mov','avi','mkv'].includes(ext)) return 'video';
       return 'other';
     }
 
@@ -1238,6 +1376,11 @@
         image: 'fa-file-image',
         pdf: 'fa-file-pdf',
         document: 'fa-file-word',
+        spreadsheet: 'fa-file-excel',
+        presentation: 'fa-file-powerpoint',
+        archive: 'fa-file-archive',
+        audio: 'fa-file-audio',
+        video: 'fa-file-video',
         other: 'fa-file'
       };
       return icons[type] || 'fa-file';
@@ -1246,89 +1389,43 @@
     function formatFileSize(bytes) {
       if (bytes < 1024) return `${bytes} B`;
       if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-      return `${(bytes / 1048576).toFixed(1)} MB`;
+      if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(1)} MB`;
+      return `${(bytes / 1073741824).toFixed(1)} GB`;
     }
 
     function formatDate(dateString) {
-      return new Date(dateString).toLocaleDateString('pt-BR');
+      return new Date(dateString).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
 
     function isValidFilename(name) {
       return /^[a-zA-Z0-9\-_ .\u00C0-\u00FF]+$/.test(name);
     }
 
-    // Função para carregar miniaturas de forma lazy
-function loadThumbnails() {
-  const lazyImages = document.querySelectorAll('.thumbnail.lazy-load');
-  
-  lazyImages.forEach(img => {
-    const storagePath = img.dataset.src;
-    if (!storagePath) return;
-    
-    // Obter URL de download com tamanho reduzido (thumbnail)
-    storage.ref(storagePath).getDownloadURL()
-      .then(url => {
-        // Criar uma imagem temporária para carregar a miniatura
-        const tempImg = new Image();
-        tempImg.src = url;
-        tempImg.onload = () => {
-          // Quando carregada, exibir a miniatura
-          img.src = url;
-          img.style.opacity = 1;
-          // Esconder o spinner
-          const container = img.closest('.thumbnail-container');
-          if (container) {
-            const loading = container.querySelector('.thumbnail-loading');
-            if (loading) loading.style.display = 'none';
-          }
-        };
-      })
-      .catch(error => {
-        console.error('Erro ao carregar miniatura:', error);
-        // Se falhar, mostrar o ícone padrão
-        const container = img.closest('.thumbnail-container');
-        if (container) {
-          container.innerHTML = `<i class="fas fa-file-image file-icon"></i>`;
-        }
+    function logAcesso() {
+      db.collection('logs').add({
+        userId: currentUser.uid,
+        action: 'login',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        userAgent: navigator.userAgent,
+        screenResolution: `${window.screen.width}x${window.screen.height}`
       });
-  });
-  }
-
-  // Função para verificar quando o usuário rola a página (para lazy loading)
-  function setupLazyLoading() {
-  let lazyLoadThrottleTimeout;
-  
-    function lazyLoad() {
-      if(lazyLoadThrottleTimeout) {
-        clearTimeout(lazyLoadThrottleTimeout);
-      }    
-    
-      lazyLoadThrottleTimeout = setTimeout(function() {
-        loadThumbnails();
-      }, 20);
-    }
-  
-    window.addEventListener('scroll', lazyLoad);
-    window.addEventListener('resize', lazyLoad);
     }
 
-      function logAcesso() {
-        db.collection('logs').add({
-          userId: currentUser.uid,
-          action: 'login',
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          userAgent: navigator.userAgent
-        });
-      }
-
-      function logAcao(action, details) {
-        db.collection('logs').add({
-          userId: currentUser.uid,
-          action,
-          details,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }
-    </script>
-  </body>
+    function logAcao(action, details) {
+      db.collection('logs').add({
+        userId: currentUser.uid,
+        action,
+        details,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        currentPath: currentPath
+      });
+    }
+  </script>
+</body>
 </html>
