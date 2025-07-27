@@ -4,45 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self' data: blob:;
-  
-  script-src 'self' 'unsafe-inline' 'unsafe-eval'
-    https://cdn.jsdelivr.net
-    https://cdnjs.cloudflare.com
-    https://www.gstatic.com
-    https://www.googleapis.com
-    https://www.gstatic.com/firebasejs;
-
-  style-src 'self' 'unsafe-inline'
-    https://cdn.jsdelivr.net
-    https://fonts.googleapis.com
-    https://cdnjs.cloudflare.com;
-
-  font-src 'self'
-    https://cdn.jsdelivr.net
-    https://fonts.gstatic.com
-    https://cdnjs.cloudflare.com
-    data:;
-
-  img-src 'self' data: blob:
-    https://*
-    https://firebasestorage.googleapis.com;
-
-  connect-src 'self'
-    https://*.firebaseio.com
-    https://*.googleapis.com
-    https://*.gstatic.com
-    https://firebasestorage.googleapis.com
-    https://backend-api-789144165592.us-central1.run.app;
-
-  frame-src https://*.firebasestorage.app;
-">
+    default-src 'self' data: blob:;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval'
+      https://cdn.jsdelivr.net
+      https://cdnjs.cloudflare.com
+      https://www.gstatic.com
+      https://www.googleapis.com
+      https://www.gstatic.com/firebasejs;
+    style-src 'self' 'unsafe-inline'
+      https://cdn.jsdelivr.net
+      https://fonts.googleapis.com
+      https://cdnjs.cloudflare.com;
+    font-src 'self'
+      https://cdn.jsdelivr.net
+      https://fonts.gstatic.com
+      https://cdnjs.cloudflare.com
+      data:;
+    img-src 'self' data: blob:
+      https://*
+      https://firebasestorage.googleapis.com;
+    connect-src 'self'
+      https://*.firebaseio.com
+      https://*.googleapis.com
+      https://*.gstatic.com
+      https://firebasestorage.googleapis.com
+      https://backend-api-789144165592.us-central1.run.app;
+    frame-src https://*.firebasestorage.app;
+  ">
 
   <!-- Favicon -->
   <link rel="icon" href="assets/images/brand/favicon/favicon-android-chrome-512x512.png" type="image/png">
 
   <title>Área Restrita | Sítio Sábio Sabiá</title>
 
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
   <!-- SDKs do Firebase (versão compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -262,23 +259,25 @@
     /* Visualização em ícones */
     .files-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 0.8rem;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
     }
     .file-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 0.5rem;
-      border-radius: 4px;
+      border-radius: var(--raio-borda);
       cursor: pointer;
       text-align: center;
       word-break: break-word;
       border: 1px solid transparent;
+      transition: all 0.2s;
     }
     .file-item:hover {
       border-color: var(--laranja-ouro);
       background: rgba(234, 167, 49, 0.1);
+      transform: translateY(-2px);
     }
     .file-icon {
       font-size: 2rem;
@@ -288,6 +287,23 @@
     .file-name {
       font-size: 0.75rem;
       line-height: 1.2;
+    }
+    .file-actions {
+      margin-top: 0.3rem;
+      display: flex;
+      gap: 0.3rem;
+    }
+    .file-action-btn {
+      padding: 0.2rem;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      border: none;
+      cursor: pointer;
     }
     
     /* Visualização em lista */
@@ -353,6 +369,21 @@
       background: #b71c1c;
     }
     
+    /* Modal Bootstrap customizado */
+    .modal-content {
+      border-radius: var(--raio-borda);
+      border: none;
+    }
+    .modal-header {
+      background: var(--taupe);
+      color: var(--branco);
+      border-bottom: 1px solid var(--marrom-escuro);
+    }
+    .modal-footer {
+      background: var(--fundo);
+      border-top: 1px solid var(--taupe);
+    }
+    
     /* Responsividade */
     @media(max-width: 768px) {
       .explorer-container {
@@ -369,7 +400,7 @@
       }
       
       .files-grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       }
     }
   </style>
@@ -403,7 +434,7 @@
         <button class="toolbar-btn" onclick="listarArquivos('')">
           <i class="fas fa-home"></i> Home
         </button>
-        <button class="toolbar-btn" onclick="document.getElementById('fileInput').click()">
+        <button class="toolbar-btn" onclick="abrirModalUpload()">
           <i class="fas fa-upload"></i> Enviar
         </button>
         <button class="toolbar-btn" onclick="criarPasta()">
@@ -523,12 +554,34 @@
     </div>
   </main>
 
+  <!-- Modal Upload (do teste.html) -->
+  <div class="modal fade" id="modalUpload" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Upload de Arquivo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="file" id="fileInput" class="form-control" multiple />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="uploadArquivo()">
+            <i class="fas fa-cloud-upload-alt"></i> Enviar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer style="padding:0.5rem;text-align:center;font-size:0.8rem;background:var(--marrom-escuro);color:var(--fundo);">
     © <span id="current-year"></span> - Sítio Sábio Sabiá
   </footer>
 
-  <input type="file" id="fileInput" style="display:none;" multiple>
-
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
     // Configuração do Firebase
     const firebaseConfig = {
@@ -562,6 +615,7 @@
     let currentPage = 1;
     const itemsPerPage = 20;
     let currentView = 'grid'; // 'grid' ou 'list'
+    let modalUpload = null;
 
     // Observador de autenticação
     auth.onAuthStateChanged(user => {
@@ -574,6 +628,9 @@
         listarArquivos('');
         logAcesso();
         updateStorageUsage();
+        
+        // Inicializa o modal Bootstrap
+        modalUpload = new bootstrap.Modal(document.getElementById('modalUpload'));
       }
     });
 
@@ -630,6 +687,69 @@
       
       // Upload de arquivos
       document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+    }
+
+    function abrirModalUpload() {
+      modalUpload.show();
+    }
+
+    async function uploadArquivo() {
+      const files = document.getElementById('fileInput').files;
+      if (!files || files.length === 0) return;
+      
+      let uploadCount = 0;
+      const uploadPromises = [];
+      
+      for (const file of files) {
+        // Validações
+        if (!isValidFilename(file.name)) {
+          toastr.warning(`Nome inválido: "${file.name}". Use apenas letras, números e hífens.`);
+          continue;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) { // 10MB
+          toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 10MB)`);
+          continue;
+        }
+        
+        const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
+        const storageRef = storage.ref(filePath);
+        
+        const metadata = {
+          contentType: file.type,
+          customMetadata: {
+            originalName: file.name,
+            uploadedBy: currentUser.uid,
+            uploadedAt: new Date().toISOString()
+          }
+        };
+        
+        uploadPromises.push(
+          storageRef.put(file, metadata)
+            .then(() => {
+              uploadCount++;
+              toastr.success(`"${file.name}" enviado com sucesso`);
+              logAcao('upload', { filename: file.name, size: file.size });
+            })
+            .catch(error => {
+              console.error(`Erro ao enviar ${file.name}:`, error);
+              toastr.error(`Falha ao enviar "${file.name}"`);
+            })
+        );
+      }
+      
+      try {
+        await Promise.all(uploadPromises);
+        if (uploadCount > 0) {
+          listarArquivos(currentPath);
+          updateStorageUsage();
+          modalUpload.hide();
+        }
+      } catch (error) {
+        console.error('Erro no upload:', error);
+      } finally {
+        document.getElementById('fileInput').value = '';
+      }
     }
 
     async function listarArquivos(path) {
@@ -726,11 +846,23 @@
         const type = getFileType(file.name);
         const icon = getFileIcon(file.name);
         const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
+        const size = formatFileSize(file.size);
         
         return `
           <div class="file-item" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
             <i class="fas ${icon} file-icon"></i>
             <div class="file-name">${escapeHtml(file.name)}</div>
+            <small class="text-muted">${size}</small>
+            <div class="file-actions">
+              <button class="file-action-btn" style="background:var(--sucesso);color:white;" 
+                onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Baixar">
+                <i class="fas fa-download"></i>
+              </button>
+              <button class="file-action-btn" style="background:var(--perigo);color:white;" 
+                onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Excluir">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
           </div>
         `;
       }).join('');
