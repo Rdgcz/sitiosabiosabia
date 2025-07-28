@@ -55,6 +55,7 @@
         --bordas: #D9C7B8;
         --destaque: #8C3A10;
         --texto: #3E2723;
+        --texto-legenda: #F8F1E5;
         --branco: #FFFFFF;
         --sombra: rgba(0, 0, 0, 0.1);
         
@@ -179,6 +180,74 @@
         margin-bottom: var(--espaco-medio);
     }
 
+    /* === GRID DE IMAGENS === */
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr); /* 2 colunas */
+        gap: 20px; /* Espaço entre as células */
+        width: 90%; /* Largura do grid */
+        max-width: 800px; /* Largura máxima do grid */
+        margin: 0 auto; /* Centralizar o grid */
+        padding: 20px;
+        justify-items: center; /* Adicionei esta linha para centralizar os itens horizontalmente */
+    }
+        
+    .image-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid var(--terracota);
+        padding: 10px;
+        border-radius: var(--raio-borda);
+        background-color: var(--marrom-escuro);
+        width: 100%; /* Garante que a imagem ocupe toda a largura do grid */
+        max-width: 800px; /* largura máxima fixa */
+    }
+        
+    .image-item img {
+        width: 100%;
+        height: auto;
+        max-height: 600px; /* Altura máxima para uniformizar */
+        object-fit: contain; /* Mantém a proporção cortando o excesso */
+        aspect-ratio: 16/9; /* Proporção widescreen (ajuste conforme necessidade) */
+        border-radius: var(--raio-borda-pequeno);
+    }
+        
+    .image-caption {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        font-family: var(--fonte-secundaria);
+        color: var(--texto-legenda);
+        padding: 0 5px; /* Espaço lateral interno */
+    }
+
+    .legenda-principal {
+        font-weight: bold; /* Opcional: destaque para a legenda */
+        margin-bottom: 5px; /* Espaço entre legenda e créditos */
+    }
+
+    .creditos-imagem {
+        font-size: 0.8em; /* Tamanho menor para créditos */
+        color: var(--taupe); /* Cor diferenciada */
+        font-style: italic; /* Estilo diferenciado */
+    }
+    /* === RESPONSIVIDADE === */
+        
+    @media (max-width: 768px) {
+        .image-grid {
+            width: 95%; /* Ocupa mais espaço em mobile */
+            gap: 15px;
+            padding: 10px 0;
+        }
+        
+        .image-item img {
+            aspect-ratio: unset; /* Remove a proporção fixa em mobile */
+            max-height: 70vh; /* Limita a altura máxima */
+        }
+    }
+
     /* === LAYOUT === */
     .container {
         width: 100%;
@@ -192,7 +261,7 @@
         background-color: var(--terracota);
         color: var(--branco);
         padding: var(--espaco-pequeno) var(--espaco-pequeno);
-	    padding-bottom: 1px;
+        padding-bottom: 1px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -276,7 +345,7 @@
     /* === CONTEÚDO PRINCIPAL === */
     main {
         max-width: 1200px;
-        margin: var(--espaco-grande) auto;
+        margin: var(--espaco-pequeno) auto;
         padding: 0 var(--espaco-grande);
         flex: 1;
     }
@@ -284,8 +353,8 @@
     .destaque {
         background-color: var(--branco);
         border-radius: var(--raio-borda);
-        padding: var(--espaco-grande);
-        margin-bottom: var(--espaco-grande);
+        padding: var(--espaco-pequeno);
+        margin-bottom: var(--espaco-pequeno);
         box-shadow: 0 4px 12px var(--sombra);
         border-top: 4px solid var(--laranja-ouro);
         transition: transform var(--transicao-media);
@@ -293,6 +362,14 @@
 
     .destaque:hover {
         transform: translateY(-5px);
+    }
+
+    .separador {
+        height: 2px;
+        background-color: var(--destaque);
+        width: 100%;
+        margin: 20px 0;
+        border: none;
     }
 
     /* === BOTÕES === */
@@ -328,23 +405,24 @@
 
     /* Estilo do botão (modificado) */
     #btnTopo {
-        display: block; /* Alterado de 'none' para 'block' */
-        margin: 0 auto; /* Centraliza horizontalmente */
+        display: block;
+        margin: 0 auto;
         z-index: 99;
         border: none;
         outline: none;
-        background-color: #362219; /* Cor mantida do seu JS */
-        color: #F8F1E5; /* Cor mantida do seu JS */
+        background-color: var(--marrom-escuro);
+        color: var(--fundo);
         cursor: pointer;
-        padding: 10px 20px; /* Ajustado para melhor proporção */
-        border-radius: 5px;
-        font-size: 10px;
-        transition: color 0.3s; /* Adicionado para suavizar hover */
-        width: auto; /* Largura conforme conteúdo */
+        padding: 10px 20px;
+        border-radius: var(--raio-borda-pequeno);
+        font-size: 1rem;
+        transition: all var(--transicao-media);
+        width: auto;
     }
 
     #btnTopo:hover {
-        color: #EAA731; /* Cor do texto alterada para contraste */
+        background-color: var(--destaque);
+        color: var(--laranja-ouro);
     }
 
     /* === RODAPÉ === */
@@ -352,8 +430,8 @@
         background-color: var(--marrom-escuro);
         color: var(--fundo);
         text-align: center;
-        padding: var(--espaco-grande);
-        margin-top: auto;
+        padding: 0.5rem 1rem;
+        height: fit-content;
     }
 
     .redes-sociais {
@@ -540,42 +618,43 @@
                 </li>
             </ul>
             
-            <figure>
-                <img src="https://jacuhy.net/wp-content/uploads/2021/11/22405527_1302756449835248_3828469202357361771_n.jpg"
-                    alt="Vista de Cunha com a Serra do Mar ao fundo"
-                    class="imagem-conteudo"
-                    loading="lazy"
-                    onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                    itemprop="image">
-                <figcaption class="imagem-legenda">Cunha com a Serra do Mar ao fundo. (Reprodução do site <a href="https://www.jacuhy.net" target="_blank" rel="noopener noreferrer">jacuhy.net</a> - Foto: Instituto Chão Caipira. Ano: 2011.)</figcaption>
-            </figure>
-            
-            <hr class="separador">    
-            
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://jacuhy.net/wp-content/uploads/2021/11/22405527_1302756449835248_3828469202357361771_n.jpg"
+                        alt="Vista de Cunha com a Serra do Mar ao fundo"
+                        loading="lazy"
+                        decoding="async">
+                    <div class="image-caption">
+                        <div class="legenda-principal">Cunha com a Serra do Mar ao fundo.</div>
+                        <div class="creditos-imagem">Reprodução do site <a href="https://www.jacuhy.net" target="_blank" rel="noopener noreferrer">jacuhy.net</a> - Foto: Instituto Chão Caipira. Ano: 2011.</div>
+                    </div>
+                </div>
+            </div>
+
             <div>
                 <h4>2. Acesso</h4>
-                <h5>Principais vias:</h5>
-                <ul>
-                    <li><strong>SP-171 (Rodovia Cunha-Paraty)</strong>: Liga Cunha a Paraty (RJ), uma estrada cênica, porém sinuosa e desafiadora.</li>
-                    <li><strong>BR-459 (Cunha-Taubaté)</strong>: Conexão com o Vale do Paraíba.</li>
-                </ul>
+                <p><strong>SP-171/RJ-165:</strong> Liga Guaratinguetá, Cunha e Paraty. Estrada cênica, porém sinuosa e desafiadora.</p>
+                <h5>Distâncias importantes:</h5>
+                    <ul>
+                        <li>Paraty (RJ): ~60 km</li>
+                        <li>Guaratinguetá (SP): ~80 km</li>
+                        <li>São Paulo (capital): ~230 km</li>
+                        <li>Rio de Janeiro (capital): ~308 km</li>
+                        <li>Belo Horizonte: ~560 km</li>
+                    </ul>
                 
-                <h4>Distâncias importantes:</h4>
-                <ul>
-                    <li>Paraty (RJ): ~60 km</li>
-                    <li>Guaratinguetá (SP): ~80 km</li>
-                    <li>São Paulo (capital): ~230 km</li>
-                </ul>
-                
-                <figure>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Mapa_de_SP-171.jpg" 
-                        alt="Mapa da Rodovia SP-171 ligando Guaratinguetá, Cunha e Paraty"
-                        class="imagem-conteudo"
-                        loading="lazy"
-                        onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                        itemprop="image">
-                    <figcaption class="imagem-legenda">Mapa da Rodovia SP-171 que liga Guaratinguetá, Cunha e Paraty. (<a href="https://commons.wikimedia.org/wiki/File:Mapa_de_SP-171.jpg" target="_blank" rel="noopener noreferrer">Diego Campos</a>, Public domain, via Wikimedia Commons)</figcaption>
-                </figure>
+                <div class="image-grid">
+                    <div class="image-item">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Mapa_de_SP-171.jpg" 
+                            alt="Mapa da Rodovia SP-171 ligando Guaratinguetá, Cunha e Paraty"
+                            loading="lazy"
+                            decoding="async">
+                        <div class="image-caption">
+                            <div class="legenda-principal">Mapa da Rodovia SP-171/RJ-165 que liga Guaratinguetá, Cunha e Paraty.</div>
+                            <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Mapa_de_SP-171.jpg" target="_blank" rel="noopener noreferrer">Diego Campos</a>, Public domain, via Wikimedia Commons</div>
+                        </div>
+                    </div>
+                </div>
             </div>        
             
             <hr class="separador">
@@ -583,28 +662,32 @@
             <h3>Microrregião: Cunha e Seu Entorno Imediato</h3>    
             <h4>1. Características Urbanas e Sociais</h4>
             <ul>
-                <li><strong>População pequena e estilo de vida rústico</strong>: Cunha tem cerca de 22 mil habitantes, com forte influência da cultura caipira e tropeira.</li>
+                <li><strong>População pequena e estilo de vida rústico</strong>: Cunha tem cerca de 22 mil habitantes (Censo 2022/IBGE), com forte influência da cultura caipira e tropeira.</li>
                 <li><strong>Turismo de experiência</strong>:
                     <ul>
                         <li>Festival do Queijo Artesanal (evento gastronômico importante)</li>
                         <li>Festival do Pinhão (um dos eventos mais tradicionais)</li>
                         <li>Roteiros de cerâmicas e ateliês de arte</li>
-                        <li>Trilhas e cachoeiras, como a Cachoeira do Paraíso</li>
+                        <li><a href="https://www.instagram.com/fuscunhaoficial/" target="_blank" rel="noopener noreferrer">Fuscunha</a> (Tradicional festa do antigo veículo VW Fusca)</li>
+                        <li>Trilhas e diversas cachoeiras</li>
                     </ul>
                 </li>
             </ul>
             
-            <figure>
-                <img src="https://www.012news.com.br/wp-content/compressx-nextgen/uploads/2024/04/Festa-do-Pinhao_2018-690x460.webp.avif" 
-                    alt="Festival do Pinhão em Cunha"
-                    class="imagem-conteudo"
-                    loading="lazy"
-                    onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                    itemprop="image">
-                <figcaption class="imagem-legenda">Festival do Pinhão em Cunha. (Reprodução: <a href="https://www.012news.com.br/cunha-realiza-mais-uma-edicao-de-seu-festival-do-pinhao/" target="_blank" rel="noopener noreferrer">012News</a>)</figcaption>
-            </figure>
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://www.012news.com.br/wp-content/compressx-nextgen/uploads/2024/04/Festa-do-Pinhao_2018-690x460.webp.avif" 
+                        alt="Festival do Pinhão em Cunha"
+                        loading="lazy"
+                        decoding="async">
+                    <div class="image-caption">
+                        <div class="legenda-principal">Festival do Pinhão em Cunha.</div>
+                        <div class="creditos-imagem">Reprodução: <a href="https://www.012news.com.br/cunha-realiza-mais-uma-edicao-de-seu-festival-do-pinhao/" target="_blank" rel="noopener noreferrer">012News</a> / 2018</div>
+                    </div>                        
+                </div>
+            </div>
             
-            <hr class="separador">    
+                
             
             <h4>2. Biodiversidade e Meio Ambiente</h4>
             <ul>
@@ -612,39 +695,45 @@
                 <li><strong>Clima de altitude</strong>: Neblina frequente e invernos frios, com possibilidade de geada.</li>                    
             </ul>
             
-            <figure>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Arauc%C3%A1rias_ao_fundo_Parque_Nacional_da_Serra_da_Bocaina_-_denoise.jpg/1280px-Arauc%C3%A1rias_ao_fundo_Parque_Nacional_da_Serra_da_Bocaina_-_denoise.jpg"
-                    alt="Araucárias com o Parque Nacional da Serra da Bocaina ao fundo"
-                    class="imagem-conteudo"
-                    loading="lazy"
-                    onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                    itemprop="image">
-                <figcaption class="imagem-legenda">Araucárias com Parque Nacional da Serra da Bocaina ao fundo (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Araucárias_ao_fundo_Parque_Nacional_da_Serra_da_Bocaina_-_denoise.jpg" target="_blank" rel="noopener noreferrer">Heris Luiz Cordeiro Rocha</a> via Wikimedia Commons)</figcaption>
-            </figure>
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Arauc%C3%A1rias_ao_fundo_Parque_Nacional_da_Serra_da_Bocaina_-_denoise.jpg/1280px-Arauc%C3%A1rias_ao_fundo_Parque_Nacional_da_Serra_da_Bocaina_-_denoise.jpg"
+                        alt="Araucárias com o Parque Nacional da Serra da Bocaina ao fundo"
+                        loading="lazy"
+                        decoding="async">
+                    <div class="image-caption">
+                        <div class="legenda-principal">Araucárias com Parque Nacional da Serra da Bocaina ao fundo</div>
+                        <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Araucárias_ao_fundo_Parque_Nacional_da_Serra_da_Bocaina_-_denoise.jpg" target="_blank" rel="noopener noreferrer">Heris Luiz Cordeiro Rocha</a> via Wikimedia Commons</div>
+                    </div>                    
+                </div>
+            </div>
             
             <hr class="separador">
             
-            <h3>Regiões Relacionadas (Costa Verde e Vale do Paraíba)</h3>
-            
+            <h2>Regiões Relacionadas (Costa Verde e Vale do Paraíba)</h2>
+                    
             <div itemscope itemtype="https://schema.org/ItemList">
-                <h4>Costa Verde (Angra dos Reis, Paraty, Ubatuba)</h4>
-                
+                <h3>Costa Verde (Angra dos Reis, Paraty, Ubatuba)</h3>
+            <hr class="separador">    
                 <div itemprop="itemListElement" itemscope itemtype="https://schema.org/Place">
-                    <h5>Angra dos Reis (RJ):</h5>
+                    <h4>Angra dos Reis (RJ):</h4>
                     <ul>
                         <li>Praias e ilhas (Ilha Grande, Praia do Aventureiro)</li>
                         <li>Porto e usina nuclear</li>
                     </ul>
                     
-                    <figure>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Angra_dos_Reis.jpg" 
-                            alt="Vista aérea de Angra dos Reis"
-                            class="imagem-conteudo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                            itemprop="image">
-                        <figcaption class="imagem-legenda">Angra dos Reis, no estado do Rio de Janeiro (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Angra_dos_Reis.jpg" target="_blank" rel="noopener noreferrer">Sonia Leite Cortez</a>, via Wikimedia Commons)</figcaption>
-                    </figure>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Angra_dos_Reis.jpg" 
+                                alt="Vista aérea de Angra dos Reis"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="image-caption">
+                                <div class="legenda-principal">Angra dos Reis, no estado do Rio de Janeiro</div>
+                                <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Angra_dos_Reis.jpg" target="_blank" rel="noopener noreferrer">Sonia Leite Cortez</a> via Wikimedia Commons</div>
+                            </div>                            
+                        </div>
+                    </div>
                 </div>
                 
                 <hr class="separador">
@@ -656,15 +745,18 @@
                         <li>Rota da Cachaça e Festival Literário (Flip)</li>
                     </ul>
                     
-                    <figure>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Paraty_05.JPG" 
-                            alt="Centro histórico de Paraty"
-                            class="imagem-conteudo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                            itemprop="image">
-                        <figcaption class="imagem-legenda">Paraty, no estado do Rio de Janeiro (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Paraty_05.JPG" target="_blank" rel="noopener noreferrer">Vani Ribeiro</a>, via Wikimedia Commons)</figcaption>
-                    </figure>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Paraty_05.JPG" 
+                                alt="Centro histórico de Paraty"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="image-caption">
+                                <div class="legenda-principal">Paraty, no estado do Rio de Janeiro</div>
+                                <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Paraty_05.JPG" target="_blank" rel="noopener noreferrer">Vani Ribeiro</a> via Wikimedia Commons</div>
+                            </div>                            
+                        </div>
+                    </div>
                 </div>
                 
                 <hr class="separador">
@@ -676,15 +768,18 @@
                         <li>Parque Estadual da Serra do Mar</li>
                     </ul>
                     
-                    <figure>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Praia_Grande_Ubatuba_04.jpg" 
-                            alt="Praia Grande em Ubatuba"
-                            class="imagem-conteudo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                            itemprop="image">
-                        <figcaption class="imagem-legenda">Ubatuba, no estado de São Paulo (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Praia_Grande_Ubatuba_04.jpg" target="_blank" rel="noopener noreferrer">Deyves Martins</a>, via Wikimedia Commons)</figcaption>
-                    </figure>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Praia_Grande_Ubatuba_04.jpg" 
+                                alt="Praia Grande em Ubatuba"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="image-caption">
+                                <div class="legenda-principal">Ubatuba, no estado de São Paulo</div>
+                                <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Praia_Grande_Ubatuba_04.jpg" target="_blank" rel="noopener noreferrer">Deyves Martins</a> via Wikimedia Commons</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -701,15 +796,18 @@
                         <li>Turismo religioso intenso</li>
                     </ul>
                     
-                    <figure>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Bas%C3%ADlica_de_Nossa_Senhora_Aparecida-SP_em_2019.jpg/1280px-Bas%C3%ADlica_de_Nossa_Senhora_Aparecida-SP_em_2019.jpg" 
-                            alt="Basílica de Nossa Senhora Aparecida"
-                            class="imagem-conteudo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                            itemprop="image">
-                        <figcaption class="imagem-legenda">Basílica de Nossa Senhora Aparecida em Aparecida do Norte, no estado de São Paulo (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Nossa_Senhora_Aparecida-SP_em_2019.jpg" target="_blank" rel="noopener noreferrer">Alex Costa Maciel</a>, via Wikimedia Commons)</figcaption>
-                    </figure>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Bas%C3%ADlica_de_Nossa_Senhora_Aparecida-SP_em_2019.jpg/1280px-Bas%C3%ADlica_de_Nossa_Senhora_Aparecida-SP_em_2019.jpg" 
+                                alt="Basílica de Nossa Senhora Aparecida"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="image-caption">
+                                <div class="legenda-principal">Basílica de Nossa Senhora Aparecida em Aparecida do Norte, no estado de São Paulo</div>
+                                <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Nossa_Senhora_Aparecida-SP_em_2019.jpg" target="_blank" rel="noopener noreferrer">Alex Costa Maciel</a> via Wikimedia Commons</div>
+                            </div>                            
+                        </div>
+                    </div>
                 </div>
                 
                 <hr class="separador">
@@ -721,15 +819,18 @@
                         <li>Polo industrial (aeroporto e fábricas)</li>
                     </ul>
                     
-                    <figure>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Guaratinguet%C3%A1_Pra%C3%A7aConselheiro.jpg/1280px-Guaratinguet%C3%A1_Pra%C3%A7aConselheiro.jpg" 
-                            alt="Praça Conselheiro Rodrigues Alves em Guaratinguetá"
-                            class="imagem-conteudo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                            itemprop="image">
-                        <figcaption class="imagem-legenda">Praça Conselheiro em Guaratinguetá, no estado de São Paulo (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Guaratinguet%C3%A1_Pra%C3%A7aConselheiro.jpg" target="_blank" rel="noopener noreferrer">Zééh.mané</a>, via Wikimedia Commons)</figcaption>
-                    </figure>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Guaratinguet%C3%A1_Pra%C3%A7aConselheiro.jpg/1280px-Guaratinguet%C3%A1_Pra%C3%A7aConselheiro.jpg" 
+                                alt="Praça Conselheiro Rodrigues Alves em Guaratinguetá"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="image-caption">
+                                <div class="legenda-principal">Praça Conselheiro em Guaratinguetá, no estado de São Paulo</div>
+                                <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Guaratinguet%C3%A1_Pra%C3%A7aConselheiro.jpg" target="_blank" rel="noopener noreferrer">Zééh.mané</a> via Wikimedia Commons</div>
+                            </div>                            
+                        </div>
+                    </div>
                 </div>
                 
                 <hr class="separador">
@@ -741,15 +842,18 @@
                         <li>História do café e literatura (Monteiro Lobato)</li>
                     </ul>
                     
-                    <figure>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Noite_em_Taubat%C3%A9.jpg" 
-                            alt="Vista noturna de Taubaté"
-                            class="imagem-conteudo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'"
-                            itemprop="image">
-                        <figcaption class="imagem-legenda">Anoitecer em Taubaté, no estado de São Paulo (Créditos: <a href="https://commons.wikimedia.org/wiki/File:Noite_em_Taubat%C3%A9.jpg" target="_blank" rel="noopener noreferrer">Raffael222</a>, via Wikimedia Commons)</figcaption>
-                    </figure>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Noite_em_Taubat%C3%A9.jpg" 
+                                alt="Vista noturna de Taubaté"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="image-caption">
+                                <div class="legenda-principal">Anoitecer em Taubaté, no estado de São Paulo</div>
+                                <div class="creditos-imagem"><a href="https://commons.wikimedia.org/wiki/File:Noite_em_Taubat%C3%A9.jpg" target="_blank" rel="noopener noreferrer">Raffael222</a> via Wikimedia Commons</div>
+                            </div>    
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -846,28 +950,28 @@
             const btnTopo = document.createElement('button');
             btnTopo.id = 'btnTopo';
             btnTopo.title = 'Voltar ao topo';
-            btnTopo.innerHTML = '↑ Voltar ao topo';  // Adicionei o texto
+            btnTopo.innerHTML = '↑ Voltar ao topo';
     
-            // Removi as propriedades de posição fixa
+            // Estilização do botão
             btnTopo.style.display = 'block';
-            btnTopo.style.margin = '20px auto';  // Centraliza horizontalmente
+            btnTopo.style.margin = '20px auto';
             btnTopo.style.zIndex = '99';
             btnTopo.style.border = 'none';
             btnTopo.style.outline = 'none';
             btnTopo.style.backgroundColor = '#362219';
             btnTopo.style.color = '#F8F1E5';
             btnTopo.style.cursor = 'pointer';
-            btnTopo.style.padding = '10px 20px';  // Ajustei o padding
+            btnTopo.style.padding = '10px 20px';
             btnTopo.style.borderRadius = '5px';
             btnTopo.style.fontSize = '16px';
             btnTopo.style.transition = 'background-color 0.3s';
     
             // Efeito hover
             btnTopo.onmouseover = function() {
-            this.style.backgroundColor = '#4a2d21';
+                this.style.backgroundColor = '#4a2d21';
             }
             btnTopo.onmouseout = function() {
-            this.style.backgroundColor = '#362219';
+                this.style.backgroundColor = '#362219';
             }
     
             btnTopo.addEventListener('click', voltarAoTopo);
