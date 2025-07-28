@@ -251,7 +251,7 @@
 
         .clock-container {
             text-align: right;
-            min-width: 200px;
+            min-width: 250px;
         }
 
         .clock {
@@ -269,26 +269,13 @@
             background-color: var(--marrom-escuro);
         }
 
-        .nav-container {
+        nav ul {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: var(--espaco-pequeno) var(--espaco-base);
-            max-width: 1200px; /* Adicionado para limitar a largura */
-            margin: 0 auto; /* Centraliza o container */
-            width: 100%;
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--bordas);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: var(--espaco-pequeno);
-            position: absolute;
-            right: var(--espaco-base);
+            list-style: none;
+            gap: var(--espaco-grande);
+            flex-wrap: wrap;
+            padding: var(--espaco-pequeno) 0;
         }
 
         nav ul {
@@ -570,7 +557,7 @@
     <header>
         <div class="logo-container">
             <img src="frontend/assets/images/brand/logo/logo_sss_redu_compressed.png" 
-                 alt="Sítio Sábio Sabiá" 
+                 alt="Logomarca do Sítio Sábio Sabiá" 
                  class="logo" 
                  itemprop="logo" 
                  width="150" 
@@ -593,17 +580,12 @@
     </header>
 
     <nav aria-label="Navegação principal">
-        <div class="nav-container">
-            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-principal">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul id="menu-principal" role="menubar">
-                <li role="none"><a href="frontend/cunha.html" role="menuitem">Cunha</a></li>
-                <li role="none"><a href="frontend/ositio.html" role="menuitem">O Sítio</a></li>
-                <li role="none"><a href="frontend/underConstruction.html" role="menuitem">Galeria</a></li>
-                <li role="none"><a href="frontend/login.html" role="menuitem"><i class="fas fa-lock"></i></a></li>
-            </ul>
-        </div>
+        <ul id="menu-principal" role="menubar">
+            <li role="none"><a href="frontend/cunha.html" role="menuitem">Cunha</a></li>
+            <li role="none"><a href="frontend/ositio.html" role="menuitem">O Sítio</a></li>
+            <li role="none"><a href="frontend/underConstruction.html" role="menuitem">Galeria</a></li>
+            <li role="none"><a href="frontend/login.html" role="menuitem"><i class="fas fa-lock"></i></a></li>
+        </ul>
     </nav>
 
     <main class="fade-in" itemprop="mainContentOfPage">
