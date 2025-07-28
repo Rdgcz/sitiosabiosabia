@@ -180,6 +180,48 @@
         margin-bottom: var(--espaco-medio);
     }
 
+    /* === GRID DE IMAGENS === */
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+        gap: 20px; /* Espaço entre as células */
+        max-width: 1200px; /* Largura máxima do grid */
+        margin: 0 auto; /* Centralizar o grid */
+        padding: 20px;
+    }
+        
+    .image-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #A0470D;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #362219;
+    }
+        
+    .image-item img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+        object-fit: cover;
+        aspect-ratio: 4/3; /* Proporção da imagem */
+    }
+        
+    .image-caption {
+        margin-top: 10px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: var(--fonte-secundaria);
+        color: var(--texto-legenda);
+    }
+        
+    @media (max-width: 600px) {
+        .image-grid {
+            grid-template-columns: 1fr; /* 1 coluna em telas pequenas */
+        }
+    }
+
     /* === LAYOUT === */
     .container {
         width: 100%;
@@ -327,46 +369,34 @@
         transform: translateY(-2px);
         text-decoration: none;
     }
-    /* === GRID DE IMAGENS === */
-    .image-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 colunas */
-        gap: 20px; /* Espaço entre as células */
-        max-width: 1200px; /* Largura máxima do grid */
-        margin: 0 auto; /* Centralizar o grid */
-        padding: 20px;
-    }
-        
-    .image-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        border: 2px solid #A0470D;
-        padding: 10px;
-        border-radius: 8px;
-        background-color: #362219;
-    }
-        
-    .image-item img {
-        width: 100%;
-        height: auto;
-        border-radius: 5px;
-        object-fit: cover;
-        aspect-ratio: 4/3; /* Proporção da imagem */
-    }
-        
-    .image-caption {
-        margin-top: 10px;
+
+    /* Container do botão (novo) */
+    .btn-topo-container {
         text-align: center;
-        font-family: Arial, sans-serif;
-        font-size: var(--fonte-secundaria);
-        color: var(--texto-legenda);
+        margin: 50px 0;
+        width: 100%;
     }
-        
-    @media (max-width: 600px) {
-        .image-grid {
-            grid-template-columns: 1fr; /* 1 coluna em telas pequenas */
-        }
+
+    /* Estilo do botão (modificado) */
+    #btnTopo {
+        display: block;
+        margin: 0 auto;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: var(--marrom-escuro);
+        color: var(--fundo);
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: var(--raio-borda-pequeno);
+        font-size: 1rem;
+        transition: all var(--transicao-media);
+        width: auto;
+    }
+
+    #btnTopo:hover {
+        background-color: var(--destaque);
+        color: var(--laranja-ouro);
     }
 
     /* === RODAPÉ === */
@@ -835,12 +865,15 @@
                     </div>                    
             <hr class="separador">    
         </section>
+        <div>
+            <button onclick="voltarAoTopo()" id="btnTopo" title="Voltar ao topo">↑ Voltar ao topo</button>
+        </div>
     </main>
 
     <footer itemscope itemtype="https://schema.org/WPFooter">
         <div class="redes-sociais">
-            <a href="#" aria-label="Instagram" itemprop="sameAs"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="Facebook" itemprop="sameAs"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/sitiosabiosabia/" target="_blank" aria-label="Instagram" itemprop="sameAs"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61578012552098" target="_blank" aria-label="Facebook" itemprop="sameAs"><i class="fab fa-facebook-f"></i></a>
         </div>
         <p>© <span id="current-year" itemprop="copyrightYear"></span> - <span itemprop="copyrightHolder">Sítio Sábio Sabiá</span> - Todos os direitos reservados.</p>
         <p itemprop="email">sitiosabiosabia@gmail.com</p>
@@ -883,6 +916,26 @@
             }
         }
 
+        // Função para mostrar/ocultar o botão de voltar ao topo
+        function verificarScroll() {
+            const btnTopo = document.getElementById('btnTopo');
+            if (btnTopo) {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    btnTopo.style.display = 'block';
+                } else {
+                    btnTopo.style.display = 'none';
+                }
+            }
+        }
+
+        // Função para voltar ao topo com animação suave
+        function voltarAoTopo() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
         // Inicialização quando o DOM estiver pronto
         document.addEventListener('DOMContentLoaded', function() {
             // Atualiza o ano no footer
@@ -894,6 +947,58 @@
             // Inicia o relógio
             atualizarRelogio();
             setInterval(atualizarRelogio, 1000);
+            
+            // Configura o botão de voltar ao topo
+            window.addEventListener('scroll', verificarScroll);
+            
+            // Cria o botão de voltar ao topo se não existir
+            if (!document.getElementById('btnTopo')) {
+                const btnTopo = document.createElement('button');
+                btnTopo.id = 'btnTopo';
+                btnTopo.title = 'Voltar ao topo';
+                btnTopo.innerHTML = '↑ Voltar ao topo';
+        
+                // Estilização do botão
+                btnTopo.style.display = 'block';
+                btnTopo.style.margin = '20px auto';
+                btnTopo.style.zIndex = '99';
+                btnTopo.style.border = 'none';
+                btnTopo.style.outline = 'none';
+                btnTopo.style.backgroundColor = '#362219';
+                btnTopo.style.color = '#F8F1E5';
+                btnTopo.style.cursor = 'pointer';
+                btnTopo.style.padding = '10px 20px';
+                btnTopo.style.borderRadius = '5px';
+                btnTopo.style.fontSize = '16px';
+                btnTopo.style.transition = 'background-color 0.3s';
+        
+                // Efeito hover
+                btnTopo.onmouseover = function() {
+                    this.style.backgroundColor = '#4a2d21';
+                }
+                btnTopo.onmouseout = function() {
+                    this.style.backgroundColor = '#362219';
+                }
+        
+                btnTopo.addEventListener('click', voltarAoTopo);
+        
+                // Cria um container para o botão
+                const btnContainer = document.createElement('div');
+                btnContainer.style.textAlign = 'center';
+                btnContainer.style.margin = '30px 0';
+        
+                // Insere o botão no container
+                btnContainer.appendChild(btnTopo);
+        
+                // Encontra o separador e insere o container após ele
+                const separador = document.querySelector('.separador');
+                if (separador) {
+                    separador.parentNode.insertBefore(btnContainer, separador.nextSibling);
+                } else {
+                    // Fallback caso não encontre o separador
+                    document.body.appendChild(btnContainer);
+                }
+            }
             
             // Melhoria de acessibilidade para links externos
             document.querySelectorAll('a[href^="http"]').forEach(link => {
