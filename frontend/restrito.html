@@ -1120,15 +1120,25 @@
   };
 
   const abrirModalUpload = () => {
+    console.log('Abrindo modal de upload...');
     document.getElementById('fileInput').value = '';
-    modalUpload.show();
+    if (modalUpload) {
+      modalUpload.show();
+    } else {
+      console.error('Modal de upload não foi inicializado corretamente');
+      toastr.error('Erro ao abrir o modal de upload');
+    }
   };
 
   const uploadArquivo = async () => {
+    console.log('Iniciando upload...');
     const files = document.getElementById('fileInput').files;
     const generateThumbs = document.getElementById('generateThumbnails').checked;
     
+    console.log('Arquivos selecionados:', files);
+    
     if (!files || files.length === 0) {
+      console.log('Nenhum arquivo selecionado');
       toastr.warning('Nenhum arquivo selecionado');
       return;
     }
@@ -1139,18 +1149,23 @@
     const uploadPromises = [];
     
     for (const file of files) {
+      console.log('Processando arquivo:', file.name);
+      
       if (!isValidFilename(file.name)) {
+        console.log('Nome inválido:', file.name);
         toastr.warning(`Nome inválido: "${file.name}". Use apenas letras, números e hífens.`);
         continue;
       }
       
       if (file.size > 50 * 1024 * 1024) {
+        console.log('Arquivo muito grande:', file.name);
         toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 50MB)`);
         continue;
       }
       
       const fileType = getFileType(file.name);
       const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
+      console.log('Caminho do arquivo:', filePath);
       
       const metadata = {
         contentType: file.type,
@@ -1163,16 +1178,30 @@
       
       uploadPromises.push(
         uploadBytes(ref(storage, filePath), file, metadata)
-          .then(() => logAcao('upload', { filename: file.name, size: file.size }))
+          .then(() => {
+            console.log('Upload concluído:', file.name);
+            logAcao('upload', { filename: file.name, size: file.size });
+          })
+          .catch(error => {
+            console.error('Erro no upload:', error);
+            throw error;
+          })
       );
       
       if (fileType === 'image' && generateThumbs) {
-        uploadPromises.push(createAndUploadThumbnail(file));
+        uploadPromises.push(
+          createAndUploadThumbnail(file)
+            .catch(error => {
+              console.error('Erro na miniatura:', error);
+            })
+        );
       }
     }
     
     try {
+      console.log('Iniciando uploads...');
       await Promise.all(uploadPromises);
+      console.log('Todos os uploads concluídos');
       toastr.success('Upload concluído com sucesso');
       listarArquivos(currentPath);
       updateStorageUsage();
@@ -1220,6 +1249,7 @@
                   originalFile: file.name
                 }
               });
+              console.log('Thumbnail criada com sucesso:', file.name);
               resolve();
             } catch (error) {
               console.error('Erro ao enviar thumbnail:', error);
@@ -1402,12 +1432,20 @@
       } else {
         currentUser = user;
         document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Verificar e inicializar o modal de upload
+        const modalElement = document.getElementById('modalUpload');
+        if (modalElement) {
+          modalUpload = new bootstrap.Modal(modalElement);
+          console.log('Modal de upload inicializado com sucesso');
+        } else {
+          console.error('Elemento do modal não encontrado');
+        }
+        
         setupEvents();
         listarArquivos('');
         logAcesso();
         updateStorageUsage();
-        
-        modalUpload = new bootstrap.Modal(document.getElementById('modalUpload'));
       }
     });
   });
