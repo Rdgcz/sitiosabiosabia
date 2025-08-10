@@ -4,33 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self' data: blob:;
-    script-src 'self'
-      https://cdn.jsdelivr.net
-      https://cdnjs.cloudflare.com
-      https://www.gstatic.com
-      https://www.googleapis.com
-      https://www.gstatic.com/firebasejs/;
-    style-src 'self'
-      https://cdn.jsdelivr.net
-      https://fonts.googleapis.com
-      https://cdnjs.cloudflare.com;
-    font-src 'self'
-      https://cdn.jsdelivr.net
-      https://fonts.gstatic.com
-      https://cdnjs.cloudflare.com
-      data:;
-    img-src 'self' data: blob:
-      https://*
-      https://firebasestorage.googleapis.com;
-    connect-src 'self'
-      https://*.firebaseio.com
-      https://*.googleapis.com
-      https://*.gstatic.com
-      https://firebasestorage.googleapis.com
-      https://backend-api-789144165592.us-central1.run.app;
-    frame-src https://*.firebasestorage.app;
-  ">
+  default-src 'self' data: blob:;
+  script-src 'self' 'unsafe-inline'
+    https://cdn.jsdelivr.net
+    https://cdnjs.cloudflare.com
+    https://www.gstatic.com
+    https://www.googleapis.com
+    https://www.gstatic.com/firebasejs/;
+  style-src 'self' 'unsafe-inline'
+    https://cdn.jsdelivr.net
+    https://fonts.googleapis.com
+    https://cdnjs.cloudflare.com;
+  font-src 'self'
+    https://cdn.jsdelivr.net
+    https://fonts.gstatic.com
+    https://cdnjs.cloudflare.com
+    data:;
+  img-src 'self' data: blob:
+    https://*
+    https://firebasestorage.googleapis.com;
+  connect-src 'self'
+    https://*.firebaseio.com
+    https://*.googleapis.com
+    https://*.gstatic.com
+    https://firebasestorage.googleapis.com
+    https://backend-api-789144165592.us-central1.run.app;
+  frame-src https://*.firebasestorage.app;
+">
 
   <!-- Favicon -->
   <link rel="icon" href="assets/images/brand/favicon/favicon-android-chrome-512x512.png" type="image/png">
@@ -40,11 +40,22 @@
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
+  <!-- SDKs do Firebase (versão compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- ViewerJS para visualização de imagens/PDFs -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
+
   <!-- Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   <!-- Toast notifications -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <style>
     :root {
@@ -419,21 +430,6 @@
       background: var(--fundo);
       border-top: 1px solid var(--taupe);
     }
-
-    /* Modal de visualização de imagem */
-    .image-modal .modal-body {
-      padding: 0;
-      text-align: center;
-      background-color: #f8f9fa;
-    }
-    .image-modal img {
-      max-height: 80vh;
-      max-width: 100%;
-      object-fit: contain;
-    }
-    .image-modal .modal-footer {
-      justify-content: space-between;
-    }
     
     /* Responsividade */
     @media(max-width: 768px) {
@@ -646,323 +642,280 @@
     </div>
   </div>
 
-  <!-- Modal de Visualização de Imagem -->
-  <div class="modal fade image-modal" id="imagePreviewModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Visualização de Imagem</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <img id="previewImage" src="" class="img-fluid" alt="Visualização">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="fas fa-times"></i> Fechar
-          </button>
-          <button type="button" class="btn btn-primary" id="downloadPreviewBtn">
-            <i class="fas fa-download"></i> Baixar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <footer style="padding:0.5rem;text-align:center;font-size:0.8rem;background:var(--marrom-escuro);color:var(--fundo);">
     © <span id="current-year"></span> - Sítio Sábio Sabiá
   </footer> 
 
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
 
-  <script type="module">
-    // Importações do Firebase Modular
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-    import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject, getMetadata } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
-    import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+<script type="module">
+  // Importações do Firebase Modular
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject, getMetadata } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-    // Configuração do Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0O5QqfQae3K9-Ku9-tnpGS-ko82h10JI",
-      authDomain: "sitio-sabio-sabia.firebaseapp.com",
-      projectId: "sitio-sabio-sabia",
-      storageBucket: "sitio-sabio-sabia.firebasestorage.app",
-      messagingSenderId: "789144165592",
-      appId: "1:789144165592:web:0311bc2930a047cf160bad"
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0O5QqfQae3K9-Ku9-tnpGS-ko82h10JI",
+    authDomain: "sitio-sabio-sabia.firebaseapp.com",
+    projectId: "sitio-sabio-sabia",
+    storageBucket: "sitio-sabio-sabia.firebasestorage.app",
+    messagingSenderId: "789144165592",
+    appId: "1:789144165592:web:0311bc2930a047cf160bad"
+  };
+
+  // Inicialização do Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const storage = getStorage(app);
+  const db = getFirestore(app);
+
+  // Configuração do Toastr
+  toastr.options = {
+    positionClass: "toast-top-right",
+    preventDuplicates: true,
+    progressBar: true,
+    timeOut: 5000
+  };
+
+  // Variáveis globais
+  let currentUser = null;
+  let currentPath = '';
+  let allFiles = [];
+  let allFolders = [];
+  let currentPage = 1;
+  const itemsPerPage = 20;
+  let currentView = 'grid'; // 'grid' ou 'list'
+  const thumbnailCache = {}; // Cache para miniaturas
+  let modalUpload = null;
+
+  // Funções auxiliares
+  const escapeHtml = (text) => text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  const getFileType = (name) => {
+    const ext = name.split('.').pop().toLowerCase();
+    if (['jpg','jpeg','png','gif','webp','bmp','svg'].includes(ext)) return 'image';
+    if (ext === 'pdf') return 'pdf';
+    if (['doc','docx','odt','rtf','txt'].includes(ext)) return 'document';
+    if (['xls','xlsx','csv'].includes(ext)) return 'spreadsheet';
+    if (['ppt','pptx'].includes(ext)) return 'presentation';
+    if (['zip','rar','7z','tar','gz'].includes(ext)) return 'archive';
+    if (['mp3','wav','ogg'].includes(ext)) return 'audio';
+    if (['mp4','mov','avi','mkv'].includes(ext)) return 'video';
+    return 'other';
+  };
+
+  const getFileIcon = (name) => {
+    const type = getFileType(name);
+    const icons = {
+      image: 'fa-file-image',
+      pdf: 'fa-file-pdf',
+      document: 'fa-file-word',
+      spreadsheet: 'fa-file-excel',
+      presentation: 'fa-file-powerpoint',
+      archive: 'fa-file-archive',
+      audio: 'fa-file-audio',
+      video: 'fa-file-video',
+      other: 'fa-file'
     };
+    return icons[type] || 'fa-file';
+  };
 
-    // Inicialização do Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const storage = getStorage(app);
-    const db = getFirestore(app);
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(1)} MB`;
+    return `${(bytes / 1073741824).toFixed(1)} GB`;
+  };
 
-    // Configuração do Toastr
-    toastr.options = {
-      positionClass: "toast-top-right",
-      preventDuplicates: true,
-      progressBar: true,
-      timeOut: 5000
-    };
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
-    // Variáveis globais
-    let currentUser = null;
-    let currentPath = '';
-    let allFiles = [];
-    let allFolders = [];
-    let currentPage = 1;
-    const itemsPerPage = 20;
-    let currentView = 'grid'; // 'grid' ou 'list'
-    const thumbnailCache = {}; // Cache para miniaturas
-    let modalUpload = null;
-    let imagePreviewModal = null;
-    let currentPreviewUrl = '';
+  const isValidFilename = (name) => /^[a-zA-Z0-9\-_ .\u00C0-\u00FF]+$/.test(name);
 
-    // Funções auxiliares
-    const escapeHtml = (text) => text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-    const getFileType = (name) => {
-      const ext = name.split('.').pop().toLowerCase();
-      if (['jpg','jpeg','png','gif','webp','bmp','svg'].includes(ext)) return 'image';
-      if (ext === 'pdf') return 'pdf';
-      if (['doc','docx','odt','rtf','txt'].includes(ext)) return 'document';
-      if (['xls','xlsx','csv'].includes(ext)) return 'spreadsheet';
-      if (['ppt','pptx'].includes(ext)) return 'presentation';
-      if (['zip','rar','7z','tar','gz'].includes(ext)) return 'archive';
-      if (['mp3','wav','ogg'].includes(ext)) return 'audio';
-      if (['mp4','mov','avi','mkv'].includes(ext)) return 'video';
-      return 'other';
-    };
-
-    const getFileIcon = (name) => {
-      const type = getFileType(name);
-      const icons = {
-        image: 'fa-file-image',
-        pdf: 'fa-file-pdf',
-        document: 'fa-file-word',
-        spreadsheet: 'fa-file-excel',
-        presentation: 'fa-file-powerpoint',
-        archive: 'fa-file-archive',
-        audio: 'fa-file-audio',
-        video: 'fa-file-video',
-        other: 'fa-file'
-      };
-      return icons[type] || 'fa-file';
-    };
-
-    const formatFileSize = (bytes) => {
-      if (bytes < 1024) return `${bytes} B`;
-      if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-      if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(1)} MB`;
-      return `${(bytes / 1073741824).toFixed(1)} GB`;
-    };
-
-    const formatDate = (dateString) => {
-      return new Date(dateString).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+  // Funções principais
+  const logAcesso = async () => {
+    try {
+      await addDoc(collection(db, 'logs'), {
+        userId: currentUser.uid,
+        action: 'login',
+        timestamp: serverTimestamp(),
+        userAgent: navigator.userAgent,
+        screenResolution: `${window.screen.width}x${window.screen.height}`
       });
-    };
+    } catch (error) {
+      console.error('Erro ao registrar acesso:', error);
+    }
+  };
 
-    const isValidFilename = (name) => /^[a-zA-Z0-9\-_ .\u00C0-\u00FF]+$/.test(name);
+  const logAcao = async (action, details) => {
+    try {
+      await addDoc(collection(db, 'logs'), {
+        userId: currentUser.uid,
+        action,
+        details,
+        timestamp: serverTimestamp(),
+        currentPath
+      });
+    } catch (error) {
+      console.error('Erro ao registrar ação:', error);
+    }
+  };
 
-    // Funções principais
-    const logAcesso = async () => {
-      try {
-        await addDoc(collection(db, 'logs'), {
-          userId: currentUser.uid,
-          action: 'login',
-          timestamp: serverTimestamp(),
-          userAgent: navigator.userAgent,
-          screenResolution: `${window.screen.width}x${window.screen.height}`
-        });
-      } catch (error) {
-        console.error('Erro ao registrar acesso:', error);
-      }
-    };
+  const updateBreadcrumbs = () => {
+    if (!currentPath) {
+      document.getElementById('breadcrumbs').innerHTML = '<span onclick="listarArquivos(\'\')">Home</span>';
+      return;
+    }
+    
+    const parts = currentPath.split('/').filter(p => p);
+    let html = '<span onclick="listarArquivos(\'\')">Home</span>';
+    let tempPath = '';
+    
+    parts.forEach((part, index) => {
+      tempPath += part + '/';
+      html += ` / <span onclick="listarArquivos('${tempPath}')">${part}</span>`;
+    });
+    
+    document.getElementById('breadcrumbs').innerHTML = html;
+  };
 
-    const logAcao = async (action, details) => {
-      try {
-        await addDoc(collection(db, 'logs'), {
-          userId: currentUser.uid,
-          action,
-          details,
-          timestamp: serverTimestamp(),
-          currentPath
-        });
-      } catch (error) {
-        console.error('Erro ao registrar ação:', error);
-      }
-    };
+  const updateFolderTree = () => {
+    const folders = allFolders;
+    let html = '';
+    
+    if (folders.length === 0) {
+      html = '<li><em>Nenhuma pasta</em></li>';
+    } else {
+      folders.forEach(folder => {
+        const folderName = folder.name;
+        html += `
+          <li>
+            <a href="javascript:void(0)" onclick="listarArquivos('${currentPath}${folderName}/')">
+              <i class="fas fa-folder"></i> ${escapeHtml(folderName)}
+            </a>
+          </li>
+        `;
+      });
+    }
+    
+    document.getElementById('folder-tree').innerHTML = html;
+  };
 
-    const updateBreadcrumbs = () => {
-      if (!currentPath) {
-        document.getElementById('breadcrumbs').innerHTML = '<span onclick="listarArquivos(\'\')">Home</span>';
-        return;
-      }
+  const filterFilesList = (files) => {
+    const searchText = document.getElementById('search-input').value.toLowerCase();
+    const filterType = document.getElementById('search-type').value;
+    const filterSize = document.getElementById('search-size').value;
+    
+    return files.filter(file => {
+      // Filtro por texto
+      if (!file.name.toLowerCase().includes(searchText)) return false;
       
-      const parts = currentPath.split('/').filter(p => p);
-      let html = '<span onclick="listarArquivos(\'\')">Home</span>';
-      let tempPath = '';
+      // Filtro por tipo
+      if (filterType && getFileType(file.name) !== filterType) return false;
       
-      parts.forEach((part, index) => {
-        tempPath += part + '/';
-        html += ` / <span onclick="listarArquivos('${tempPath}')">${part}</span>`;
+      // Filtro por tamanho
+      if (filterSize === 'small' && file.size >= 1e6) return false;
+      if (filterSize === 'medium' && (file.size < 1e6 || file.size >= 5e6)) return false;
+      if (filterSize === 'large' && file.size < 5e6) return false;
+      
+      return true;
+    });
+  };
+
+  const paginateFiles = (files) => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return files.slice(start, start + itemsPerPage);
+  };
+
+  const updatePaginationControls = (totalItems) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const paginationDiv = document.getElementById('pagination');
+    
+    if (totalPages <= 1) {
+      paginationDiv.innerHTML = '';
+      return;
+    }
+    
+    paginationDiv.innerHTML = `
+      <button class="toolbar-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(-1)">
+        <i class="fas fa-chevron-left"></i> Anterior
+      </button>
+      <span style="margin:0 1rem;">Página ${currentPage} de ${totalPages}</span>
+      <button class="toolbar-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changePage(1)">
+        Próxima <i class="fas fa-chevron-right"></i>
+      </button>
+    `;
+  };
+
+  const changePage = (delta) => {
+    currentPage += delta;
+    showFiles(allFiles);
+  };
+
+  const filterFiles = () => {
+    currentPage = 1;
+    showFiles(allFiles);
+  };
+
+  const updateStatusBar = () => {
+    const filteredFiles = filterFilesList(allFiles);
+    const totalItems = filteredFiles.length + allFolders.length;
+    
+    document.getElementById('status-info').textContent = 
+      `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
+  };
+
+  const updateStorageUsage = async () => {
+    try {
+      const storageRef = ref(storage, `documentos/${currentUser.uid}`);
+      const result = await listAll(storageRef);
+      
+      let totalSize = 0;
+      const sizePromises = result.items.map(async file => {
+        const meta = await getMetadata(file);
+        return meta.size;
       });
       
-      document.getElementById('breadcrumbs').innerHTML = html;
-    };
-
-    const updateFolderTree = () => {
-      const folders = allFolders;
-      let html = '';
+      const sizes = await Promise.all(sizePromises);
+      totalSize = sizes.reduce((sum, size) => sum + size, 0);
       
-      if (folders.length === 0) {
-        html = '<li><em>Nenhuma pasta</em></li>';
-      } else {
-        folders.forEach(folder => {
-          const folderName = folder.name;
-          html += `
-            <li>
-              <a href="javascript:void(0)" onclick="listarArquivos('${currentPath}${folderName}/')">
-                <i class="fas fa-folder"></i> ${escapeHtml(folderName)}
-              </a>
-            </li>
-          `;
-        });
-      }
+      document.getElementById('storage-info').textContent = 
+        `${formatFileSize(totalSize)} usado`;
+    } catch (error) {
+      console.error('Erro ao calcular uso de armazenamento:', error);
+    }
+  };
+
+  const showFilesAsGrid = (files) => {
+    const html = files.map(file => {
+      const type = getFileType(file.name);
+      const icon = getFileIcon(file.name);
+      const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
+      const thumbPath = `documentos/${currentUser.uid}/${currentPath}thumbs/${file.name}`;
+      const size = formatFileSize(file.size);
       
-      document.getElementById('folder-tree').innerHTML = html;
-    };
-
-    const filterFilesList = (files) => {
-      const searchText = document.getElementById('search-input').value.toLowerCase();
-      const filterType = document.getElementById('search-type').value;
-      const filterSize = document.getElementById('search-size').value;
-      
-      return files.filter(file => {
-        // Filtro por texto
-        if (!file.name.toLowerCase().includes(searchText)) return false;
-        
-        // Filtro por tipo
-        if (filterType && getFileType(file.name) !== filterType) return false;
-        
-        // Filtro por tamanho
-        if (filterSize === 'small' && file.size >= 1e6) return false;
-        if (filterSize === 'medium' && (file.size < 1e6 || file.size >= 5e6)) return false;
-        if (filterSize === 'large' && file.size < 5e6) return false;
-        
-        return true;
-      });
-    };
-
-    const paginateFiles = (files) => {
-      const start = (currentPage - 1) * itemsPerPage;
-      return files.slice(start, start + itemsPerPage);
-    };
-
-    const updatePaginationControls = (totalItems) => {
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
-      const paginationDiv = document.getElementById('pagination');
-      
-      if (totalPages <= 1) {
-        paginationDiv.innerHTML = '';
-        return;
-      }
-      
-      paginationDiv.innerHTML = `
-        <button class="toolbar-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(-1)">
-          <i class="fas fa-chevron-left"></i> Anterior
-        </button>
-        <span style="margin:0 1rem;">Página ${currentPage} de ${totalPages}</span>
-        <button class="toolbar-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changePage(1)">
-          Próxima <i class="fas fa-chevron-right"></i>
-        </button>
-      `;
-    };
-
-    const changePage = (delta) => {
-      currentPage += delta;
-      showFiles(allFiles);
-    };
-
-    const filterFiles = () => {
-      currentPage = 1;
-      showFiles(allFiles);
-    };
-
-    const updateStatusBar = () => {
-      const filteredFiles = filterFilesList(allFiles);
-      const totalItems = filteredFiles.length + allFolders.length;
-      
-      document.getElementById('status-info').textContent = 
-        `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
-    };
-
-    const updateStorageUsage = async () => {
-      try {
-        const storageRef = ref(storage, `documentos/${currentUser.uid}`);
-        const result = await listAll(storageRef);
-        
-        let totalSize = 0;
-        const sizePromises = result.items.map(async file => {
-          const meta = await getMetadata(file);
-          return meta.size;
-        });
-        
-        const sizes = await Promise.all(sizePromises);
-        totalSize = sizes.reduce((sum, size) => sum + size, 0);
-        
-        document.getElementById('storage-info').textContent = 
-          `${formatFileSize(totalSize)} usado`;
-      } catch (error) {
-        console.error('Erro ao calcular uso de armazenamento:', error);
-      }
-    };
-
-    const showFilesAsGrid = (files) => {
-      const html = files.map(file => {
-        const type = getFileType(file.name);
-        const icon = getFileIcon(file.name);
-        const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
-        const thumbPath = `documentos/${currentUser.uid}/${currentPath}thumbs/${file.name}`;
-        const size = formatFileSize(file.size);
-        
-        if (type === 'image') {
-          return `
-            <div class="file-item">
-              <div class="thumbnail-container" onclick="previewFile('${escapeHtml(fullPath)}', '${type}')">
-                <img src="" data-src="${escapeHtml(thumbPath)}" data-fallback="${escapeHtml(fullPath)}" 
-                     alt="${escapeHtml(file.name)}" class="thumbnail lazy-load">
-                <div class="thumbnail-loading">
-                  <i class="fas fa-spinner fa-spin"></i>
-                </div>
-              </div>
-              <div class="file-name">${escapeHtml(file.name)}</div>
-              <div class="file-size">${size}</div>
-              <div class="file-actions">
-                <button class="file-action-btn" style="background:var(--sucesso);color:white;" 
-                  onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Baixar">
-                  <i class="fas fa-download"></i>
-                </button>
-                <button class="file-action-btn" style="background:var(--perigo);color:white;" 
-                  onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Excluir">
-                  <i class="fas fa-trash"></i>
-                </button>
+      if (type === 'image') {
+        return `
+          <div class="file-item">
+            <div class="thumbnail-container" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
+              <img src="" data-src="${escapeHtml(thumbPath)}" data-fallback="${escapeHtml(fullPath)}" 
+                   alt="${escapeHtml(file.name)}" class="thumbnail lazy-load">
+              <div class="thumbnail-loading">
+                <i class="fas fa-spinner fa-spin"></i>
               </div>
             </div>
-          `;
-        }
-        
-        return `
-          <div class="file-item" onclick="previewFile('${escapeHtml(fullPath)}', '${type}')">
-            <i class="fas ${icon} file-icon"></i>
             <div class="file-name">${escapeHtml(file.name)}</div>
             <div class="file-size">${size}</div>
             <div class="file-actions">
@@ -974,511 +927,538 @@
                 onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Excluir">
                 <i class="fas fa-trash"></i>
               </button>
-              </div>
             </div>
-          `;
-      }).join('');
-      
-      document.getElementById('files-grid').innerHTML = html || '<div class="file-item"><i class="fas fa-folder-open file-icon"></i><div class="file-name">Nenhum arquivo</div></div>';
-      loadThumbnails();
-    };
-
-    const showFilesAsList = (files) => {
-      const html = files.map(file => {
-        const type = getFileType(file.name);
-        const icon = getFileIcon(file.name);
-        const size = formatFileSize(file.size);
-        const date = formatDate(file.timeCreated);
-        const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
-        
-        return `
-          <tr onclick="previewFile('${escapeHtml(fullPath)}', '${type}')">
-            <td><i class="fas ${icon}"></i> ${escapeHtml(file.name)}</td>
-            <td>${type}</td>
-            <td>${size}</td>
-            <td>${date}</td>
-            <td>
-              <button class="toolbar-btn" onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()">
-                <i class="fas fa-download"></i>
-              </button>
-              <button class="toolbar-btn" style="background:var(--perigo);color:white;" onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
+          </div>
         `;
-      }).join('');
-      
-      document.getElementById('files-list-body').innerHTML = html || '<tr><td colspan="5"><em>Nenhum arquivo encontrado</em></td></tr>';
-    };
-
-    const showFiles = (files) => {
-      const filtered = filterFilesList(files);
-      const paginated = paginateFiles(filtered);
-      
-      if (currentView === 'grid') {
-        showFilesAsGrid(paginated);
-      } else {
-        showFilesAsList(paginated);
       }
       
-      updatePaginationControls(filtered.length);
-      updateStatusBar();
-    };
+      return `
+        <div class="file-item" onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
+          <i class="fas ${icon} file-icon"></i>
+          <div class="file-name">${escapeHtml(file.name)}</div>
+          <div class="file-size">${size}</div>
+          <div class="file-actions">
+            <button class="file-action-btn" style="background:var(--sucesso);color:white;" 
+              onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Baixar">
+              <i class="fas fa-download"></i>
+            </button>
+            <button class="file-action-btn" style="background:var(--perigo);color:white;" 
+              onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+            </div>
+          </div>
+        `;
+    }).join('');
+    
+    document.getElementById('files-grid').innerHTML = html || '<div class="file-item"><i class="fas fa-folder-open file-icon"></i><div class="file-name">Nenhum arquivo</div></div>';
+    loadThumbnails();
+  };
 
-    const loadThumbnails = () => {
-      const lazyImages = document.querySelectorAll('.thumbnail.lazy-load:not([data-loaded])');
+  const showFilesAsList = (files) => {
+    const html = files.map(file => {
+      const type = getFileType(file.name);
+      const icon = getFileIcon(file.name);
+      const size = formatFileSize(file.size);
+      const date = formatDate(file.timeCreated);
+      const fullPath = `documentos/${currentUser.uid}/${currentPath}${file.name}`;
       
-      lazyImages.forEach(img => {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              const thumbPath = img.dataset.src;
-              const fallbackPath = img.dataset.fallback;
-              
-              if (thumbnailCache[thumbPath]) {
-                img.src = thumbnailCache[thumbPath];
+      return `
+        <tr onclick="handleFileClick('${escapeHtml(fullPath)}', '${type}')">
+          <td><i class="fas ${icon}"></i> ${escapeHtml(file.name)}</td>
+          <td>${type}</td>
+          <td>${size}</td>
+          <td>${date}</td>
+          <td>
+            <button class="toolbar-btn" onclick="downloadFile('${escapeHtml(fullPath)}');event.stopPropagation()">
+              <i class="fas fa-download"></i>
+            </button>
+            <button class="toolbar-btn" style="background:var(--perigo);color:white;" onclick="deleteFile('${escapeHtml(fullPath)}');event.stopPropagation()">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+    
+    document.getElementById('files-list-body').innerHTML = html || '<tr><td colspan="5"><em>Nenhum arquivo encontrado</em></td></tr>';
+  };
+
+  const showFiles = (files) => {
+    const filtered = filterFilesList(files);
+    const paginated = paginateFiles(filtered);
+    
+    if (currentView === 'grid') {
+      showFilesAsGrid(paginated);
+    } else {
+      showFilesAsList(paginated);
+    }
+    
+    updatePaginationControls(filtered.length);
+    updateStatusBar();
+  };
+
+  const loadThumbnails = () => {
+    const lazyImages = document.querySelectorAll('.thumbnail.lazy-load:not([data-loaded])');
+    
+    lazyImages.forEach(img => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            const thumbPath = img.dataset.src;
+            const fallbackPath = img.dataset.fallback;
+            
+            if (thumbnailCache[thumbPath]) {
+              img.src = thumbnailCache[thumbPath];
+              img.classList.add('thumbnail-loaded');
+              hideLoading(img);
+              img.dataset.loaded = 'true';
+              observer.unobserve(img);
+              return;
+            }
+            
+            getDownloadURL(ref(storage, thumbPath))
+              .then(url => {
+                thumbnailCache[thumbPath] = url;
+                img.src = url;
                 img.classList.add('thumbnail-loaded');
                 hideLoading(img);
                 img.dataset.loaded = 'true';
-                observer.unobserve(img);
-                return;
-              }
-              
-              getDownloadURL(ref(storage, thumbPath))
-                .then(url => {
-                  thumbnailCache[thumbPath] = url;
-                  img.src = url;
-                  img.classList.add('thumbnail-loaded');
-                  hideLoading(img);
-                  img.dataset.loaded = 'true';
-                })
-                .catch(error => {
-                  console.log('Thumbnail não encontrada, usando fallback');
-                  if (fallbackPath) {
-                    getDownloadURL(ref(storage, fallbackPath))
-                      .then(url => {
-                        thumbnailCache[thumbPath] = url;
-                        img.src = url;
-                        img.classList.add('thumbnail-loaded');
-                        hideLoading(img);
-                        img.dataset.loaded = 'true';
-                      })
-                      .catch(error => {
-                        console.error('Erro ao carregar fallback:', error);
-                        showIconFallback(img);
-                      });
-                  } else {
-                    showIconFallback(img);
-                  }
-                });
-              
-              observer.unobserve(img);
-            }
-          });
-        }, {
-          rootMargin: '100px',
-          threshold: 0.1
-        });
-        
-        observer.observe(img);
-      });
-    };
-
-    const hideLoading = (img) => {
-      const container = img.closest('.thumbnail-container');
-      if (container) {
-        const loading = container.querySelector('.thumbnail-loading');
-        if (loading) loading.style.display = 'none';
-      }
-    };
-
-    const showIconFallback = (img) => {
-      const container = img.closest('.thumbnail-container');
-      if (container) {
-        container.innerHTML = `<i class="fas fa-file-image file-icon"></i>`;
-      }
-    };
-
-    const setupLazyLoading = () => {
-      if ('IntersectionObserver' in window) {
-        return;
-      }
-      
-      window.addEventListener('scroll', () => {
-        loadThumbnails();
-      });
-      loadThumbnails();
-    };
-
-    const previewFile = async (fullPath, type) => {
-      try {
-        const url = await getDownloadURL(ref(storage, fullPath));
-        
-        if (type === 'image') {
-          currentPreviewUrl = url;
-          document.getElementById('previewImage').src = url;
-          document.getElementById('previewImage').alt = fullPath.split('/').pop();
-          imagePreviewModal.show();
-        } else if (type === 'pdf') {
-          window.open(url, '_blank');
-        } else {
-          downloadFile(fullPath);
-        }
-      } catch (error) {
-        console.error('Erro ao visualizar arquivo:', error);
-        toastr.error('Erro ao visualizar arquivo');
-      }
-    };
-
-    const abrirModalUpload = () => {
-      console.log('Abrindo modal de upload...');
-      document.getElementById('fileInput').value = '';
-      if (modalUpload) {
-        modalUpload.show();
-      } else {
-        console.error('Modal de upload não foi inicializado corretamente');
-        toastr.error('Erro ao abrir o modal de upload');
-      }
-    };
-
-    const uploadArquivo = async () => {
-      console.log('Iniciando upload...');
-      const files = document.getElementById('fileInput').files;
-      const generateThumbs = document.getElementById('generateThumbnails').checked;
-      
-      console.log('Arquivos selecionados:', files);
-      
-      if (!files || files.length === 0) {
-        console.log('Nenhum arquivo selecionado');
-        toastr.warning('Nenhum arquivo selecionado');
-        return;
-      }
-      
-      modalUpload.hide();
-      toastr.info(`Enviando ${files.length} arquivo(s)...`, '', { timeOut: 3000 });
-      
-      const uploadPromises = [];
-      
-      for (const file of files) {
-        console.log('Processando arquivo:', file.name);
-        
-        if (!isValidFilename(file.name)) {
-          console.log('Nome inválido:', file.name);
-          toastr.warning(`Nome inválido: "${file.name}". Use apenas letras, números e hífens.`);
-          continue;
-        }
-        
-        if (file.size > 50 * 1024 * 1024) {
-          console.log('Arquivo muito grande:', file.name);
-          toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 50MB)`);
-          continue;
-        }
-        
-        const fileType = getFileType(file.name);
-        const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
-        console.log('Caminho do arquivo:', filePath);
-        
-        const metadata = {
-          contentType: file.type,
-          customMetadata: {
-            originalName: file.name,
-            uploadedBy: currentUser.uid,
-            uploadedAt: new Date().toISOString()
+              })
+              .catch(error => {
+                console.log('Thumbnail não encontrada, usando fallback');
+                if (fallbackPath) {
+                  getDownloadURL(ref(storage, fallbackPath))
+                    .then(url => {
+                      thumbnailCache[thumbPath] = url;
+                      img.src = url;
+                      img.classList.add('thumbnail-loaded');
+                      hideLoading(img);
+                      img.dataset.loaded = 'true';
+                    })
+                    .catch(error => {
+                      console.error('Erro ao carregar fallback:', error);
+                      showIconFallback(img);
+                    });
+                } else {
+                  showIconFallback(img);
+                }
+              });
+            
+            observer.unobserve(img);
           }
-        };
+        });
+      }, {
+        rootMargin: '100px',
+        threshold: 0.1
+      });
+      
+      observer.observe(img);
+    });
+  };
+
+  const hideLoading = (img) => {
+    const container = img.closest('.thumbnail-container');
+    if (container) {
+      const loading = container.querySelector('.thumbnail-loading');
+      if (loading) loading.style.display = 'none';
+    }
+  };
+
+  const showIconFallback = (img) => {
+    const container = img.closest('.thumbnail-container');
+    if (container) {
+      container.innerHTML = `<i class="fas fa-file-image file-icon"></i>`;
+    }
+  };
+
+  const setupLazyLoading = () => {
+    if ('IntersectionObserver' in window) {
+      return;
+    }
+    
+    window.addEventListener('scroll', () => {
+      loadThumbnails();
+    });
+    loadThumbnails();
+  };
+
+  const handleFileClick = async (fullPath, type) => {
+    if (type === 'folder') {
+      const path = fullPath.replace(`documentos/${currentUser.uid}/`, '');
+      listarArquivos(path);
+    } else {
+      previewFile(fullPath, type);
+    }
+  };
+
+  const previewFile = async (fullPath, type) => {
+    try {
+      const url = await getDownloadURL(ref(storage, fullPath));
+      
+      if (type === 'image') {
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.maxWidth = '100%';
         
+        const viewer = new Viewer(img, {
+          hidden: function() {
+            viewer.destroy();
+          }
+        });
+        viewer.show();
+      } else if (type === 'pdf') {
+        window.open(url, '_blank');
+      } else {
+        downloadFile(fullPath);
+      }
+    } catch (error) {
+      console.error('Erro ao visualizar arquivo:', error);
+      toastr.error('Erro ao visualizar arquivo');
+    }
+  };
+
+  const abrirModalUpload = () => {
+    console.log('Abrindo modal de upload...');
+    document.getElementById('fileInput').value = '';
+    if (modalUpload) {
+      modalUpload.show();
+    } else {
+      console.error('Modal de upload não foi inicializado corretamente');
+      toastr.error('Erro ao abrir o modal de upload');
+    }
+  };
+
+  const uploadArquivo = async () => {
+    console.log('Iniciando upload...');
+    const files = document.getElementById('fileInput').files;
+    const generateThumbs = document.getElementById('generateThumbnails').checked;
+    
+    console.log('Arquivos selecionados:', files);
+    
+    if (!files || files.length === 0) {
+      console.log('Nenhum arquivo selecionado');
+      toastr.warning('Nenhum arquivo selecionado');
+      return;
+    }
+    
+    modalUpload.hide();
+    toastr.info(`Enviando ${files.length} arquivo(s)...`, '', { timeOut: 3000 });
+    
+    const uploadPromises = [];
+    
+    for (const file of files) {
+      console.log('Processando arquivo:', file.name);
+      
+      if (!isValidFilename(file.name)) {
+        console.log('Nome inválido:', file.name);
+        toastr.warning(`Nome inválido: "${file.name}". Use apenas letras, números e hífens.`);
+        continue;
+      }
+      
+      if (file.size > 50 * 1024 * 1024) {
+        console.log('Arquivo muito grande:', file.name);
+        toastr.warning(`Arquivo muito grande: "${file.name}" (máx. 50MB)`);
+        continue;
+      }
+      
+      const fileType = getFileType(file.name);
+      const filePath = `documentos/${currentUser.uid}/${currentPath}${file.name.trim()}`;
+      console.log('Caminho do arquivo:', filePath);
+      
+      const metadata = {
+        contentType: file.type,
+        customMetadata: {
+          originalName: file.name,
+          uploadedBy: currentUser.uid,
+          uploadedAt: new Date().toISOString()
+        }
+      };
+      
+      uploadPromises.push(
+        uploadBytes(ref(storage, filePath), file, metadata)
+          .then(() => {
+            console.log('Upload concluído:', file.name);
+            logAcao('upload', { filename: file.name, size: file.size });
+          })
+          .catch(error => {
+            console.error('Erro no upload:', error);
+            throw error;
+          })
+      );
+      
+      if (fileType === 'image' && generateThumbs) {
         uploadPromises.push(
-          uploadBytes(ref(storage, filePath), file, metadata)
-            .then(() => {
-              console.log('Upload concluído:', file.name);
-              logAcao('upload', { filename: file.name, size: file.size });
-            })
+          createAndUploadThumbnail(file)
             .catch(error => {
-              console.error('Erro no upload:', error);
-              throw error;
+              console.error('Erro na miniatura:', error);
             })
         );
-        
-        if (fileType === 'image' && generateThumbs) {
-          uploadPromises.push(
-            createAndUploadThumbnail(file)
-              .catch(error => {
-                console.error('Erro na miniatura:', error);
-              })
-          );
-        }
       }
-      
-      try {
-        console.log('Iniciando uploads...');
-        await Promise.all(uploadPromises);
-        console.log('Todos os uploads concluídos');
-        toastr.success('Upload concluído com sucesso');
-        listarArquivos(currentPath);
-        updateStorageUsage();
-      } catch (error) {
-        console.error('Erro no upload:', error);
-        toastr.error('Ocorreram erros durante o upload');
-      }
-    };
+    }
+    
+    try {
+      console.log('Iniciando uploads...');
+      await Promise.all(uploadPromises);
+      console.log('Todos os uploads concluídos');
+      toastr.success('Upload concluído com sucesso');
+      listarArquivos(currentPath);
+      updateStorageUsage();
+    } catch (error) {
+      console.error('Erro no upload:', error);
+      toastr.error('Ocorreram erros durante o upload');
+    }
+  };
 
-    const createAndUploadThumbnail = (file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const maxSize = 300;
-            let width = img.width;
-            let height = img.height;
-            
-            if (width > height) {
-              if (width > maxSize) {
-                height *= maxSize / width;
-                width = maxSize;
-              }
-            } else {
-              if (height > maxSize) {
-                width *= maxSize / height;
-                height = maxSize;
-              }
+  const createAndUploadThumbnail = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxSize = 300;
+          let width = img.width;
+          let height = img.height;
+          
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
             }
-            
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            canvas.toBlob(async (blob) => {
-              const thumbPath = `documentos/${currentUser.uid}/${currentPath}thumbs/${file.name}`;
-              try {
-                await uploadBytes(ref(storage, thumbPath), blob, {
-                  contentType: 'image/jpeg',
-                  customMetadata: {
-                    isThumbnail: 'true',
-                    originalFile: file.name
-                  }
-                });
-                console.log('Thumbnail criada com sucesso:', file.name);
-                resolve();
-              } catch (error) {
-                console.error('Erro ao enviar thumbnail:', error);
-                resolve();
-              }
-            }, 'image/jpeg', 0.7);
-          };
-          img.src = e.target.result;
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          canvas.toBlob(async (blob) => {
+            const thumbPath = `documentos/${currentUser.uid}/${currentPath}thumbs/${file.name}`;
+            try {
+              await uploadBytes(ref(storage, thumbPath), blob, {
+                contentType: 'image/jpeg',
+                customMetadata: {
+                  isThumbnail: 'true',
+                  originalFile: file.name
+                }
+              });
+              console.log('Thumbnail criada com sucesso:', file.name);
+              resolve();
+            } catch (error) {
+              console.error('Erro ao enviar thumbnail:', error);
+              resolve();
+            }
+          }, 'image/jpeg', 0.7);
         };
-        reader.readAsDataURL(file);
-      });
-    };
-
-    const listarArquivos = async (path) => {
-      try {
-        currentPath = path;
-        updateBreadcrumbs();
-        
-        document.getElementById('files-grid').innerHTML = '<div class="file-item"><i class="fas fa-spinner fa-spin file-icon"></i><div class="file-name">Carregando...</div></div>';
-        document.getElementById('files-list-body').innerHTML = '<tr><td colspan="5"><i class="fas fa-spinner fa-spin"></i> Carregando...</td></tr>';
-        
-        const storageRef = ref(storage, `documentos/${currentUser.uid}/${path}`);
-        const result = await listAll(storageRef);
-        
-        allFolders = result.prefixes.sort((a,b) => a.name.localeCompare(b.name));
-        
-        allFiles = await Promise.all(result.items.map(async (itemRef) => {
-          const metadata = await getMetadata(itemRef);
-          return {
-            ref: itemRef,
-            name: itemRef.name,
-            size: metadata.size,
-            type: metadata.contentType,
-            timeCreated: metadata.timeCreated,
-            fullPath: itemRef.fullPath,
-            isThumbnail: metadata.customMetadata?.isThumbnail === 'true'
-          };
-        }));
-        
-        allFiles = allFiles.filter(file => !file.isThumbnail);
-        allFiles.sort((a,b) => a.name.localeCompare(b.name));
-        
-        updateFolderTree();
-        showFiles(allFiles);
-        updateStatusBar();
-      } catch (error) {
-        console.error('Erro ao listar arquivos:', error);
-        toastr.error('Erro ao carregar arquivos');
-      }
-    };
-
-    const criarPasta = async () => {
-      const nome = prompt('Digite o nome da nova pasta:');
-      if (!nome) return;
-      
-      const nomeTrimmed = nome.trim();
-      if (!isValidFilename(nomeTrimmed)) {
-        toastr.error('Nome inválido. Use apenas letras, números e hífens.');
-        return;
-      }
-      
-      if (allFolders.some(f => f.name === nomeTrimmed)) {
-        toastr.error(`Já existe uma pasta com o nome "${nomeTrimmed}"`);
-        return;
-      }
-      
-      const filePath = `documentos/${currentUser.uid}/${currentPath}${nomeTrimmed}/.keep`;
-      const content = `Pasta criada por ${currentUser.email} em ${new Date().toISOString()}`;
-      
-      try {
-        await uploadBytes(ref(storage, filePath), new Blob([content]), {
-          contentType: 'text/plain',
-          customMetadata: { purpose: 'folder-marker' }
-        });
-        
-        toastr.success(`Pasta "${nomeTrimmed}" criada com sucesso`);
-        listarArquivos(currentPath);
-        logAcao('create_folder', { folderName: nomeTrimmed });
-      } catch (error) {
-        console.error('Erro ao criar pasta:', error);
-        toastr.error(`Erro ao criar pasta: ${error.message}`);
-      }
-    };
-
-    const downloadFile = async (path) => {
-      try {
-        const url = await getDownloadURL(ref(storage, path));
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = path.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        logAcao('download', { filename: path.split('/').pop() });
-      } catch (error) {
-        console.error('Erro ao baixar arquivo:', error);
-        toastr.error('Erro ao baixar arquivo');
-      }
-    };
-
-    const deleteFile = async (path) => {
-      const fileName = path.split('/').pop();
-      if (!confirm(`Tem certeza que deseja excluir "${fileName}"?`)) return;
-      
-      try {
-        const thumbPath = path.replace('/documentos/', '/documentos/thumbs/');
-        try {
-          await deleteObject(ref(storage, thumbPath));
-        } catch (error) {
-          console.log('Miniatura não encontrada ou já excluída');
-        }
-        
-        await deleteObject(ref(storage, path));
-        
-        toastr.success('Arquivo excluído com sucesso');
-        listarArquivos(currentPath);
-        updateStorageUsage();
-        logAcao('delete', { filename: fileName });
-      } catch (error) {
-        console.error('Erro ao excluir arquivo:', error);
-        toastr.error('Erro ao excluir arquivo');
-      }
-    };
-
-    const logout = () => {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      }).catch((error) => {
-        toastr.error('Erro ao fazer logout');
-      });
-    };
-
-    const setupEvents = () => {
-      document.getElementById('view-grid-btn').addEventListener('click', () => {
-        currentView = 'grid';
-        document.getElementById('files-grid').style.display = 'grid';
-        document.getElementById('files-list').classList.remove('active');
-        document.getElementById('view-grid-btn').classList.add('active');
-        document.getElementById('view-list-btn').classList.remove('active');
-        showFiles(allFiles);
-      });
-      
-      document.getElementById('view-list-btn').addEventListener('click', () => {
-        currentView = 'list';
-        document.getElementById('files-grid').style.display = 'none';
-        document.getElementById('files-list').classList.add('active');
-        document.getElementById('view-grid-btn').classList.remove('active');
-        document.getElementById('view-list-btn').classList.add('active');
-        showFiles(allFiles);
-      });
-      
-      document.getElementById('advanced-search-toggle').addEventListener('click', () => {
-        const adv = document.getElementById('advanced-search');
-        adv.style.display = adv.style.display === 'none' ? 'block' : 'none';
-      });
-      
-      document.getElementById('clear-search').addEventListener('click', () => {
-        document.getElementById('search-input').value = '';
-        document.getElementById('search-type').value = '';
-        document.getElementById('search-size').value = '';
-        filterFiles();
-      });
-      
-      ['search-input','search-type','search-size'].forEach(id => {
-        document.getElementById(id).addEventListener('input', filterFiles);
-      });
-      
-      document.getElementById('refresh-btn').addEventListener('click', () => {
-        listarArquivos(currentPath);
-      });
-      
-      document.getElementById('logout-btn').addEventListener('click', logout);
-
-      // Configurar botão de download no modal de visualização
-      document.getElementById('downloadPreviewBtn').addEventListener('click', () => {
-        if (currentPreviewUrl) {
-          const a = document.createElement('a');
-          a.href = currentPreviewUrl;
-          a.download = document.getElementById('previewImage').alt || 'download';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-      });
-    };
-
-    // Inicialização quando o DOM estiver pronto
-    document.addEventListener('DOMContentLoaded', () => {
-      onAuthStateChanged(auth, (user) => {
-        if (!user) {
-          window.location.href = "login.html";
-        } else {
-          currentUser = user;
-          document.getElementById('current-year').textContent = new Date().getFullYear();
-          
-          // Inicializar modais
-          modalUpload = new bootstrap.Modal(document.getElementById('modalUpload'));
-          imagePreviewModal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
-          
-          setupEvents();
-          listarArquivos('');
-          logAcesso();
-          updateStorageUsage();
-        }
-      });
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     });
+  };
 
-    // Exporta funções para o escopo global (necessário para chamadas via HTML)
-    window.listarArquivos = listarArquivos;
-    window.previewFile = previewFile;
-    window.downloadFile = downloadFile;
-    window.deleteFile = deleteFile;
-    window.changePage = changePage;
-    window.abrirModalUpload = abrirModalUpload;
-    window.uploadArquivo = uploadArquivo;
-    window.criarPasta = criarPasta;
-  </script>
+  const listarArquivos = async (path) => {
+    try {
+      currentPath = path;
+      updateBreadcrumbs();
+      
+      document.getElementById('files-grid').innerHTML = '<div class="file-item"><i class="fas fa-spinner fa-spin file-icon"></i><div class="file-name">Carregando...</div></div>';
+      document.getElementById('files-list-body').innerHTML = '<tr><td colspan="5"><i class="fas fa-spinner fa-spin"></i> Carregando...</td></tr>';
+      
+      const storageRef = ref(storage, `documentos/${currentUser.uid}/${path}`);
+      const result = await listAll(storageRef);
+      
+      allFolders = result.prefixes.sort((a,b) => a.name.localeCompare(b.name));
+      
+      allFiles = await Promise.all(result.items.map(async (itemRef) => {
+        const metadata = await getMetadata(itemRef);
+        return {
+          ref: itemRef,
+          name: itemRef.name,
+          size: metadata.size,
+          type: metadata.contentType,
+          timeCreated: metadata.timeCreated,
+          fullPath: itemRef.fullPath,
+          isThumbnail: metadata.customMetadata?.isThumbnail === 'true'
+        };
+      }));
+      
+      allFiles = allFiles.filter(file => !file.isThumbnail);
+      allFiles.sort((a,b) => a.name.localeCompare(b.name));
+      
+      updateFolderTree();
+      showFiles(allFiles);
+      updateStatusBar();
+    } catch (error) {
+      console.error('Erro ao listar arquivos:', error);
+      toastr.error('Erro ao carregar arquivos');
+    }
+  };
+
+  const criarPasta = async () => {
+    const nome = prompt('Digite o nome da nova pasta:');
+    if (!nome) return;
+    
+    const nomeTrimmed = nome.trim();
+    if (!isValidFilename(nomeTrimmed)) {
+      toastr.error('Nome inválido. Use apenas letras, números e hífens.');
+      return;
+    }
+    
+    if (allFolders.some(f => f.name === nomeTrimmed)) {
+      toastr.error(`Já existe uma pasta com o nome "${nomeTrimmed}"`);
+      return;
+    }
+    
+    const filePath = `documentos/${currentUser.uid}/${currentPath}${nomeTrimmed}/.keep`;
+    const content = `Pasta criada por ${currentUser.email} em ${new Date().toISOString()}`;
+    
+    try {
+      await uploadBytes(ref(storage, filePath), new Blob([content]), {
+        contentType: 'text/plain',
+        customMetadata: { purpose: 'folder-marker' }
+      });
+      
+      toastr.success(`Pasta "${nomeTrimmed}" criada com sucesso`);
+      listarArquivos(currentPath);
+      logAcao('create_folder', { folderName: nomeTrimmed });
+    } catch (error) {
+      console.error('Erro ao criar pasta:', error);
+      toastr.error(`Erro ao criar pasta: ${error.message}`);
+    }
+  };
+
+  const downloadFile = async (path) => {
+    try {
+      const url = await getDownloadURL(ref(storage, path));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = path.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      logAcao('download', { filename: path.split('/').pop() });
+    } catch (error) {
+      console.error('Erro ao baixar arquivo:', error);
+      toastr.error('Erro ao baixar arquivo');
+    }
+  };
+
+  const deleteFile = async (path) => {
+    const fileName = path.split('/').pop();
+    if (!confirm(`Tem certeza que deseja excluir "${fileName}"?`)) return;
+    
+    try {
+      const thumbPath = path.replace('/documentos/', '/documentos/thumbs/');
+      try {
+        await deleteObject(ref(storage, thumbPath));
+      } catch (error) {
+        console.log('Miniatura não encontrada ou já excluída');
+      }
+      
+      await deleteObject(ref(storage, path));
+      
+      toastr.success('Arquivo excluído com sucesso');
+      listarArquivos(currentPath);
+      updateStorageUsage();
+      logAcao('delete', { filename: fileName });
+    } catch (error) {
+      console.error('Erro ao excluir arquivo:', error);
+      toastr.error('Erro ao excluir arquivo');
+    }
+  };
+
+  const logout = () => {
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    }).catch((error) => {
+      toastr.error('Erro ao fazer logout');
+    });
+  };
+
+  const setupEvents = () => {
+    document.getElementById('view-grid-btn').addEventListener('click', () => {
+      currentView = 'grid';
+      document.getElementById('files-grid').style.display = 'grid';
+      document.getElementById('files-list').classList.remove('active');
+      document.getElementById('view-grid-btn').classList.add('active');
+      document.getElementById('view-list-btn').classList.remove('active');
+      showFiles(allFiles);
+    });
+    
+    document.getElementById('view-list-btn').addEventListener('click', () => {
+      currentView = 'list';
+      document.getElementById('files-grid').style.display = 'none';
+      document.getElementById('files-list').classList.add('active');
+      document.getElementById('view-grid-btn').classList.remove('active');
+      document.getElementById('view-list-btn').classList.add('active');
+      showFiles(allFiles);
+    });
+    
+    document.getElementById('advanced-search-toggle').addEventListener('click', () => {
+      const adv = document.getElementById('advanced-search');
+      adv.style.display = adv.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    document.getElementById('clear-search').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-type').value = '';
+      document.getElementById('search-size').value = '';
+      filterFiles();
+    });
+    
+    ['search-input','search-type','search-size'].forEach(id => {
+      document.getElementById(id).addEventListener('input', filterFiles);
+    });
+    
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+      listarArquivos(currentPath);
+    });
+    
+    document.getElementById('logout-btn').addEventListener('click', logout);
+  };
+
+  // Inicialização quando o DOM estiver pronto
+  document.addEventListener('DOMContentLoaded', () => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Verificar e inicializar o modal de upload
+        const modalElement = document.getElementById('modalUpload');
+        if (modalElement) {
+          modalUpload = new bootstrap.Modal(modalElement);
+          console.log('Modal de upload inicializado com sucesso');
+        } else {
+          console.error('Elemento do modal não encontrado');
+        }
+        
+        setupEvents();
+        listarArquivos('');
+        logAcesso();
+        updateStorageUsage();
+      }
+    });
+  });
+
+  // Exporta funções para o escopo global (necessário para chamadas via HTML)
+  window.listarArquivos = listarArquivos;
+  window.handleFileClick = handleFileClick;
+  window.downloadFile = downloadFile;
+  window.deleteFile = deleteFile;
+  window.changePage = changePage;
+  window.abrirModalUpload = abrirModalUpload;
+  window.uploadArquivo = uploadArquivo;
+  window.criarPasta = criarPasta;
+</script>
 </body>
 </html>
