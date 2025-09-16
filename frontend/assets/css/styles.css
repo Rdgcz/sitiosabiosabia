@@ -1,0 +1,330 @@
+        :root {
+            /* Cores permanecem as mesmas */
+            --laranja-ouro: #EAA731;
+            --marrom-escuro: #362219;
+            --terracota: #A0470D;
+            --taupe: #A67958;
+            --fundo: #F8F1E5;
+            --bordas: #D9C7B8;
+            --destaque: #8C3A10;
+            --texto: #3E2723;
+            --branco: #FFFFFF;
+            --sombra: rgba(0, 0, 0, 0.1);
+            
+            /* Tipografia permanece a mesma */
+            --fonte-principal: 'Arial', sans-serif;
+            --fonte-secundaria: system-ui, sans-serif;
+            --peso-regular: 400;
+            --peso-bold: 700;
+            
+            /* Espaçamentos permanecem os mesmos */
+            --espaco-base: 1rem;
+            --espaco-pequeno: 0.5rem;
+            --espaco-medio: 1.5rem;
+            --espaco-grande: 2rem;
+            
+            /* Bordas permanecem as mesmas */
+            --raio-borda: 8px;
+            --raio-borda-pequeno: 4px;
+            
+            /* Transições permanecem as mesmas */
+            --transicao-rapida: 0.2s ease;
+            --transicao-media: 0.3s ease;
+        }
+
+        /* === RESET E BASE === */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--fundo);
+            color: var(--texto);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        /* === TIPOGRAFIA === */
+        h1, h2, h3, h4 {
+            font-family: var(--fonte-principal);
+            line-height: 1.2;
+            font-weight: var(--peso-bold);
+            margin-bottom: var(--espaco-pequeno);
+        }
+
+       
+
+        p {
+            margin-bottom: var(--espaco-medio);
+        }
+
+
+
+        a {
+            color: var(--destaque);
+            text-decoration: underline;
+
+        }
+
+        a:hover {
+            color: var(--laranja-ouro);
+            text-decoration: none;
+        }
+
+        /* === IMAGENS === */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: var(--raio-borda-pequeno);
+        }
+
+        .imagem-conteudo {
+            margin: var(--espaco-base) auto;
+            box-shadow: 0 2px 8px var(--sombra);
+        }
+
+        .imagem-legenda {
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--taupe);
+            margin-top: var(--espaco-pequeno);
+            margin-bottom: var(--espaco-medio);
+        }
+
+        /* === LAYOUT === */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--espaco-base);
+        }
+
+        /* === CABEÇALHO === */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 110px;
+            background-color: var(--terracota);
+            color: var(--branco);
+            padding: 10px;
+            padding-bottom: 1px;
+            display: flex;
+
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--espaco-pequeno);
+            border-bottom: #362219 solid 3px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: var(--espaco-pequeno);
+        }
+
+        .logo {
+            width:100px;
+            height: auto;
+        }
+
+        .header-text {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        main {
+            max-width: 1200px;
+            margin-top: 0 auto;
+            padding-top:100px;
+            flex: 1;
+        }
+
+        
+        /* === BOTÕES === */
+        .btn {
+            display: inline-block;
+            background-color: var(--laranja-ouro);
+            color: var(--marrom-escuro);
+            padding: 0.8rem 1.8rem;
+            border-radius: var(--raio-borda-pequeno);
+            text-decoration: none;
+            font-weight: var(--peso-bold);
+            border: 2px solid transparent;
+            transition: all var(--transicao-media);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover,
+        .btn:focus {
+            background-color: var(--destaque);
+            color: var(--branco);
+            border-color: var(--laranja-ouro);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        /* === RODAPÉ === */
+        footer {
+           
+            position: relative;
+            
+            
+            background-color: var(--marrom-escuro);
+            color: var(--fundo);
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: var(--espaco-grande);
+            padding: 0.5rem;
+            width: 100%;
+            height: fit-content;
+            min-height: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .copyright, .email {
+            padding: 0.25rem 0;
+            margin: 0;
+            line-height: 1.0;
+        }
+
+
+        /* === RESPONSIVIDADE === */
+        @media (max-width: 992px) {
+            :root {
+                --espaco-grande: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --espaco-base: 0.8rem;
+            }
+
+            header {
+                flex-direction: column;
+                text-align: center;
+                padding: var(--espaco-base);
+            }
+
+            .logo-container {
+                justify-content: center;
+            }
+
+            .header-text {
+                order: 2;
+                width: 100%;
+            }
+
+            .clock-container {
+                text-align: center;
+                width: 100%;
+                order: 3;
+                margin-top: var(--espaco-base);
+            }
+
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: static;
+                align-self: flex-end;
+                margin: var(--espaco-pequeno);
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--espaco-base);
+                padding: var(--espaco-base) 0;
+                display: none;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            main {
+                margin: var(--espaco-grande) auto;
+                padding: 0 var(--espaco-base);
+            }
+
+            .destaque {
+                padding: var(--espaco-base);
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --espaco-base: 0.6rem;
+                --espaco-medio: 1rem;
+            }
+            
+            .logo {
+                width: 100px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .swiper-container {
+                height: 280px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .swiper-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .swiper-container {
+                height: 220px;
+                margin: 0.8rem 0;
+            }
+    
+            .swiper-slide img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .swiper-container {
+                height: 180px;
+                margin: 0.5rem 0;
+                border-radius: var(--raio-borda-pequeno-mobile);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .swiper-container {
+                height: 150px;
+            }
+        }
