@@ -142,6 +142,9 @@
         }
 
         .header-text {
+            font-size: 1.2rem;
+            font-weight: var(--peso-bold);  
+            
             text-align: center;
             flex-grow: 1;
         }
