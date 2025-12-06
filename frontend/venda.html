@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Sítio Sábio Sabiá — Venda • R$ 1.290.000</title>
 <meta name="description" content="Sítio Sábio Sabiá — refúgio privado de 11 ha com nascentes, lagos e infraestrutura. A 50 minutos de Cunha; 15 km do asfalto. R$ 1.290.000 (negociável).">
-<link rel="canonical" href="https://rdgcz.github.io/portfolio/venda.html">
+<link rel="canonical" href="https://www.sitiosabiosabia.com.br/frontend/venda.html">
 <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
 <link rel="alternate icon" href="img/favicon-32.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -37,6 +37,8 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
 
 .sale-hero {
   padding: 0; /* hero agora é full-bleed */
+  padding-top: 1rem !important;
+  padding-bottom: 2rem !important;
   border-bottom: 1px solid #eee;
   background: #fafafa;
 }
@@ -54,8 +56,8 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
 /* IMAGE */
 .sale-hero__media {
   position: relative;
-  height: 520px;
-  border-radius: 14px;
+  height: 560px !important;
+  border-radius: 16px !important;
   overflow: hidden;
   box-shadow: 0 20px 45px rgba(0,0,0,0.12);
 }
@@ -72,10 +74,11 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.15) 0%,
-    rgba(0,0,0,0.05) 40%,
+    rgba(0,0,0,0.25) 0%,
+    rgba(0,0,0,0.12) 35%,
+    rgba(0,0,0,0.05) 70%,
     rgba(0,0,0,0.00) 100%
-  );
+  ) !important;
   pointer-events: none;
 }
 
@@ -98,15 +101,15 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
 .sale-hero__title {
   font-family: var(--font-title);
   font-size: 2.8rem;
-  margin: 0 0 0.8rem;
+  margin: 0 0 1rem !important;
   letter-spacing: -0.5px;
 }
 
 .sale-hero__subtitle {
   color: var(--muted);
-  margin: 0 0 1.4rem;
-  font-size: 1.15rem;
-  line-height: 1.55;
+  margin: 0 0 1.6rem !important;
+  font-size: 1.18rem !important;
+  line-height: 1.55 !important;
 }
 
 /* PRICE */
@@ -115,7 +118,7 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
   align-items: center;
   flex-wrap: wrap;
   gap: 0.7rem;
-  margin-bottom: 1.8rem;
+  margin-bottom: 2rem !important;
 }
 
 .price {
@@ -154,7 +157,7 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
 .btn--primary {
   background:var(--accent);
   color:#071011;
-  box-shadow:0 8px 26px rgba(37,211,102,0.18)
+  box-shadow:0 8px 26px rgba(37,211,102,0.25) !important;
 }
 
 .btn--outline {
@@ -163,9 +166,21 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
   background:transparent
 }
 
+.sale-hero__ctas .btn--primary {
+  font-size: 1.05rem !important;
+  padding: 1rem 1.4rem !important;
+  box-shadow: 0 10px 26px rgba(37,211,102,0.25) !important;
+}
+
+.sale-hero__ctas .btn--outline {
+  font-size: 1rem !important;
+  padding: 0.95rem 1.4rem !important;
+}
+
 .sale-hero__access {
-  color: var(--muted);
-  font-size: 0.95rem;
+  margin-top: 1rem !important;
+  font-size: 1rem !important;
+  color: #555 !important;
 }
 
 /* MOBILE */
@@ -176,11 +191,14 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
   }
 
   .sale-hero__media {
-    height: 360px;
+    height: 360px !important;
   }
 
+  .sale-hero__ctas {
+    justify-content: center !important;
+  }
   .sale-hero__title {
-    font-size: 2rem;
+    font-size: 2.1rem !important;
   }
 }
 
