@@ -193,10 +193,6 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
     padding-top: 2rem;
   }
 
-  .sale-hero__media {
-    max-height: 250px !important;
-  }
-
   .sale-hero__ctas {
     justify-content: center !important;
   }
@@ -204,6 +200,21 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
     font-size: 2.1rem !important;
   }
 }
+
+@media (max-width: 768px) {
+  .sale-hero__media {
+    height: auto !important;
+    max-height: 260px !important;
+  }
+
+  .sale-hero__media img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+}
+
 
 
 
@@ -232,7 +243,15 @@ body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webk
 .card p{margin:0;color:var(--muted)}
 
 /* LOCATION */
-.location__map{width:100%;height:340px;border-radius:10px;overflow:hidden;border:1px solid #eee}
+.location__map{position: relative;width:100%;height:350px;border-radius:12px;overflow:hidden !important;border:1px solid #eaeaea}
+.location__map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+}
+
 .location__notes{margin-top:1rem;color:var(--muted)}
 
 /* OPPORTUNITY */
