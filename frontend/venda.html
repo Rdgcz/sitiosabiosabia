@@ -1,1521 +1,817 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sítio Sábio Sabiá — Venda • R$ 1.290.000 | Refúgio de 11 ha com nascentes e lagos</title>
-    <meta name="description" content="Sítio Sábio Sabiá: refúgio exclusivo de 11 hectares com nascentes, lagos e infraestrutura completa. A 50 minutos de Cunha, 15 km do asfalto. R$ 1.290.000 (negociável). Documentação regularizada.">
-    <meta name="keywords" content="sítio à venda, Cunha SP, propriedade rural, turismo rural, 11 hectares, lago, nascente, chalé">
-    <meta name="author" content="Sítio Sábio Sabiá">
-    <link rel="canonical" href="https://www.sitiosabiosabia.com.br/frontend/venda.html">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Sítio Sábio Sabiá — Venda • R$ 1.290.000">
-    <meta property="og:description" content="Refúgio exclusivo de 11 ha com nascentes, lagos e infraestrutura completa. A 50 minutos de Cunha/SP.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.sitiosabiosabia.com.br/frontend/venda.html">
-    <meta property="og:image" content="https://www.sitiosabiosabia.com.br/assets/images/venda/hero.webp">
-    
-    <!-- Favicons -->
-    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
-    <link rel="alternate icon" href="img/favicon-32.png" type="image/png">
-    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="assets/images/venda/hero.webp" as="image" type="image/webp">
-    
-    <style>
-        /* ====== VARIÁVEIS CSS ====== */
-        :root {
-            --max-width: 1200px;
-            --font-title: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --color-primary: #25d366;
-            --color-primary-dark: #1da851;
-            --color-secondary: #071011;
-            --color-text: #111111;
-            --color-text-light: #666666;
-            --color-background: #ffffff;
-            --color-card: #ffffff;
-            --color-border: #eeeeee;
-            --color-overlay: rgba(0, 0, 0, 0.85);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-full: 9999px;
-            --transition-fast: 150ms ease;
-            --transition-base: 250ms ease;
-            --transition-slow: 350ms ease;
-        }
-        
-        /* ====== RESET & BASE STYLES ====== */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        body {
-            font-family: var(--font-body);
-            color: var(--color-text);
-            background-color: var(--color-background);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            overflow-x: hidden;
-        }
-        
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        a {
-            color: inherit;
-            text-decoration: none;
-            transition: color var(--transition-fast);
-        }
-        
-        button, input, textarea, select {
-            font: inherit;
-            color: inherit;
-        }
-        
-        button {
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
-        
-        /* ====== TYPOGRAPHY ====== */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-title);
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-        
-        h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            letter-spacing: -0.02em;
-        }
-        
-        h2 {
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            letter-spacing: -0.01em;
-        }
-        
-        h3 {
-            font-size: clamp(1.25rem, 3vw, 1.75rem);
-        }
-        
-        p {
-            margin-bottom: 1rem;
-        }
-        
-        .lead {
-            font-size: 1.125rem;
-            color: var(--color-text-light);
-        }
-        
-        /* ====== UTILITY CLASSES ====== */
-        .container {
-            width: 100%;
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-        
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-        
-        .text-center {
-            text-align: center;
-        }
-        
-        .text-muted {
-            color: var(--color-text-light);
-        }
-        
-        /* ====== HEADER ====== */
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background-color: var(--color-background);
-            border-bottom: 1px solid var(--color-border);
-            padding: 1rem 0;
-            backdrop-filter: blur(8px);
-            background-color: rgba(255, 255, 255, 0.95);
-        }
-        
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .brand-logo {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-sm);
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .brand-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .brand-subtitle {
-            font-size: 0.875rem;
-            color: var(--color-text-light);
-        }
-        
-        /* ====== HERO SECTION ====== */
-        .hero {
-            position: relative;
-            padding: 4rem 0 3rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            overflow: hidden;
-        }
-        
-        .hero-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .hero-media {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            height: 500px;
-        }
-        
-        .hero-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform var(--transition-slow);
-        }
-        
-        .hero-media:hover .hero-image {
-            transform: scale(1.02);
-        }
-        
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.3) 0%,
-                rgba(0, 0, 0, 0.1) 40%,
-                transparent 100%
-            );
-            pointer-events: none;
-        }
-        
-        .hero-content {
-            padding-right: 1rem;
-        }
-        
-        .hero-badge {
-            display: inline-block;
-            background-color: rgba(37, 211, 102, 0.1);
-            color: var(--color-primary);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 0.875rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(37, 211, 102, 0.2);
-        }
-        
-        .hero-price {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--color-background);
-            color: var(--color-secondary);
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
-            font-weight: 800;
-            font-size: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 1.5rem;
-            border: 2px solid var(--color-primary);
-        }
-        
-        .hero-cta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        
-        /* ====== BUTTONS ====== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.875rem 1.75rem;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 1rem;
-            line-height: 1;
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            border: 2px solid transparent;
-            white-space: nowrap;
-        }
-        
-        .btn-primary {
-            background-color: var(--color-primary);
-            color: var(--color-secondary);
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--color-primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--color-secondary);
-            border-color: var(--color-border);
-        }
-        
-        .btn-secondary:hover {
-            border-color: var(--color-text-light);
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-        
-        .btn-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-        
-        /* ====== QUICK FACTS ====== */
-        .facts {
-            padding: 3rem 0;
-            background-color: #fafafa;
-        }
-        
-        .facts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .fact-card {
-            background-color: var(--color-card);
-            padding: 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            text-align: center;
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-        }
-        
-        .fact-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .fact-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--color-primary);
-        }
-        
-        /* ====== GALLERY ====== */
-        .gallery {
-            padding: 4rem 0;
-        }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .gallery-item {
-            position: relative;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            aspect-ratio: 4/3;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all var(--transition-base);
-        }
-        
-        .gallery-item:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform var(--transition-slow);
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-        
-        /* ====== LIGHTBOX ====== */
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--color-overlay);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity var(--transition-base), visibility var(--transition-base);
-            padding: 1rem;
-        }
-        
-        .lightbox.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .lightbox-content {
-            position: relative;
-            max-width: 90vw;
-            max-height: 90vh;
-            width: auto;
-            height: auto;
-        }
-        
-        .lightbox-image {
-            display: block;
-            max-width: 100%;
-            max-height: 90vh;
-            object-fit: contain;
-            border-radius: var(--radius-md);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-        
-        .lightbox-btn {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            z-index: 1001;
-        }
-        
-        .lightbox-btn:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-            transform: scale(1.1);
-        }
-        
-        .lightbox-close {
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-        }
-        
-        .lightbox-prev,
-        .lightbox-next {
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-        }
-        
-        .lightbox-prev {
-            left: 1rem;
-        }
-        
-        .lightbox-next {
-            right: 1rem;
-        }
-        
-        .lightbox-counter {
-            position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-full);
-            font-size: 0.875rem;
-        }
-        
-        /* ====== CONTENT SECTIONS ====== */
-        .section {
-            padding: 4rem 0;
-        }
-        
-        .section-title {
-            position: relative;
-            margin-bottom: 2.5rem;
-            padding-bottom: 0.75rem;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background-color: var(--color-primary);
-            border-radius: var(--radius-full);
-        }
-        
-        .section-title-center {
-            text-align: center;
-        }
-        
-        .section-title-center::after {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        /* ====== CARDS ====== */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .card {
-            background-color: var(--color-card);
-            border-radius: var(--radius-md);
-            padding: 1.75rem;
-            box-shadow: var(--shadow-sm);
-            transition: all var(--transition-base);
-            border: 1px solid var(--color-border);
-        }
-        
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--color-primary);
-        }
-        
-        .card-icon {
-            font-size: 2rem;
-            color: var(--color-primary);
-            margin-bottom: 1rem;
-        }
-        
-        /* ====== LOCATION ====== */
-        .location-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: start;
-        }
-        
-        .location-map {
-            position: relative;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            aspect-ratio: 16/9;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--color-border);
-        }
-        
-        .location-map iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .location-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        /* ====== DOCUMENTATION ====== */
-        .doc-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 0.75rem;
-        }
-        
-        .doc-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background-color: rgba(37, 211, 102, 0.05);
-            border-radius: var(--radius-sm);
-            border-left: 4px solid var(--color-primary);
-        }
-        
-        .doc-item::before {
-            content: '✓';
-            color: var(--color-primary);
-            font-weight: bold;
-        }
-        
-        /* ====== OPPORTUNITY ====== */
-        .opportunity {
-            background: linear-gradient(135deg, #f8fff9 0%, #ffffff 100%);
-            padding: 2.5rem;
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(37, 211, 102, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .opportunity::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 8px;
-            height: 100%;
-            background-color: var(--color-primary);
-        }
-        
-        /* ====== CONTACT FORM ====== */
-        .contact {
-            background-color: #f8f9fa;
-        }
-        
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-        
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .contact-methods {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .contact-method {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            background-color: var(--color-card);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            transition: all var(--transition-fast);
-        }
-        
-        .contact-method:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .contact-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--color-primary);
-        }
-        
-        .form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .form-label {
-            font-weight: 500;
-            color: var(--color-secondary);
-        }
-        
-        .form-control {
-            padding: 0.875rem 1rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            transition: all var(--transition-fast);
-            background-color: var(--color-background);
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
-        }
-        
-        textarea.form-control {
-            min-height: 140px;
-            resize: vertical;
-        }
-        
-        /* ====== FOOTER ====== */
-        .site-footer {
-            background-color: var(--color-secondary);
-            color: white;
-            padding: 3rem 0 1.5rem;
-            margin-top: 3rem;
-        }
-        
-        .footer-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-brand {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .footer-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        
-        .footer-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: white;
-        }
-        
-        .footer-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .footer-link {
-            color: rgba(255, 255, 255, 0.7);
-            transition: color var(--transition-fast);
-        }
-        
-        .footer-link:hover {
-            color: white;
-        }
-        
-        .footer-bottom {
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        /* ====== RESPONSIVE DESIGN ====== */
-        @media (max-width: 1024px) {
-            .hero-container,
-            .location-container,
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .footer-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero {
-                padding: 2rem 0;
-            }
-            
-            .hero-media {
-                height: 350px;
-                order: -1;
-            }
-            
-            .hero-content {
-                padding-right: 0;
-            }
-            
-            .hero-cta {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .section {
-                padding: 2.5rem 0;
-            }
-            
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            
-            .lightbox-btn {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .lightbox-prev,
-            .lightbox-next {
-                font-size: 1.5rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 1rem;
-            }
-            
-            .header-container {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-            
-            .brand {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .hero-price {
-                font-size: 1.25rem;
-                padding: 0.5rem 1rem;
-            }
-            
-            .facts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .opportunity {
-                padding: 1.5rem;
-            }
-        }
-        
-        /* ====== ANIMATIONS ====== */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .animate-fade-in {
-            animation: fadeIn var(--transition-base);
-        }
-        
-        .animate-slide-in {
-            animation: slideIn var(--transition-base);
-        }
-        
-        /* ====== PRINT STYLES ====== */
-        @media print {
-            .site-header,
-            .hero-cta,
-            .lightbox,
-            .site-footer {
-                display: none !important;
-            }
-            
-            body {
-                font-size: 12pt;
-                color: #000;
-            }
-            
-            .container {
-                max-width: 100%;
-                padding: 0;
-            }
-            
-            .hero-container,
-            .location-container {
-                display: block;
-            }
-            
-            a {
-                color: #000;
-                text-decoration: underline;
-            }
-            
-            .btn {
-                border: 1px solid #000;
-                color: #000;
-                background: none;
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sítio Sábio Sabiá — Venda • R$ 1.290.000</title>
+<meta name="description" content="Sítio Sábio Sabiá — refúgio privado de 11 ha com nascentes, lagos e infraestrutura. A 50 minutos de Cunha; 15 km do asfalto. R$ 1.290.000 (negociável).">
+<link rel="canonical" href="https://www.sitiosabiosabia.com.br/frontend/venda.html">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="alternate icon" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+<style>
+:root{
+  --max-width:1180px;
+  --font-title: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --accent:#25d366;
+  --muted:#666;
+  --bg:#fff;
+  --card-bg:#ffffff;
+}
+
+/* Reset básico */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font-body);color:#111;background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* Container */
+.container{max-width:var(--max-width);margin:0 auto;padding:0 1.5rem}
+
+/* HERO */
+
+/* ========================= */
+/*      HERO PREMIUM         */
+/* ========================= */
+
+.sale-hero {
+  padding: 0; /* hero agora é full-bleed */
+  padding-top: 3.6rem !important;
+  padding-bottom: 2rem !important;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 3rem !important;
+  background: #fafafa;
+}
+
+.sale-hero__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+/* IMAGE */
+.sale-hero__media {
+  position: relative;
+  height: 600px !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.06) !important;
+}
+
+.sale-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom !important;
+}
+
+/* OVERLAY */
+.sale-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,0.22) 30%,
+    rgba(0,0,0,0.10) 60%,
+    rgba(0,0,0,0.00) 100%
+  ) !important;
+  pointer-events: none;
+}
+
+/* CONTENT */
+.sale-hero__content {
+  padding: 0 0.5rem;
+}
+
+.sale-hero__kicker {
+  display: inline-block;
+  background: #e7f7eb;
+  color: var(--accent);
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.4px;
+  margin-bottom: 1rem;
+}
+
+.sale-hero__title {
+  font-family: var(--font-title);
+  font-size: 2.8rem;
+  margin: 0 0 1rem !important;
+  letter-spacing: -0.5px;
+}
+
+.sale-hero__subtitle {
+  color: var(--muted);
+  margin: 0 0 1.6rem !important;
+  font-size: 1.18rem !important;
+  line-height: 1.55 !important;
+}
+
+/* PRICE */
+.sale-hero__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 2rem !important;
+}
+
+.price {
+  background: #fff;
+  color: #071011;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  box-shadow: 0 10px 26px rgba(37,211,102,0.15);
+}
+
+.price-note {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* CTAS */
+.sale-hero__ctas {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+
+.btn {
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;padding:.85rem 1.2rem;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  cursor:pointer
+}
+
+.btn--primary {
+  background:var(--accent);
+  color:#071011;
+  box-shadow:0 8px 26px rgba(37,211,102,0.25) !important;
+}
+
+.btn--outline {
+  border:1px solid #ddd;
+  color:#071011;
+  background:transparent
+}
+
+.sale-hero__ctas .btn--primary {
+  font-size: 1.08rem !important;
+  padding: 1.1rem 1.66rem !important;
+  box-shadow: 0 10px 26px rgba(37,211,102,0.25) !important;
+}
+
+.sale-hero__ctas .btn--outline {
+  font-size: 1rem !important;
+  padding: 1.05rem 1.6rem !important;
+}
+
+.sale-hero__access {
+  margin-top: 1rem !important;
+  font-size: 1rem !important;
+  color: #555 !important;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .sale-hero__inner {
+    grid-template-columns: 1fr;
+    padding-top: 2rem;
+  }
+
+  .sale-hero__ctas {
+    justify-content: center !important;
+  }
+  .sale-hero__title {
+    font-size: 2.1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sale-hero {
+    margin-bottom: 2.2rem !important;
+  }
+
+  .sale-hero__media {
+    height: auto !important;
+    max-height: 260px !important;
+  }
+
+  .sale-hero__media img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover;
+    object-position: center 88% !important;
+  }
+}
+
+
+
+
+
+
+
+
+/* QUICK FACTS */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2rem auto;max-width:var(--max-width);padding:0 1.5rem}
+.fact{background:var(--card-bg);border-radius:10px;padding:1rem 1rem;box-shadow:0 6px 18px rgba(6,18,25,0.04);text-align:center}
+.fact h4{margin:0;font-size:1.05rem;font-weight:700}
+.fact p{margin:.4rem 0 0;color:var(--muted)}
+
+/* GALLERY */
+.sale-gallery {
+  padding: 60px 20px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.sale-gallery .section-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.gallery-item {
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.15);
+}
+
+.lightbox.active {
+  display: flex;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Responsivo */
+@media (max-width: 920px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* LIGHTBOX - VERSÃO SIMPLIFICADA E FUNCIONAL */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox__content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox__image {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+/* Botões de controle - VERSÃO SIMPLES */
+.lightbox-btn {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 28px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: background 0.2s;
+}
+
+.lightbox-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+}
+
+.lightbox-prev {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-next {
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+  .lightbox-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+  
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
+  .lightbox-close { top: 10px; right: 10px; }
+}
+
+
+/* INFRA / CONSTRUÇÕES */
+.section{max-width:var(--max-width);margin:2.4rem auto;padding:0 1.5rem}
+.section h2{font-family:var(--font-title);font-size:1.6rem;margin:0 0 1rem}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.card{background:var(--card-bg);border-radius:10px;padding:1rem;box-shadow:0 8px 24px rgba(6,18,25,0.04)}
+.card h3{margin:0 0 .6rem;font-size:1.05rem}
+.card p{margin:0;color:var(--muted)}
+
+/* LOCATION */
+.location__map {
+  position: relative;
+  width:100%;
+  height:350px;
+  margin-top: 1.2rem !important;
+  border-radius:12px;
+  overflow:hidden !important;
+  border:1px solid #eaeaea
+}
+
+.location__map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+}
+
+.location__notes{margin-top:1rem;color:var(--muted)}
+
+/* OPPORTUNITY */
+.opportunity{background:linear-gradient(180deg,#fbfff8,#ffffff);padding:2rem;border-radius:12px;box-shadow:0 8px 28px rgba(6,18,25,0.03);margin:1.6rem 0}
+
+/* DOCUMENTATION */
+.doc-list li {margin-bottom: .4rem;font-size: 1rem;color: #444;}
+
+
+/* CONTACT / FORM */
+.contact-grid{display:grid;grid-template-columns:1fr 420px;gap:2rem;max-width:var(--max-width);margin:1.6rem auto;padding:0 1.5rem}
+.contact-card{background:var(--card-bg);border-radius:10px;padding:1.4rem;box-shadow:0 10px 30px rgba(6,18,25,0.04)}
+.form-row{display:flex;gap:.6rem;margin-bottom:.8rem}
+.input,textarea{width:100%;padding:.75rem;border-radius:8px;border:1px solid #e6e6e6;font-size:1rem}
+textarea{min-height:140px;resize:vertical}
+.contact-quick{display:flex;flex-direction:column;gap:.8rem}
+
+/* FOOTER */
+.footer{margin-top:3rem;padding:2.4rem 0;border-top:1px solid #eee;background:transparent}
+.footer__inner{max-width:var(--max-width);margin:0 auto;padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.footer__copy{color:var(--muted)}
+.footer__nav a{margin-left:1rem;color:var(--muted);text-decoration:none}
+
+/* small screens */
+@media (max-width:1000px){
+  .sale-hero__inner{grid-template-columns:1fr;gap:1.2rem}
+  .facts{grid-template-columns:repeat(2,1fr)}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .contact-grid{grid-template-columns:1fr;align-items:stretch}
+}
+@media (max-width:520px){
+  .facts{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .sale-hero__media img{height:260px}
+  .sale-hero__title{font-size:1.6rem}
+  .price{font-size:1rem}
+}
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+</style>
+
 </head>
 <body>
-    <!-- Header -->
-    <header class="site-header" role="banner">
-        <div class="container header-container">
-            <div class="brand">
-                <img src="assets/images/brand/logo/logo_sss_redu_compressed.png" 
-                     alt="Logo Sítio Sábio Sabiá" 
-                     class="brand-logo">
-                <div class="brand-text">
-                    <strong class="brand-name">Sítio Sábio Sabiá</strong>
-                    <small class="brand-subtitle">Nome na escritura: Sítio Cachoeirinha da Barra</small>
-                </div>
-            </div>
-            <a href="https://wa.me/5511991344511" 
-               class="btn btn-primary" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               aria-label="Conversar no WhatsApp sobre o sítio">
-                <span class="btn-icon">💬</span>
-                WhatsApp
-            </a>
-        </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="hero" aria-labelledby="hero-title">
-        <div class="container hero-container">
-            <div class="hero-media animate-fade-in">
-                <div class="hero-overlay"></div>
-                <img src="assets/images/venda/hero.webp" 
-                     alt="Paisagem do Sítio Sábio Sabiá com lago e vegetação preservada" 
-                     class="hero-image"
-                     loading="eager"
-                     width="800"
-                     height="500">
-            </div>
-            
-            <div class="hero-content animate-slide-in">
-                <span class="hero-badge" aria-hidden="true">À VENDA</span>
-                
-                <h1 id="hero-title" class="hero-title">Sítio Sábio Sabiá</h1>
-                
-                <p class="lead">
-                    Refúgio exclusivo de 11 hectares com nascentes, lagos e infraestrutura completa — 
-                    a aproximadamente 50 minutos de Cunha, SP.
-                </p>
-                
-                <div class="hero-price">
-                    R$ 1.290.000
-                    <span class="text-muted" style="font-size: 0.875rem; margin-left: 0.5rem;">(negociável)</span>
-                </div>
-                
-                <p class="text-muted">
-                    <strong>Avaliado em:</strong> R$ 1.450.000 • 
-                    <strong>Área total:</strong> 11 hectares • 
-                    <strong>Localização:</strong> Cunha/SP
-                </p>
-                
-                <div class="hero-cta">
-                    <a href="https://wa.me/5511991344511" 
-                       class="btn btn-primary"
-                       target="_blank"
-                       rel="noopener noreferrer">
-                        <span class="btn-icon">💬</span>
-                        Conversar no WhatsApp
-                    </a>
-                    <a href="#contact" class="btn btn-secondary">
-                        <span class="btn-icon">📅</span>
-                        Agendar Visita
-                    </a>
-                </div>
-                
-                <div class="hero-details">
-                    <p><strong>📍 Acesso:</strong> 15 km de estrada rural em boas condições — deslocamento aproximado: 50 minutos até Cunha.</p>
-                    <p><strong>🚗 Condições:</strong> Veículos de passeio conseguem acesso sem necessidade de 4x4.</p>
-                    <p><strong>📋 Status:</strong> Documentação 100% regularizada e pronta para transferência.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<header role="banner" class="site-header" aria-label="Topo">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0">
+    <div style="display:flex;align-items:center;gap:.8rem">
+      <img src="assets/images/brand/logo/logo_sss_redu_compressed.png" alt="" style="width:60px;height:60px;border-radius:6px;object-fit:cover">
+      <div>
+        <strong style="display:block">Sítio Sábio Sabiá</strong>
+        <small style="color:var(--muted);display:block">Nome na escritura: Sítio Cachoeirinha da Barra</small>
+      </div>
+    </div>
+    <div style="display:flex;gap:.6rem;align-items:center">
 
-    <!-- Quick Facts -->
-    <section class="facts" aria-label="Dados rápidos sobre o sítio">
-        <div class="container">
-            <h2 class="section-title section-title-center">Características Principais</h2>
-            <div class="facts-grid">
-                <div class="fact-card">
-                    <div class="fact-icon">🌳</div>
-                    <h3>11 Hectares</h3>
-                    <p class="text-muted">Área total com vegetação preservada e nascentes naturais</p>
-                </div>
-                <div class="fact-card">
-                    <div class="fact-icon">🏠</div>
-                    <h3>Infraestrutura</h3>
-                    <p class="text-muted">Casa principal, 2 chalés, galpão e áreas de lazer</p>
-                </div>
-                <div class="fact-card">
-                    <div class="fact-icon">💧</div>
-                    <h3>Recursos Hídricos</h3>
-                    <p class="text-muted">Nascentes perenes, lagoas e córregos</p>
-                </div>
-                <div class="fact-card">
-                    <div class="fact-icon">📍</div>
-                    <h3>Localização</h3>
-                    <p class="text-muted">50min de Cunha • 15km do asfalto • Privacidade total</p>
-                </div>
-            </div>
-        </div>
-    </section>
+      <a class="btn btn--primary" href="https://wa.me/5511991344511" target="_blank" rel="noopener noreferrer" aria-label="Conversar no WhatsApp">WhatsApp</a>
+    </div>
+  </div>
+</header>
 
-    <!-- Gallery -->
-    <section class="gallery" id="gallery" aria-labelledby="gallery-title">
-        <div class="container">
-            <h2 id="gallery-title" class="section-title section-title-center">Galeria de Fotos</h2>
-            <div class="gallery-grid">
-                <button class="gallery-item" data-index="0" aria-label="Vista ampla do lago principal e chalé ao fundo">
-                    <img src="assets/images/venda/galeria/lago1.webp" 
-                         alt="Vista panorâmica do lago principal com chalé ao fundo e vegetação preservada"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="1" aria-label="Vista aérea parcial de dois lagos com a casa central">
-                    <img src="assets/images/venda/galeria/vista-superior-lago-casa.webp" 
-                         alt="Vista superior mostrando lago e a casa, com morros e árvores ao redor"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="2" aria-label="Placa Sítio Sábio Sabiá e lago frontal">
-                    <img src="assets/images/venda/galeria/placa-e-lago.webp" 
-                         alt="Placa Sítio Sábio Sabiá ao lado do lago e casa principal ao fundo"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="3" aria-label="Casa principal vista frontal">
-                    <img src="assets/images/venda/galeria/casa-principal.webp" 
-                         alt="Casa principal com varanda e vista aberta para o vale"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="4" aria-label="Chalé 1 em meio à natureza">
-                    <img src="assets/images/venda/galeria/chale1-01.webp" 
-                         alt="Chalé 1 rodeado por árvores e vegetação de montanha"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="5" aria-label="Chalé 2 com paisagem">
-                    <img src="assets/images/venda/galeria/chale2-01.webp" 
-                         alt="Chalé 2 com deck e vegetação preservada ao redor"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="6" aria-label="Detalhe do deck do chalé 2 com vista para o lago">
-                    <img src="assets/images/venda/galeria/chale2-detalhe.webp" 
-                         alt="Deck do chalé 2 e vegetação ao redor com vista para o lago"
-                         loading="lazy">
-                </button>
-                <button class="gallery-item" data-index="7" aria-label="Vista panorâmica aérea">
-                    <img src="assets/images/venda/galeria/vista-aerea.webp" 
-                         alt="Vista panorâmica ampla do vale, lagos e construções ao fundo"
-                         loading="lazy">
-                </button>
-            </div>
-        </div>
-    </section>
+<!-- HERO -->
+<section class="sale-hero" aria-labelledby="hero-title">
+  <div class="sale-hero__inner">
 
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualização ampliada de imagem" aria-hidden="true">
-        <button class="lightbox-btn lightbox-close" aria-label="Fechar visualização">&times;</button>
-        <button class="lightbox-btn lightbox-prev" aria-label="Imagem anterior">‹</button>
-        <div class="lightbox-content">
-            <img class="lightbox-image" id="lightbox-image" src="" alt="">
-            <div class="lightbox-counter" id="lightbox-counter">1 / 8</div>
-        </div>
-        <button class="lightbox-btn lightbox-next" aria-label="Próxima imagem">›</button>
+    <!-- HERO IMAGE -->
+    <div class="sale-hero__media">
+      <div class="sale-hero__overlay"></div>
+      <img src="assets/images/venda/hero.webp" alt="Paisagem do Sítio Sábio Sabiá com lago e vegetação ao redor" loading="eager">
     </div>
 
-    <!-- Infrastructure -->
-    <section class="section" aria-labelledby="infra-title">
-        <div class="container">
-            <h2 id="infra-title" class="section-title">Infraestrutura & Construções</h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon">🏡</div>
-                    <h3>Casa Principal</h3>
-                    <p class="text-muted">Ampla residência com sala, cozinha, 3 quartos, área externa coberta e vista panorâmica para o vale. Pronta para moradia imediata.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">🏕️</div>
-                    <h3>Chalés Independentes</h3>
-                    <p class="text-muted">Dois chalés completos, ideais para hospedagem, locação turística ou casa de hóspedes. Cada um com estrutura básica e confortável.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">🔧</div>
-                    <h3>Galpão & Áreas Úteis</h3>
-                    <p class="text-muted">Espaço para armazenagem, oficina e manutenção. Áreas organizadas que facilitam a operação e cuidado da propriedade.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- CONTENT -->
+    <div class="sale-hero__content">
+      <span class="sale-hero__kicker">À VENDA</span>
 
-    <!-- Location -->
-    <section class="section" aria-labelledby="location-title">
-        <div class="container">
-            <h2 id="location-title" class="section-title">Localização & Acesso</h2>
-            <div class="location-container">
-                <div class="location-map">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14012.086861849582!2d-44.96434144949925!3d-23.221904003570824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9d61000ebe4889%3A0xd86f8e482c3ac3f0!2zU8OtdGlvIFPDoWJpbyBTYWJpw6E!5e1!3m2!1spt-BR!2sbr!4v1764975603928!5m2!1spt-BR!2sbr" 
-                            width="600" 
-                            height="450" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="Localização do Sítio Sábio Sabiá no mapa">
-                    </iframe>
-                </div>
-                <div class="location-details">
-                    <div>
-                        <h3>Detalhes do Acesso</h3>
-                        <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--color-text-light); display: flex; flex-direction: column; gap: 0.5rem;">
-                            <li>Estrada rural com manutenção periódica</li>
-                            <li>15km do asfalto em condições transitáveis</li>
-                            <li>Veículos de passeio acessam sem necessidade de 4x4</li>
-                            <li>Trecho final com boas condições de tráfego</li>
-                            <li>Aproximadamente 50 minutos até Cunha/SP</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>Observações Importantes</h3>
-                        <p class="text-muted">Valorizamos transparência total. O sítio oferece privacidade e isolamento por estar distante do centro urbano — ideal para quem busca tranquilidade, turismo rural ou produção orgânica.</p>
-                        <p class="text-muted" style="margin-top: 0.5rem;"><strong>Visitas:</strong> Exclusivamente mediante agendamento prévio.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      <h1 id="hero-title" class="sale-hero__title">Sítio Sábio Sabiá</h1>
 
-    <!-- Documentation -->
-    <section class="section" aria-labelledby="doc-title">
-        <div class="container">
-            <h2 id="doc-title" class="section-title">Documentação 100% Regularizada</h2>
-            <p class="lead" style="margin-bottom: 2rem;">Todo o processo documental está em ordem, pronto para transferência imediata:</p>
-            
-            <ul class="doc-list">
-                <li class="doc-item">Matrícula registrada em cartório</li>
-                <li class="doc-item">CAR – Cadastro Ambiental Rural regularizado</li>
-                <li class="doc-item">ITR em dia e quitado</li>
-                <li class="doc-item">Energia elétrica instalada (medidor individual)</li>
-                <li class="doc-item">Confrontações claras e definidas</li>
-                <li class="doc-item">Sem litígios ou pendências judiciais</li>
-                <li class="doc-item">Área registrada conforme matrícula</li>
-                <li class="doc-item">Georreferenciamento completo</li>
-            </ul>
-        </div>
-    </section>
+      <p class="sale-hero__subtitle">
+        Refúgio exclusivo de 11 hectares com nascentes, lagos e infraestrutura completa —
+        a aproximadamente 50 minutos de Cunha.
+      </p>
 
-    <!-- Opportunity -->
-    <section class="section" aria-labelledby="opportunity-title">
-        <div class="container">
-            <h2 id="opportunity-title" class="section-title">Oportunidade de Investimento</h2>
-            <div class="opportunity">
-                <h3 style="margin-bottom: 1rem;">Potenciais de Valorização</h3>
-                <div style="margin-bottom: 1.5rem;">
-                    <p class="text-muted">O Sítio Sábio Sabiá oferece oportunidades reais para diferentes perfis de investimento:</p>
-                    <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--color-text-light); display: flex; flex-direction: column; gap: 0.5rem;">
-                        <li><strong>Turismo Rural:</strong> Chalés prontos para hospedagem e experiências imersivas</li>
-                        <li><strong>Produção Sustentável:</strong> Agroflorestal, orgânicos e apicultura</li>
-                        <li><strong>Retiro & Bem-estar:</strong> Espaço para retiros, yoga e ecoturismo</li>
-                        <li><strong>Valorização Paisagística:</strong> Projetos de recuperação com alto retorno</li>
-                    </ul>
-                </div>
-                <div class="card" style="background: rgba(37, 211, 102, 0.05); border: none; margin-top: 1rem;">
-                    <p style="margin: 0;"><strong>💎 Nota sobre avaliação:</strong> Avaliado em R$ 1.450.000 — preço de anúncio definido em <strong>R$ 1.290.000</strong> para atrair compradores sérios e permitir negociação direta.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+      <!-- PRICE -->
+      <div class="sale-hero__meta">
+        <span class="price">R$ 1.290.000</span>
+        <span class="price-note">• preço negociável · avaliado em R$ 1.450.000</span>
+      </div>
 
-    <!-- Contact -->
-    <section class="section contact" id="contact" aria-labelledby="contact-title">
-        <div class="container">
-            <h2 id="contact-title" class="section-title">Contato & Agendamento</h2>
-            
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <div>
-                        <h3 style="margin-bottom: 1rem;">Fale Diretamente</h3>
-                        <p class="text-muted">Para visitas, propostas ou dúvidas, entre em contato pelo WhatsApp. Respostas rápidas e agendamento prioritário para interessados reais.</p>
-                    </div>
-                    
-                    <div class="contact-methods">
-                        <a href="https://wa.me/5511991344511" 
-                           class="contact-method"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           aria-label="Conversar no WhatsApp">
-                            <span class="contact-icon">💬</span>
-                            <div>
-                                <strong>WhatsApp</strong>
-                                <p class="text-muted" style="font-size: 0.875rem;">(11) 99134-4511 • Resposta rápida</p>
-                            </div>
-                        </a>
-                        
-                        <a href="mailto:sitiosabiosabia@gmail.com" 
-                           class="contact-method"
-                           aria-label="Enviar email">
-                            <span class="contact-icon">✉️</span>
-                            <div>
-                                <strong>Email</strong>
-                                <p class="text-muted" style="font-size: 0.875rem;">sitiosabiosabia@gmail.com</p>
-                            </div>
-                        </a>
-                    </div>
-                    
-                    <div class="card" style="margin-top: 1rem;">
-                        <p class="text-muted" style="margin: 0; font-size: 0.875rem;">
-                            <strong>Nome técnico na escritura:</strong> Sítio Cachoeirinha da Barra<br>
-                            <strong>Responsável:</strong> Rodrigo
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="contact-form">
-                    <h3 style="margin-bottom: 1rem;">Agende Sua Visita</h3>
-                    <form class="form" id="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Nome Completo *</label>
-                            <input type="text" id="name" name="name" class="form-control" required aria-required="true">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone" class="form-label">Telefone / WhatsApp *</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" required aria-required="true">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-control">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message" class="form-label">Melhor Dia/Horário para Visita</label>
-                            <textarea id="message" name="message" class="form-control" rows="4"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">
-                            <span class="btn-icon">📨</span>
-                            Enviar Agendamento
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+      <!-- CTAS -->
+      <div class="sale-hero__ctas">
+        <a class="btn btn--primary" href="https://wa.me/5511991344511" target="_blank">
+          Conversar no WhatsApp
+        </a>
+        <a class="btn btn--outline" href="#contact">
+          Agendar visita
+        </a>
+      </div>
 
-    <!-- Legal Notes -->
-    <section class="section" aria-labelledby="legal-title">
-        <div class="container">
-            <h2 id="legal-title" class="section-title">Observações Legais</h2>
-            <div class="card">
-                <p class="text-muted" style="margin: 0;">
-                    <strong>Nome na escritura:</strong> Sítio Cachoeirinha da Barra<br><br>
-                    Todas as informações contidas neste anúncio são fornecidas pelo proprietário e devem ser verificadas em diligência prévia pelo interessado. 
-                    Propostas e visitas exclusivamente por agendamento prévio. 
-                    Preços e condições sujeitos à alteração sem aviso prévio.<br><br>
-                    <em>Este anúncio segue as melhores práticas de transparência imobiliária.</em>
-                </p>
-            </div>
-        </div>
-    </section>
+      <!-- ACCESS INFO -->
+      <p class="sale-hero__access">
+        <strong>Acesso:</strong> 15 km de estrada rural em boas condições —
+        deslocamento aproximado: 50 minutos até Cunha.
+      </p>
+    </div>
 
-    <!-- Footer -->
-    <footer class="site-footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-brand">
-                    <strong style="font-size: 1.25rem;">Sítio Sábio Sabiá</strong>
-                    <p class="text-muted" style="color: rgba(255, 255, 255, 0.7);">
-                        Refúgio exclusivo de 11 hectares em Cunha/SP<br>
-                        Documentação 100% regularizada
-                    </p>
-                </div>
-                
-                <div class="footer-links">
-                    <div>
-                        <h4 class="footer-title">Contato</h4>
-                        <ul class="footer-list">
-                            <li><a href="https://wa.me/5511991344511" class="footer-link" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
-                            <li><a href="mailto:sitiosabiosabia@gmail.com" class="footer-link">Email</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="footer-title">Informações</h4>
-                        <ul class="footer-list">
-                            <li><a href="#gallery" class="footer-link">Galeria de Fotos</a></li>
-                            <li><a href="#location" class="footer-link">Localização</a></li>
-                            <li><a href="#contact" class="footer-link">Agendar Visita</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="footer-title">Documentação</h4>
-                        <ul class="footer-list">
-                            <li><span class="footer-link">Matrícula registrada</span></li>
-                            <li><span class="footer-link">CAR regularizado</span></li>
-                            <li><span class="footer-link">ITR em dia</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>© 2025 Sítio Sábio Sabiá • Nome na escritura: Sítio Cachoeirinha da Barra • Todos os direitos reservados</p>
-                <p style="margin-top: 0.5rem; font-size: 0.875rem;">Anúncio por Rodrigo • WhatsApp: (11) 99134-4511</p>
-            </div>
-        </div>
-    </footer>
+  </div>
+</section>
 
-    <!-- JavaScript -->
-    <script>
-        // Lightbox functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elements
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-            const lightboxCounter = document.getElementById('lightbox-counter');
-            const closeBtn = document.querySelector('.lightbox-close');
-            const prevBtn = document.querySelector('.lightbox-prev');
-            const nextBtn = document.querySelector('.lightbox-next');
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            
-            // State
-            let currentIndex = 0;
-            const images = Array.from(galleryItems).map(item => 
-                item.querySelector('img').src.replace(/\/galeria\//, '/galeria/')
-            );
-            
-            // Open lightbox
-            function openLightbox(index) {
-                currentIndex = index;
-                updateLightbox();
-                lightbox.classList.add('active');
-                lightbox.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-                document.dispatchEvent(new CustomEvent('lightbox:open'));
-            }
-            
-            // Close lightbox
-            function closeLightbox() {
-                lightbox.classList.remove('active');
-                lightbox.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-                document.dispatchEvent(new CustomEvent('lightbox:close'));
-            }
-            
-            // Update lightbox content
-            function updateLightbox() {
-                lightboxImage.src = images[currentIndex];
-                lightboxImage.alt = galleryItems[currentIndex].getAttribute('aria-label');
-                lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
-            }
-            
-            // Navigate
-            function navigate(direction) {
-                if (direction === 'prev') {
-                    currentIndex = (currentIndex - 1 + images.length) % images.length;
-                } else {
-                    currentIndex = (currentIndex + 1) % images.length;
-                }
-                updateLightbox();
-            }
-            
-            // Event Listeners
-            galleryItems.forEach((item, index) => {
-                item.addEventListener('click', () => openLightbox(index));
-                item.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openLightbox(index);
-                    }
-                });
-            });
-            
-            closeBtn.addEventListener('click', closeLightbox);
-            prevBtn.addEventListener('click', () => navigate('prev'));
-            nextBtn.addEventListener('click', () => navigate('next'));
-            
-            // Close on overlay click
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) closeLightbox();
-            });
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (!lightbox.classList.contains('active')) return;
-                
-                switch(e.key) {
-                    case 'Escape':
-                        closeLightbox();
-                        break;
-                    case 'ArrowLeft':
-                        navigate('prev');
-                        break;
-                    case 'ArrowRight':
-                        navigate('next');
-                        break;
-                }
-            });
-            
-            // Hide navigation if only one image
-            if (images.length <= 1) {
-                prevBtn.style.display = 'none';
-                nextBtn.style.display = 'none';
-            }
-            
-            // Form submission
-            const contactForm = document.getElementById('contact-form');
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Basic validation
-                    const name = this.querySelector('#name').value.trim();
-                    const phone = this.querySelector('#phone').value.trim();
-                    
-                    if (!name || !phone) {
-                        alert('Por favor, preencha pelo menos nome e telefone.');
-                        return;
-                    }
-                    
-                    // In a real scenario, you would send the form data
-                    // For now, we'll show a success message
-                    alert('Obrigado pelo seu interesse! Entraremos em contato em breve para confirmar o agendamento.');
-                    this.reset();
-                });
-            }
-            
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Add loading animation to gallery items
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '50px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animation = 'fadeIn 0.5s ease forwards';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-            
-            galleryItems.forEach(item => observer.observe(item));
-        });
-        
-        // Performance optimizations
-        window.addEventListener('load', function() {
-            // Lazy load images that are not in viewport
-            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-            const imageObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src || img.src;
-                        imageObserver.unobserve(img);
-                    }
-                });
-            });
-            
-            lazyImages.forEach(img => imageObserver.observe(img));
-            
-            // Service Worker registration (if supported)
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js').catch(err => {
-                        console.log('Service Worker registration failed:', err);
-                    });
-                });
-            }
-        });
-    </script>
+
+
+
+<!-- QUICK FACTS -->
+<section class="facts" aria-label="Dados rápidos do sítio">
+  <div class="fact" role="article" aria-label="Área total">
+    <h4>11 hectares</h4>
+    <p>Área total aproximada</p>
+  </div>
+  <div class="fact" role="article" aria-label="Construções">
+    <h4>Construções</h4>
+    <p>Casa principal • 2 chalés • galpão</p>
+  </div>
+  <div class="fact" role="article" aria-label="Água">
+    <h4>Nascentes & Lagos</h4>
+    <p>Fontes e lagoas naturais</p>
+  </div>
+  <div class="fact" role="article" aria-label="Localização">
+    <h4>Cunha — 50 min</h4>
+    <p>15 km do asfalto (trecho em estrada rural)</p>
+  </div>
+</section>
+
+<!-- GALLERY -->
+
+<section class="sale-gallery" id="galeria">
+  <h2 class="section-title">Galeria de Fotos</h2>
+
+  <div class="gallery-grid">
+    <a href="assets/images/venda/galeria/lago1.webp" class="gallery-item" data-index="0" aria-label="Vista ampla do lago principal e chalé ao fundo">
+      <img src="assets/images/venda/galeria/lago1.webp" alt="Vista panorâmica do lago principal com chalé ao fundo e vegetação preservada">
+    </a>
+    <a href="assets/images/venda/galeria/vista-superior-lago-casa.webp" class="gallery-item" data-index="1" aria-label="Vista aérea parcial de dois lagos com a casa central">
+      <img src="assets/images/venda/galeria/vista-superior-lago-casa.webp" alt="Vista superior mostrando lago e a casa, com morros e árvores ao redor">
+    </a>
+    <a href="assets/images/venda/galeria/placa-e-lago.webp" class="gallery-item" data-index="2" aria-label="Placa Sítio Sábio Sabiá e lago frontal">
+      <img src="assets/images/venda/galeria/placa-e-lago.webp" alt="Placa Sítio Sábio Sabiá ao lado do lago e casa principal ao fundo">
+    </a>
+    <a href="assets/images/venda/galeria/casa-principal.webp" class="gallery-item" data-index="4" aria-label="Casa principal vista frontal">
+      <img src="assets/images/venda/galeria/casa-principal.webp" alt="Casa principal com varanda e vista aberta para o vale">
+    </a>
+    <a href="assets/images/venda/galeria/chale1-01.webp" class="gallery-item" data-index="5" aria-label="Chalé 1 em meio à natureza">
+      <img src="assets/images/venda/galeria/chale1-01.webp" alt="Chalé 1 rodeado por árvores e vegetação de montanha">
+    </a>
+    <a href="assets/images/venda/galeria/chale2-01.webp" class="gallery-item" data-index="6" aria-label="Chalé 2 com paisagem">
+      <img src="assets/images/venda/galeria/chale2-01.webp" alt="Chalé 2 com deck e vegetação preservada ao redor">
+    </a>
+    <a href="assets/images/venda/galeria/chale2-detalhe.webp" class="gallery-item" data-index="3" aria-label="Detalhe do deck do chalé 2 com vista para o lago">
+      <img src="assets/images/venda/galeria/chale2-detalhe.webp" alt="Deck do chalé 2 e vegetação ao redor com vista para o lago">
+    </a>
+    <a href="assets/images/venda/galeria/vista-aerea.webp" class="gallery-item" data-index="7" aria-label="Vista panorâmica">
+      <img src="assets/images/venda/galeria/vista-aerea.webp" alt="Vista panorâmica ampla do vale, lagos e construções ao fundo">
+    </a>
+  </div>
+</section>
+
+<!-- LIGHTBOX SIMPLIFICADO E FUNCIONAL -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Visualização de imagem ampliada" aria-hidden="true">
+  <button class="lightbox-btn lightbox-close" aria-label="Fechar">&times;</button>
+  <button class="lightbox-btn lightbox-prev" aria-label="Imagem anterior">&#10094;</button>
+  <div class="lightbox__content">
+    <img id="lightbox-img" class="lightbox__image" src="" alt="">
+  </div>
+  <button class="lightbox-btn lightbox-next" aria-label="Próxima imagem">&#10095;</button>
+</div>
+
+<!-- INFRA / CONSTRUCOES -->
+<section class="section" aria-labelledby="infra-title">
+  <div class="container">
+    <h2 id="infra-title">Infraestrutura & Construções</h2>
+    <div class="cards" role="list">
+      <div class="card" role="listitem">
+        <h3>Casa principal</h3>
+        <p>Casa ampla com sala, cozinha, 3 quartos, área externa coberta e vista panorâmica.</p>
+      </div>
+      <div class="card" role="listitem">
+        <h3>Chalés</h3>
+        <p>Dois chalés prontos para locação ou hóspedes — estrutura básica e confortável.</p>
+      </div>
+      <div class="card" role="listitem">
+        <h3>Galpão</h3>
+        <p>Área de armazenagem e oficina — facilita manutenção e operações.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="section" aria-labelledby="location-title">
+  <div class="container">
+    <h2 id="location-title">Localização & Acesso</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start">
+      <div>
+        <div class="location__map" role="region" aria-label="Mapa do sítio">
+          <!-- Substitua a src abaixo pelo embed real do Google Maps se quiser -->
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14012.086861849582!2d-44.96434144949925!3d-23.221904003570824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9d61000ebe4889%3A0xd86f8e482c3ac3f0!2zU8OtdGlvIFPDoWJpbyBTYWJpw6E!5e1!3m2!1spt-BR!2sbr!4v1764975603928!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="location__notes">Acesso por estrada rural: 15 km até o asfalto. Trecho final em estrada de terra em boas condições. O deslocamento médio até Cunha é de ≈50 minutos, garantindo privacidade e isolamento — ideal para turismo rural, retiro ou produção orgânica.</p>
+      </div>
+
+      <div>
+        <h3 style="margin-top:0">Observações sobre acesso</h3>
+        <ul style="margin:0;padding-left:1.2rem;color:var(--muted)">
+          <li>Estrada de terra com manutenção periódica.</li>
+          <li>Trecho final com boas condições de tráfego (veículos de passeio atingem sem necessidade de 4x4 durante todo o ano).</li>
+          <li>Somente visita agendada.</li>
+        </ul>
+        <p style="margin-top:1rem;color:var(--muted)"><strong>Transparência:</strong> informamos a distância até o asfalto para evitar surpresas — valorizamos negociação clara.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" aria-labelledby="doc-completa">
+  <div class="container">
+    <h2 id="doc-completa">Documentação Completa</h2>
+    <p>O Sítio Sábio Sabiá possui toda a documentação em ordem, pronta para transferência imediata:</p>
+
+    <ul class="doc-list">
+      <li>✔ Matrícula registrada em cartório</li>
+      <li>✔ CAR – Cadastro Ambiental Rural regularizado</li>
+      <li>✔ ITR em dia</li>
+      <li>✔ Energia elétrica instalada (medidor individual)</li>
+      <li>✔ Confrontações claras e definidas</li>
+      <li>✔ Sem litígios ou pendências judiciais</li>
+      <li>✔ Área registrada conforme matrícula</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- OPPORTUNITY -->
+<section class="section" aria-labelledby="opp-title">
+  <div class="container">
+    <h2 id="opp-title">Oportunidade</h2>
+    <div class="opportunity" role="region" aria-label="Potenciais de investimento">
+      <p style="margin:0 0 .6rem">O sítio oferece oportunidades reais para:</p>
+      <ul style="margin:0 0 .6rem 1.2rem;color:var(--muted)">
+        <li>Turismo rural (chalés e experiências imersivas).</li>
+        <li>Produção orgânica e agroflorestal.</li>
+        <li>Projeto de recuperação paisagística com valor agregado.</li>
+      </ul>
+      <p style="margin:0;color:var(--muted)"><strong>Nota:</strong> Avaliado em R$ 1.450.000 — preço de anúncio definido em R$ 1.290.000 para atrair compradores sérios e permitir negociação.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / FORM -->
+<section id="contact" class="section" aria-labelledby="contact-title">
+  <div class="container">
+    <h2 id="contact-title">Contato & Agendamento</h2>
+    <div class="contact-grid">
+      <div class="contact-card" aria-labelledby="contact-info">
+        <h3 id="contact-info">Fale conosco</h3>
+        <p style="margin:0 0 1rem;color:var(--muted)">Para visitas e propostas, entre em contato pelo WhatsApp. Respostas rápidas e agendamento prioritário para interessados reais.</p>
+
+        <div class="contact-quick">
+          <a class="btn btn--primary" href="https://wa.me/5511991344511" target="_blank" rel="noopener noreferrer" aria-label="Conversar no WhatsApp">Conversar no WhatsApp</a>
+          <p style="margin:0;color:var(--muted);font-size:.95rem">Nome técnico: <em>Sítio Cachoeirinha da Barra</em></p>
+        </div>
+
+      </div>
+
+      <div class="contact-card" aria-labelledby="form-title">
+        <h3 id="form-title">Agende uma visita</h3>
+        <form action="https://formspree.io/f/your-form-id" method="POST" aria-label="Formulário para agendamento">
+          <div class="form-row"><input class="input" type="text" name="name" placeholder="Seu nome" required aria-label="Seu nome"></div>
+          <div class="form-row"><input class="input" type="tel" name="phone" placeholder="Telefone / WhatsApp" required aria-label="Telefone"></div>
+          <div class="form-row"><input class="input" type="email" name="email" placeholder="Email" aria-label="Email"></div>
+          <div class="form-row"><textarea name="message" placeholder="Melhor dia/horário para visita" aria-label="Mensagem"></textarea></div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <button class="btn btn--primary" type="submit" aria-label="Enviar formulário de agendamento">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL / DOCUMENTAÇÃO -->
+<section class="section" aria-labelledby="doc-title">
+  <div class="container">
+    <h2 id="doc-title">Observações Legais</h2>
+    <p style="margin:0;color:var(--muted)">Nome na escritura: <strong>Sítio Cachoeirinha da Barra</strong>. Todas as informações neste anúncio são fornecidas pelo proprietário e devem ser verificadas em diligência prévia. Propostas e visitas por agendamento prévio.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__left">
+      <strong>Sítio Sábio Sabiá</strong>
+      <div class="footer__copy">© 2025 — anúncio por Rodrigo</div>
+    </div>
+    <nav class="footer__nav" aria-label="Contatos">
+      <a href="mailto:sitiosabiosabia@gmail.com" rel="noopener noreferrer">Email</a>
+      <a href="https://wa.me/5511991344511" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+// LIGHTBOX SIMPLIFICADO E FUNCIONAL
+document.addEventListener('DOMContentLoaded', function() {
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.querySelector('.lightbox-close');
+  const prevBtn = document.querySelector('.lightbox-prev');
+  const nextBtn = document.querySelector('.lightbox-next');
+  
+  let currentIndex = 0;
+  const images = Array.from(galleryItems).map(item => item.href);
+  
+  // Abrir lightbox ao clicar nas imagens
+  galleryItems.forEach((item, index) => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      currentIndex = index;
+      openLightbox(images[currentIndex]);
+    });
+  });
+  
+  function openLightbox(src) {
+    lightboxImg.src = src;
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; // Previne scroll
+    
+    // Focar no botão de fechar
+    if (closeBtn) closeBtn.focus();
+  }
+  
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = ''; // Restaura scroll
+  }
+  
+  function navigate(direction) {
+    if (direction === 'prev') {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+    } else {
+      currentIndex = (currentIndex + 1) % images.length;
+    }
+    
+    // Efeito de transição
+    lightboxImg.style.opacity = '0';
+    setTimeout(() => {
+      lightboxImg.src = images[currentIndex];
+      lightboxImg.style.opacity = '1';
+    }, 150);
+  }
+  
+  // Event listeners para os botões
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeLightbox);
+  }
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => navigate('prev'));
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => navigate('next'));
+  }
+  
+  // Fechar ao clicar no overlay
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+  
+  // Controles por teclado
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    
+    switch(e.key) {
+      case 'Escape':
+        closeLightbox();
+        break;
+      case 'ArrowLeft':
+        navigate('prev');
+        break;
+      case 'ArrowRight':
+        navigate('next');
+        break;
+    }
+  });
+  
+  // Esconder botões de navegação se só tem uma imagem
+  if (images.length <= 1) {
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+  }
+});
+</script>
+
 </body>
 </html>
