@@ -491,7 +491,7 @@ textarea{min-height:140px;resize:vertical}
     <!-- HERO IMAGE -->
     <div class="sale-hero__media" role="img" aria-label="Paisagem do Sítio Sábio Sabiá com lago e vegetação ao fundo" tabindex="0">
       <div class="sale-hero__overlay"></div>
-      <img src="assets/images/venda/hero.webp" alt="Paisagem do Sítio Sábio Sabiá com lago e vegetação ao redor" loading="eager">
+      <img src="assets/images/venda/hero.webp" alt="Paisagem do Sítio Sábio Sabiá com lago e vegetação ao redor" loading="lazy">
     </div>
 
     <!-- CONTENT -->
@@ -703,14 +703,14 @@ textarea{min-height:140px;resize:vertical}
       <div class="contact-card" aria-labelledby="form-title">
         <h3 id="form-title">Agende uma visita</h3>
         <!-- IMPORTANT: replace 'your-form-id' with your actual Formspree ID or endpoint -->
-        <form id="visit-form" action="https://formspree.io/f/your-form-id" method="POST" aria-label="Formulário para agendamento">
+        <form id="visit-form" action="https://formspree.io/f/myzrpqrv" method="POST" aria-label="Formulário para agendamento">
           <div class="form-row"><input class="input" type="text" name="name" placeholder="Seu nome" required aria-label="Seu nome"></div>
-          <div class="form-row"><input class="input" type="tel" name="phone" placeholder="Telefone / WhatsApp" required aria-label="Telefone"></div>
+          <div class="form-row"><input class="input" type="tel" name="phone" placeholder="WhatsApp" required aria-label="WhatsApp"></div>
           <div class="form-row"><input class="input" type="email" name="email" placeholder="Email" aria-label="Email"></div>
           <div class="form-row"><textarea name="message" placeholder="Melhor dia/horário para visita" aria-label="Mensagem"></textarea></div>
           <div style="display:flex;gap:.6rem;align-items:center">
             <button class="btn btn--primary" type="submit" aria-label="Enviar formulário de agendamento">Enviar</button>
-            <small id="form-note" style="color:var(--muted)">Ao enviar, teremos seu contato para retorno em até 48h.</small>
+            <small id="form-note" style="color:var(--muted)">Responderemos o mais rápido possível.</small>
           </div>
         </form>
         <noscript><p style="color:var(--muted)">Este formulário requer JavaScript para confirmação. Use o WhatsApp para contato rápido.</p></noscript>
@@ -723,7 +723,7 @@ textarea{min-height:140px;resize:vertical}
 <section class="section" aria-labelledby="doc-title">
   <div class="container">
     <h2 id="doc-title">Observações Legais</h2>
-    <p style="margin:0;color:var(--muted)">Nome na escritura: <strong>Sítio Cachoeirinha da Barra</strong>. Todas as informações neste anúncio são fornecidas pelo proprietário e devem ser verificadas em diligência prévia. Propostas e visitas por agendamento prévio.</p>
+    <p style="margin:0;color:var(--muted)">Nome na escritura: <strong>Sítio Cachoeirinha da Barra</strong>. Todas as informações neste anúncio são fornecidas pelo proprietário e devem ser verificadas em diligência prévia. Visitas somente por agendamento prévio.</p>
   </div>
 </section>
 
@@ -864,20 +864,49 @@ document.addEventListener('DOMContentLoaded', function() {
     if (nextBtn) nextBtn.style.display = 'none';
   }
 
-  // Simple client-side form feedback
-  const form = document.getElementById('visit-form');
+  
+// Inline success/error UX for Formspree
+const form = document.getElementById('visit-form');
+  const note = document.getElementById('form-note');
+
   if (form) {
-    form.addEventListener('submit', function(e) {
-      // Basic UX: show quick feedback and allow actual submission to Formspree
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
       const submitBtn = form.querySelector('button[type="submit"]');
+
       submitBtn.disabled = true;
       submitBtn.textContent = 'Enviando...';
-      setTimeout(() => {
+      note.textContent = 'Enviando...';
+      note.style.color = '#666';
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
+
+        if (res.ok) {
+          form.reset();
+          note.textContent = 'Mensagem enviada! Responderemos o mais rápido possível.';
+          note.style.color = '#25d366';
+        } else {
+          note.textContent = 'Erro ao enviar. Tente novamente.';
+          note.style.color = 'red';
+        }
+
+      } catch (err) {
+        note.textContent = 'Erro de conexão. Verifique sua internet.';
+        note.style.color = 'red';
+
+      } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Enviar';
-      }, 2000);
+      }
     });
   }
+
 });
 </script>
 
