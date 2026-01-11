@@ -20,23 +20,19 @@
   <meta name="twitter:description" content="Sítio rural à venda em Cunha/SP, com terra, água própria e construções existentes. Imóvel voltado a moradia permanente e projetos de longo prazo.">
   <meta name="twitter:image" content="https://sitiosabiosabia.com.br/frontend/assets/images/venda/galeria/vista-superior-lago-casa.webp">
   <meta name="twitter:image:alt" content="Vista geral do Sítio Sábio Sabiá em Cunha/SP, com lago, área verde e casa principal integrada ao relevo.">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J1TLHSVJSY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J1TLHSVJSY');
-  </script>
+  <!-- ======================
+       JSON-LD
+  ======================= -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
+    "@context": "https://schema.org/",
     "@type": "RealEstateListing",
     "name": "Sítio Sábio Sabiá",
-    "description": "Propriedade rural à venda em Cunha/SP, com aproximadamente 11 hectares, recursos hídricos próprios e construções existentes, voltada à moradia no campo e projetos de longo prazo.",
+    "description": "Propriedade rural à venda em Cunha/SP com 11 hectares, água, lago, privacidade e vocação patrimonial. Venda direta — não é hospedagem, não é aluguel.",
     "url": "https://www.sitiosabiosabia.com.br/",
     "image": [
-      "https://www.sitiosabiosabia.com.br/frontend/assets/images/venda/hero.webp"
+      "https://www.sitiosabiosabia.com.br/frontend/assets/images/venda/hero.webp",
+      "https://www.sitiosabiosabia.com.br/frontend/assets/images/venda/galeria/casa-principal.webp"
     ],
     "address": {
       "@type": "PostalAddress",
@@ -52,13 +48,44 @@
     }
   }
   </script>
-  <!-- Firebase / CSP / Preconnect / Fonts (mantidos conforme index original) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.gstatic.com https://www.googleapis.com https://www.gstatic.com/firebasejs; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https://* https://firebasestorage.googleapis.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.firebaseio.com https://*.googleapis.com https://*.gstatic.com https://firebasestorage.googleapis.com https://backend-api-789144165592.us-central1.run.app; frame-src https://*.firebasestorage.app;">
+
+  <!-- ======================
+       GA4
+  ======================= -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J1TLHSVJSY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J1TLHSVJSY');
+  </script>
+
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '960080813848443');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=960080813848443&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Preconnect / Fonts -->
   <link rel="icon" href="/frontend/assets/images/brand/favicon/favicon-android-chrome-512x512.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <!-- ===== STYLE ===== -->
   <style>
     :root{
@@ -188,23 +215,7 @@
       section{margin-bottom:72px}
     }
   </style>
-  <!-- Meta Pixel Code -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '960080813848443');
-    fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=960080813848443&ev=PageView&noscript=1"/>
-  </noscript>
-  <!-- End Meta Pixel Code -->
+  
 </head>
 <body>
   <main>
@@ -563,7 +574,7 @@
         planejamento, o contato pode ser feito diretamente com o proprietário.
       </p>
       <p class="contact">
-        <a href="https://wa.me/5511991344511" target="_blank" rel="noopener" onclick="gtag('event', 'whatsapp_click', {
+        <a href="https://wa.me/5511991344511" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'whatsapp_click', {
           event_category: 'Contato',
           event_label: 'CTA final - homepage'});">Contato direto via WhatsApp
         </a>
@@ -574,29 +585,150 @@
     <p class="copyright">
       © Sítio Sábio Sabiá
     </p>
-    <a href="frontend/login.html"
-     class="admin-access"
-     aria-label="Acesso administrativo">
-      <i class="fas fa-lock"></i>
-    </a>
+    
   </footer>
-  <script>
-    let scrollTracked = false;
-    document.addEventListener('scroll', function() {
-      if (!scrollTracked && (window.innerHeight + window.scrollY) >= document.body.offsetHeight * 0.8) {
-        gtag('event', 'scroll_80', {
-          event_category: 'Engajamento',
-          event_label: 'Leitura profunda'
-        });
-        scrollTracked = true;
-      }
+
+
+<script>
+// ================================
+// PAT_TAAV V1 — Instrumentação Invisível
+// ================================
+
+// --- Attribution & UTM ---
+const params = new URLSearchParams(window.location.search);
+const utm = {
+  source: params.get('utm_source') || document.referrer || 'direct',
+  medium: params.get('utm_medium') || 'direct',
+  campaign: params.get('utm_campaign') || 'none'
+};
+sessionStorage.setItem('utm_source', utm.source || 'direct');
+
+// --- Dwell & Depth ---
+const startTime = Date.now();
+let maxDepth = 0;
+
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const sc = (h.scrollTop + window.innerHeight) / h.scrollHeight * 100;
+  maxDepth = Math.max(maxDepth, sc);
+});
+
+function storeDwellDepth(){
+  const dwell = Math.round((Date.now() - startTime) / 1000);
+  sessionStorage.setItem('dwell_seconds', dwell);
+  sessionStorage.setItem('scroll_percent', Math.round(maxDepth));
+}
+
+window.addEventListener('beforeunload', storeDwellDepth);
+
+// --- Zones (Interest Mapper) ---
+const zonas = [
+  { z: "ativo", text: "O ativo" },
+  { z: "lugar", text: "O lugar" },
+  { z: "terra", text: "A terra" },
+  { z: "agua", text: "A água" },
+  { z: "privacidade", text: "A privacidade" },
+  { z: "acesso", text: "Acesso e logística" },
+  { z: "documentacao", text: "Documentação e regularidade" },
+  { z: "uso", text: "Uso e rotina" },
+  { z: "infraestrutura", selector: ".tech" },
+  { z: "perfil", text: "Perfil do imóvel" },
+  { z: "valor", text: "Valor" }
+];
+
+const zoneState = {};
+zonas.forEach(z => zoneState[z.z] = {seen:false,start:0,dwell:0});
+
+function markZone(z){
+  if(!zoneState[z].seen){
+    zoneState[z].seen = true;
+    zoneState[z].start = Date.now();
+  }
+}
+
+function closeZone(z){
+  if(zoneState[z].seen && zoneState[z].start){
+    const d = (Date.now() - zoneState[z].start)/1000;
+    zoneState[z].dwell += d;
+    zoneState[z].start = 0;
+  }
+}
+
+function exportZones(){
+  const out = [];
+  Object.keys(zoneState).forEach(z=>{
+    if(zoneState[z].dwell > 2.5) out.push(z);
+  });
+  return out;
+}
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    const z = entry.target.dataset.zona;
+    if(!z) return;
+    if(entry.isIntersecting){
+      markZone(z);
+    }else{
+      closeZone(z);
+    }
+  });
+},{threshold:0.15});
+
+// bind by text
+document.querySelectorAll("section h2").forEach(h=>{
+  const txt = h.textContent.trim();
+  const z = zonas.find(x=>x.text === txt);
+  if(z){
+    const sec = h.closest('section');
+    sec.dataset.zona = z.z;
+    observer.observe(sec);
+  }
+});
+
+// bind infra
+const tech = document.querySelector(".tech");
+if(tech){
+  tech.dataset.zona = "infraestrutura";
+  observer.observe(tech);
+}
+
+// --- WhatsApp CTA Delivery ---
+const wa = document.querySelector('a[href*="wa.me"]');
+if(wa){
+  wa.addEventListener('click', ()=>{
+    storeDwellDepth();
+    const zonas = exportZones();
+    const dwell = sessionStorage.getItem('dwell_seconds') || 0;
+    const depth = sessionStorage.getItem('scroll_percent') || 0;
+    const src = sessionStorage.getItem('utm_source') || 'direct';
+
+    // GA4
+    gtag('event', 'lead', {
+      zonas: zonas.join(','),
+      dwell_seconds: dwell,
+      depth_percent: depth,
+      source: src,
+      lead_type: 'whatsapp'
     });
-  </script>
-  <!-- ===== FIREBASE / BACKEND (MANTIDOS) ===== -->
-  <script src="/__/firebase/10.7.1/firebase-app-compat.js"></script>
-  <script src="/__/firebase/10.7.1/firebase-auth-compat.js"></script>
-  <script src="/__/firebase/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="/__/firebase/10.7.1/firebase-storage-compat.js"></script>
-  <script src="/__/firebase/init.js?useEmulator=false"></script>
+
+    // Meta
+    fbq('track', 'Lead', {
+      zonas: zonas,
+      dwell: dwell,
+      depth: depth,
+      source: src,
+      type: 'whatsapp'
+    });
+
+    // enrich WA link (payload completo invisível)
+    const base = wa.href;
+    const enriched = base + (base.includes('?')?'&':'?') +
+      `utm=${src}&dwell=${dwell}&depth=${depth}&zones=${zonas.join(',')}`;
+    wa.href = enriched;
+  });
+}
+</script>
+
+
 </body>
 </html>
