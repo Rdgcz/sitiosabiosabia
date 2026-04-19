@@ -14,13 +14,13 @@
   <meta property="og:description" content="Propriedade rural à venda em Cunha/SP, com 11 hectares, água própria, construções existentes e vocação real para moradia no campo. Venda direta pelo proprietário.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.sitiosabiosabia.com.br/">
-  <meta property="og:image" content="https://www.sitiosabiosabia.com.br/assets/images/venda/hero.webp">
+  <meta property="og:image" content="https://www.sitiosabiosabia.com.br/assets/images/venda/galeria/vista-superior-lago-casa.webp"">
   <meta property="og:image:alt" content="Vista geral do Sítio Sábio Sabiá em Cunha/SP, com relevo natural e construções implantadas.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Sítio à venda em Cunha/SP — 11 hectares, água própria e moradia no campo">
   <meta name="twitter:description" content="Propriedade rural à venda em Cunha/SP, com 11 hectares, água própria, construções existentes e vocação real para moradia no campo.">
-  <meta name="twitter:image" content="https://www.sitiosabiosabia.com.br/assets/images/venda/hero.webp">
+  <meta name="twitter:image" content="https://www.sitiosabiosabia.com.br/assets/images/venda/galeria/vista-superior-lago-casa.webp">
   <meta name="twitter:image:alt" content="Vista geral do Sítio Sábio Sabiá em Cunha/SP, com relevo natural e construções implantadas.">
 
   <!-- ======================
@@ -1213,6 +1213,48 @@
         </div>
       </div>
     </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Região e entorno</span>
+            <h2 class="section-title">Contexto da região</h2>
+          </div>
+
+          <div class="note-panel">
+            <p>
+              O entorno não é urbano nem estruturado como centro de serviços, mas a região possui alguns pontos conhecidos que ajudam a compor o contexto territorial do imóvel.
+            </p>
+          </div>
+        </div>
+
+        <div class="split-layout">
+          <div class="info-card">
+            <p>
+              A propriedade está inserida em uma área rural de vale, com baixa densidade de ocupação e características típicas do eixo Cunha–Paraty.
+            </p>
+            <p>
+              Apesar do perfil mais reservado e afastado, a região conta com alguns pontos de referência e circulação local, que ajudam a situar o imóvel dentro de um contexto mais amplo.
+            </p>
+            <p>
+              Esses elementos não caracterizam uma área urbana ou consolidada em infraestrutura, mas contribuem para a leitura da região onde o sítio está inserido.
+            </p>
+          </div>
+
+          <div class="negative-box">
+            <h3>Referências da região</h3>
+            <ul>
+              <li>Parque Estadual Serra do Mar — Núcleo Cunha</li>
+              <li>Região da Barra, com presença de pousadas e circulação local</li>
+              <li>Escola Estadual do Bairro da Barra</li>
+              <li>Projeto da vinícola, ainda não aberto ao público</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
         <section class="section section-contrast">
       <div class="container">
         <div class="section-header">
@@ -1706,220 +1748,300 @@
     </div>
   </footer>
 
-    <script>
-    // ================================
-    // Tracking e qualificação - V2
-    // ================================
+<script>
+  // ================================
+  // Tracking e qualificação - V2
+  // ================================
 
-    const leadForm = document.getElementById('leadForm');
-    const qualificationSection = document.getElementById('qualificacao');
+  const leadForm = document.getElementById('leadForm');
+  const qualificationSection = document.getElementById('qualificacao');
 
-    const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-    const trackingData = {
-      utm_source: params.get('utm_source') || document.referrer || 'direct',
-      utm_medium: params.get('utm_medium') || 'direct',
-      utm_campaign: params.get('utm_campaign') || 'none',
-      utm_content: params.get('utm_content') || 'none',
-      utm_term: params.get('utm_term') || 'none'
-    };
+  const trackingData = {
+    utm_source: params.get('utm_source') || document.referrer || 'direct',
+    utm_medium: params.get('utm_medium') || 'direct',
+    utm_campaign: params.get('utm_campaign') || 'none',
+    utm_content: params.get('utm_content') || 'none',
+    utm_term: params.get('utm_term') || 'none'
+  };
 
-    sessionStorage.setItem('utm_source', trackingData.utm_source);
-    sessionStorage.setItem('utm_medium', trackingData.utm_medium);
-    sessionStorage.setItem('utm_campaign', trackingData.utm_campaign);
-    sessionStorage.setItem('utm_content', trackingData.utm_content);
-    sessionStorage.setItem('utm_term', trackingData.utm_term);
+  sessionStorage.setItem('utm_source', trackingData.utm_source);
+  sessionStorage.setItem('utm_medium', trackingData.utm_medium);
+  sessionStorage.setItem('utm_campaign', trackingData.utm_campaign);
+  sessionStorage.setItem('utm_content', trackingData.utm_content);
+  sessionStorage.setItem('utm_term', trackingData.utm_term);
 
-    // ================================
-    // Scroll / profundidade
-    // ================================
-    const startTime = Date.now();
-    let maxDepth = 0;
-    let qualificationViewed = false;
-    let formStarted = false;
+  // ================================
+  // Scroll / profundidade
+  // ================================
+  const startTime = Date.now();
+  let maxDepth = 0;
+  let qualificationViewed = false;
+  let formStarted = false;
 
-    function getDwellSeconds() {
-      return Math.round((Date.now() - startTime) / 1000);
-    }
+  function getDwellSeconds() {
+    return Math.round((Date.now() - startTime) / 1000);
+  }
 
-    function updateScrollDepth() {
-      const h = document.documentElement;
-      const scrollPercent = ((h.scrollTop + window.innerHeight) / h.scrollHeight) * 100;
-      maxDepth = Math.max(maxDepth, Math.round(scrollPercent));
-      sessionStorage.setItem('scroll_percent', maxDepth);
-      sessionStorage.setItem('dwell_seconds', getDwellSeconds().toString());
-    }
+  function updateScrollDepth() {
+    const h = document.documentElement;
+    const scrollPercent = ((h.scrollTop + window.innerHeight) / h.scrollHeight) * 100;
+    maxDepth = Math.max(maxDepth, Math.round(scrollPercent));
+    sessionStorage.setItem('scroll_percent', maxDepth);
+    sessionStorage.setItem('dwell_seconds', getDwellSeconds().toString());
+  }
 
-    window.addEventListener('scroll', updateScrollDepth, { passive: true });
-    window.addEventListener('beforeunload', updateScrollDepth);
+  window.addEventListener('scroll', updateScrollDepth, { passive: true });
+  window.addEventListener('beforeunload', updateScrollDepth);
 
-    // ================================
-    // View do bloco de qualificação
-    // ================================
-    if (qualificationSection) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !qualificationViewed) {
-            qualificationViewed = true;
+  // ================================
+  // View do bloco de qualificação
+  // ================================
+  if (qualificationSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !qualificationViewed) {
+          qualificationViewed = true;
 
-            gtag('event', 'view_qualification_section', {
-              event_category: 'Lead Qualificado',
-              event_label: 'Bloco de qualificação visualizado',
-              dwell_seconds: getDwellSeconds(),
-              depth_percent: maxDepth,
-              source: trackingData.utm_source,
-              medium: trackingData.utm_medium,
-              campaign: trackingData.utm_campaign
-            });
+          gtag('event', 'view_qualification_section', {
+            event_category: 'Lead Qualificado',
+            event_label: 'Bloco de qualificação visualizado',
+            dwell_seconds: getDwellSeconds(),
+            depth_percent: maxDepth,
+            source: trackingData.utm_source,
+            medium: trackingData.utm_medium,
+            campaign: trackingData.utm_campaign
+          });
 
-            fbq('trackCustom', 'ViewQualificationSection', {
-              dwell_seconds: getDwellSeconds(),
-              depth_percent: maxDepth,
-              source: trackingData.utm_source,
-              medium: trackingData.utm_medium,
-              campaign: trackingData.utm_campaign
-            });
-          }
-        });
-      }, { threshold: 0.35 });
-
-      observer.observe(qualificationSection);
-    }
-
-    // ================================
-    // Início do formulário
-    // ================================
-    if (leadForm) {
-      const formFields = leadForm.querySelectorAll('input, select, textarea');
-
-      formFields.forEach(field => {
-        field.addEventListener('focus', () => {
-          if (!formStarted) {
-            formStarted = true;
-
-            gtag('event', 'begin_form', {
-              event_category: 'Lead Qualificado',
-              event_label: 'Início do formulário',
-              dwell_seconds: getDwellSeconds(),
-              depth_percent: maxDepth,
-              source: trackingData.utm_source,
-              medium: trackingData.utm_medium,
-              campaign: trackingData.utm_campaign
-            });
-
-            fbq('trackCustom', 'BeginQualificationForm', {
-              dwell_seconds: getDwellSeconds(),
-              depth_percent: maxDepth,
-              source: trackingData.utm_source,
-              medium: trackingData.utm_medium,
-              campaign: trackingData.utm_campaign
-            });
-          }
-        }, { once: true });
+          fbq('trackCustom', 'ViewQualificationSection', {
+            dwell_seconds: getDwellSeconds(),
+            depth_percent: maxDepth,
+            source: trackingData.utm_source,
+            medium: trackingData.utm_medium,
+            campaign: trackingData.utm_campaign
+          });
+        }
       });
+    }, { threshold: 0.35 });
+
+    observer.observe(qualificationSection);
+  }
+
+  // ================================
+  // Início do formulário
+  // ================================
+  if (leadForm) {
+    const formFields = leadForm.querySelectorAll('input, select, textarea');
+
+    formFields.forEach(field => {
+      field.addEventListener('focus', () => {
+        if (!formStarted) {
+          formStarted = true;
+
+          gtag('event', 'begin_form', {
+            event_category: 'Lead Qualificado',
+            event_label: 'Início do formulário',
+            dwell_seconds: getDwellSeconds(),
+            depth_percent: maxDepth,
+            source: trackingData.utm_source,
+            medium: trackingData.utm_medium,
+            campaign: trackingData.utm_campaign
+          });
+
+          fbq('trackCustom', 'BeginQualificationForm', {
+            dwell_seconds: getDwellSeconds(),
+            depth_percent: maxDepth,
+            source: trackingData.utm_source,
+            medium: trackingData.utm_medium,
+            campaign: trackingData.utm_campaign
+          });
+        }
+      }, { once: true });
+    });
+  }
+
+  // ================================
+  // Helpers de mensagem
+  // ================================
+  function buildObjectiveSentence(objetivo) {
+    switch (objetivo) {
+      case 'Moradia no campo':
+        return 'Meu interesse principal hoje é para moradia no campo.';
+      case 'Uso de campo / segunda residência':
+        return 'Estou avaliando a propriedade para uso de campo / segunda residência.';
+      case 'Investimento patrimonial':
+        return 'Estou avaliando a propriedade com foco patrimonial.';
+      case 'Ainda avaliando possibilidades':
+        return 'Ainda estou avaliando possibilidades no momento.';
+      default:
+        return '';
+    }
+  }
+
+  function buildLogisticsSentence(logistica) {
+    switch (logistica) {
+      case 'Compatível com o que busco':
+        return 'A logística rural me parece compatível com o que busco.';
+      case 'Preciso entender melhor':
+        return 'Gostaria de entender melhor a logística da região antes de avançar.';
+      case 'Pode ser um impedimento':
+        return 'A logística rural pode ser um ponto sensível para mim e gostaria de entender melhor.';
+      default:
+        return '';
+    }
+  }
+
+  function buildDecisionTimingSentence(prazo) {
+    switch (prazo) {
+      case 'Imediato':
+        return 'Tenho interesse com possibilidade de decisão imediata, caso haja alinhamento.';
+      case 'Até 3 meses':
+        return 'Meu horizonte de decisão hoje é de até 3 meses.';
+      case 'De 3 a 6 meses':
+        return 'Meu horizonte de decisão hoje está entre 3 e 6 meses.';
+      case 'Sem prazo definido':
+        return 'Ainda não tenho um prazo de decisão definido.';
+      default:
+        return '';
+    }
+  }
+
+  function buildObservationSentence(mensagem) {
+    if (!mensagem) return '';
+    return `Obs.: ${mensagem}`;
+  }
+
+  function buildMessageText(data) {
+    const lines = [];
+
+    lines.push('Olá! Tenho interesse em conhecer melhor a propriedade.');
+    lines.push('');
+
+    if (data.nome && data.cidade) {
+      lines.push(`Meu nome é ${data.nome}, sou de ${data.cidade}.`);
+    } else if (data.nome) {
+      lines.push(`Meu nome é ${data.nome}.`);
+    } else if (data.cidade) {
+      lines.push(`Sou de ${data.cidade}.`);
     }
 
-    // ================================
-    // Envio do formulário + clique WhatsApp
-    // ================================
-    if (leadForm) {
-      leadForm.addEventListener('submit', function(e){
-        e.preventDefault();
+    const objectiveSentence = buildObjectiveSentence(data.objetivo);
+    if (objectiveSentence) {
+      lines.push('');
+      lines.push(objectiveSentence);
+    }
 
-        updateScrollDepth();
+    const decisionSentence = buildDecisionTimingSentence(data.prazo);
+    if (decisionSentence) {
+      lines.push(decisionSentence);
+    }
 
-        const nome = document.getElementById('nome').value.trim();
-        const whatsapp = document.getElementById('whatsapp').value.trim();
-        const cidade = document.getElementById('cidade').value.trim();
-        const objetivo = document.getElementById('objetivo').value;
-        const valor = document.getElementById('valor').value;
-        const logistica = document.getElementById('logistica').value;
-        const prazo = document.getElementById('prazo').value;
-        const mensagem = document.getElementById('mensagem').value.trim();
+    const logisticsSentence = buildLogisticsSentence(data.logistica);
+    if (logisticsSentence) {
+      lines.push(logisticsSentence);
+    }
 
-        const dwellSeconds = getDwellSeconds();
-        const depthPercent = maxDepth;
+    if (data.mensagem) {
+      lines.push('');
+      lines.push(`Obs.: ${data.mensagem}`);
+    }
 
-        // Evento GA4 - envio do formulário
-        gtag('event', 'submit_qualification_form', {
-          event_category: 'Lead Qualificado',
-          event_label: 'Formulário enviado',
-          lead_objective: objetivo,
-          value_fit: valor,
-          logistics_fit: logistica,
-          decision_timing: prazo,
-          dwell_seconds: dwellSeconds,
-          depth_percent: depthPercent,
-          source: trackingData.utm_source,
-          medium: trackingData.utm_medium,
-          campaign: trackingData.utm_campaign
-        });
+    return lines.join('\n');
+  }
 
-        // Evento Meta - envio do formulário
-        fbq('trackCustom', 'SubmitQualificationForm', {
-          lead_objective: objetivo,
-          value_fit: valor,
-          logistics_fit: logistica,
-          decision_timing: prazo,
-          dwell_seconds: dwellSeconds,
-          depth_percent: depthPercent,
-          source: trackingData.utm_source,
-          medium: trackingData.utm_medium,
-          campaign: trackingData.utm_campaign
-        });
+  // ================================
+  // Envio do formulário + clique WhatsApp
+  // ================================
+  if (leadForm) {
+    leadForm.addEventListener('submit', function(e){
+      e.preventDefault();
 
-        // Evento de Lead no Meta
-        fbq('track', 'Lead', {
-          content_name: 'Formulario de qualificacao - Sitio Sabio Sabia',
-          lead_type: 'qualified_whatsapp',
-          dwell_seconds: dwellSeconds,
-          depth_percent: depthPercent,
-          source: trackingData.utm_source,
-          medium: trackingData.utm_medium,
-          campaign: trackingData.utm_campaign
-        });
+      updateScrollDepth();
 
-        // Evento GA4 - clique final para WhatsApp
-        gtag('event', 'qualified_whatsapp_click', {
-          event_category: 'Contato',
-          event_label: 'Clique WhatsApp após qualificação',
-          lead_objective: objetivo,
-          value_fit: valor,
-          logistics_fit: logistica,
-          decision_timing: prazo,
-          dwell_seconds: dwellSeconds,
-          depth_percent: depthPercent,
-          source: trackingData.utm_source,
-          medium: trackingData.utm_medium,
-          campaign: trackingData.utm_campaign
-        });
+      const nome = document.getElementById('nome').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+      const cidade = document.getElementById('cidade').value.trim();
+      const objetivo = document.getElementById('objetivo').value;
+      const valor = document.getElementById('valor').value;
+      const logistica = document.getElementById('logistica').value;
+      const prazo = document.getElementById('prazo').value;
+      const mensagem = document.getElementById('mensagem').value.trim();
 
-        const texto =
-`Olá! Preenchi a qualificação da landing page do Sítio Sábio Sabiá.
+      const dwellSeconds = getDwellSeconds();
+      const depthPercent = maxDepth;
 
-Nome: ${nome}
-WhatsApp: ${whatsapp}
-Cidade: ${cidade}
-Objetivo com o imóvel: ${objetivo}
-Compatibilidade com o valor: ${valor}
-Avaliação da logística rural: ${logistica}
-Prazo estimado de decisão: ${prazo}
-Observação adicional: ${mensagem || 'Não informado'}
-
-Origem: ${trackingData.utm_source}
-Mídia: ${trackingData.utm_medium}
-Campanha: ${trackingData.utm_campaign}
-Conteúdo: ${trackingData.utm_content}
-Termo: ${trackingData.utm_term}
-Tempo na página: ${dwellSeconds}s
-Profundidade de rolagem: ${depthPercent}%`;
-
-        const numero = '5511991344511';
-        const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
-
-        window.open(url, '_blank');
+      // Evento GA4 - envio do formulário
+      gtag('event', 'submit_qualification_form', {
+        event_category: 'Lead Qualificado',
+        event_label: 'Formulário enviado',
+        lead_objective: objetivo,
+        value_fit: valor,
+        logistics_fit: logistica,
+        decision_timing: prazo,
+        dwell_seconds: dwellSeconds,
+        depth_percent: depthPercent,
+        source: trackingData.utm_source,
+        medium: trackingData.utm_medium,
+        campaign: trackingData.utm_campaign
       });
-    }
-  </script>
+
+      // Evento Meta - envio do formulário
+      fbq('trackCustom', 'SubmitQualificationForm', {
+        lead_objective: objetivo,
+        value_fit: valor,
+        logistics_fit: logistica,
+        decision_timing: prazo,
+        dwell_seconds: dwellSeconds,
+        depth_percent: depthPercent,
+        source: trackingData.utm_source,
+        medium: trackingData.utm_medium,
+        campaign: trackingData.utm_campaign
+      });
+
+      // Evento de Lead no Meta
+      fbq('track', 'Lead', {
+        content_name: 'Formulario de qualificacao - Sitio Sabio Sabia',
+        lead_type: 'qualified_whatsapp',
+        dwell_seconds: dwellSeconds,
+        depth_percent: depthPercent,
+        source: trackingData.utm_source,
+        medium: trackingData.utm_medium,
+        campaign: trackingData.utm_campaign
+      });
+
+      // Evento GA4 - clique final para WhatsApp
+      gtag('event', 'qualified_whatsapp_click', {
+        event_category: 'Contato',
+        event_label: 'Clique WhatsApp após qualificação',
+        lead_objective: objetivo,
+        value_fit: valor,
+        logistics_fit: logistica,
+        decision_timing: prazo,
+        dwell_seconds: dwellSeconds,
+        depth_percent: depthPercent,
+        source: trackingData.utm_source,
+        medium: trackingData.utm_medium,
+        campaign: trackingData.utm_campaign
+      });
+
+      const texto = buildMessageText({
+        nome,
+        whatsapp,
+        cidade,
+        objetivo,
+        valor,
+        logistica,
+        prazo,
+        mensagem
+      });
+
+      const numero = '5511991344511';
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+
+      window.open(url, '_blank');
+    });
+  }
+</script>
 </body>
 </html>
