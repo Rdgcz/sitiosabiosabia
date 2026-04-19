@@ -1,6 +1,0 @@
-*
-!src/
-!package*.json
-!package-lock.json
-!.env
-!.env.prod
